@@ -3,13 +3,7 @@
 {  
   \setbeamertemplate{background canvas}[vertical shading][bottom=blue!5,top=blue!5]
   \setbeamertemplate{navigation symbols}{}%{\insertsectionnavigationsymbol}
-   \usecolortheme{tigers}
-   \useinnertheme{rounded}
-  \usefonttheme[onlysmall]{structureitalicserif}
-\usefoottemplate{\vbox{%
-\tinycolouredline{structure}%
-{\color{tigersgold}\textbf{\insertshortinstitute\hfill\insertshortdate}}%
-}}
+    \usetheme{BatonRouge}
 }
 
 \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
@@ -18,6 +12,7 @@
 \usepackage{booktabs}
 \usepackage{colortbl}
 \usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
 \usetikzlibrary{calc}
 \pgfdeclarelayer{background}
 \pgfdeclarelayer{foreground}
@@ -28,7 +23,7 @@
 \usepackage{hyperref}
 \usepackage{movie15}
 \hypersetup{
-  pdftitle={Introduction to Computational Chemistry},
+  pdftitle={Electronic Structure Calculation in Quantum Chemistry},
   pdfauthor={Alexander B. Pacheco, User Services Consultant, Louisiana State University}
 }
 %\usepackage{movie15}
@@ -72,14 +67,14 @@
 \begin{beamerboxesrounded}[upper=#1,lower=#2,shadow=true]}
 {\end{beamerboxesrounded}}
 
-\title[Comp. Chem.]{Introduction to Computational Chemistry}
+\title[Comp. Chem.]{Electronic Structure Calculations in Quantum Chemistry}
 
 
 \author[Alex Pacheco]{\large{Alexander~B.~Pacheco}}
        
 \institute[High Performance Computing @ Louisiana State University - http://www.hpc.lsu.edu] {\inst{}\footnotesize{User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}}
 
-\date[\hfill{March 25, 2011\hspace{2cm}\insertframenumber/\inserttotalframenumber}]{\scriptsize{LONI Worshop Series\\Tulane University, New Orleans\\March 25, 2011}}
+\date[\hfill{July 6, 2011\hspace{2cm}\insertframenumber/\inserttotalframenumber}]{\scriptsize{REU HPC Training\\Louisiana State University\\Baton Rouge\\July 6, 2011}}
      
 \subject{Talks}
 % This is only inserted into the PDF information catalog. Can be left
@@ -170,7 +165,7 @@
 %\frametitle{\small What is Computational Chemistry}
 \begin{columns}
 \column{11cm}
-\begin{block}{Theoretical Chemistry: broadly can be divided into two main categories}
+\begin{exampleblock}{{\bf Theoretical Chemistry can be broadly divided into two main categories}}
 \begin{enumerate}
 \item Static Methods {\Large$\Rightarrow$} {\color{blue}Time-Independent Schr\"{o}dinger Equation}
 \begin{enumerate}
@@ -183,9 +178,22 @@
 \item[$\vardiamond$] Semi-classical and \textit{Ab-Initio} Molecular Dynamics
 \end{enumerate}
 \end{enumerate}
-\end{block}
+\end{exampleblock}
 \end{columns}
+\end{frame}
 
+\begin{frame}
+\frametitle{\small Tutorial Goals}
+\begin{itemize}
+\item Provide a brief introduction to Electronic Structure Calculations in Quantum Chemistry to REU students.
+\begin{enumerate}
+\item Overview of Quantum Chemical methods.
+\item What kind of calculations can we carry out?
+\item What experimental properties can we study/understand?
+\item How to create input files?
+\item Tips and Tricks to run calculations?
+\end{enumerate}
+\end{itemize}
 \end{frame}
 
 
@@ -497,26 +505,46 @@ F_{\mu\nu} &= \int dx_1\tilde{\chi}^\ast_\mu(x_1)\hat{f}(x_1)\tilde{\chi}_\nu(x_
 \end{frame}
 
 \begin{frame}
-\frametitle{\small What are Post Hartree-Fock Methods}
-\footnotesize{
-\begin{columns}
-\column{12cm}
-\begin{enumerate}
-\item In Hartree-Fock theory, electron motions of independent of each other i.e. uncorrelated.
-\item However, this is not true. For two electrons with same spin $\mid\Psi_1(r_1)\alpha(\omega_1)\Psi_2(r_2)\alpha(\omega_2)\rangle$, the probability of finding electron 1 at $r_1$ and electron 2 at $r_2$
-\begin{align*}
-P(r_1,r_2)dr_1dr_2 &= \dfrac{1}{2}\left(|\Psi_1(r_1)|^2|\Psi_2(r_2)|^2 + |\Psi_1(r_2)|^2|\Psi_2(r_1)|^2 \right.\\ 
-&- \left[\Psi^\ast_1(r_1)\Psi_2(r_1)\Psi^\ast_2(r_2)\Psi_1(r_2) \right.\\
-& +\left.\left.\Psi^\ast_2(r_1)\Psi_1(r_1)\Psi^\ast_1(r_2)\Psi_2(r_2)\right]\right)dr_1dr_2
-\end{align*}
-\item[] Now $P(r_1,r_1)=0 \Rightarrow$ No two electrons with same spins can be at the same place $\Rightarrow$ "Fermi hole"
-\item Same-spin electrons are correlated while different spin electrons are not.
-\item Energy difference between HF energy and the true energy is the correlation energy
-\begin{align*}
-E_{corr} = E_0 - E_{HF}
-\end{align*}
-\end{enumerate}
-\end{columns}
+\frametitle{\small SCF Flow Chart}
+\scriptsize{
+\tikzstyle{decision} = [ellipse, draw, fill=red!50!yellow, 
+    text width=8em, text badly centered, node distance=2.5cm, inner sep=0pt, minimum height=5em]
+%    text width=6em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=green!50!black, 
+    text width=10em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse, fill=green!20,node distance=4cm, minimum height=2em]
+    
+\begin{tikzpicture}[node distance = 2cm, auto]
+    % Place nodes
+    \node [block,fill=gray] (overlap){Form overlap matrix\\{\bf S}};
+    \node [block, right of=overlap, node distance=4cm,fill=gray] (input) {Input Coordinates,\\ Basis sets etc};
+    \node [block, below of=overlap,fill=gray] (guess) {Guess Initial \\MO Coefficients\\{\bf C}};
+    \node [block, right of=guess, node distance=4cm] (fock) {Form Fock Matrix\\{\bf F}};
+    \node [block, below of=fock](solve){Solve\\{\bf FC$^\prime$}={\bf SC$^\prime$}$\boldsymbol\varepsilon$};
+    \node [decision, below of=solve,node distance=2cm](decide){SCF Converged?\\|{\bf C}-{\bf C}$^\prime$|$\le\epsilon_{tol}$};
+    \node [block, right of=solve, node distance=4cm, fill=red!50!yellow!60!green](update){Update {\bf C}\\{\bf C}={\bf C}$^\prime$};
+%    \node [decision, below of=identify] (decide) {SCF\\converged?};
+%    \node [block, left of=decide, node distance=4cm] (evaluate) {Fock Matrix\\Diagonalization};
+    \node [block, left of=decide, node distance=4cm,fill=red!80!black] (stop) {Calculate Properties\\END};
+    % Draw edges
+    \path [line] (input) -- (overlap);
+    \path [line] (overlap) -- (guess);
+    \path [line] (guess) -- (fock);
+    \path [line] (fock) -- (solve);
+    \path [line] (solve) -- (decide);
+    \path [line] (decide) -- node {yes}(stop);
+    \path [line] (decide) -| node[near start]{no} (update);
+    \path [line] (update) |- (fock);
+%    \path [line] (decide)  -- +(4,0) -- +(4,5) --node[near start]{no} (fock);
+%    \path [line] (decide) -- node {no}{solve}
+%    \path [line] (init) -| (expert);
+ %   \path [line] (identify) -- (evaluate);
+ %   \path [line] (evaluate) -- (decide);
+ %   \path [line] (decide) -- node {yes}(stop);
+ %   \path [line] (decide) -- node {no}(identify);
+ %   \path [line] (expert) -- (identify);
+\end{tikzpicture}
 }
 \end{frame}
 
@@ -531,7 +559,7 @@ E_{corr} = E_0 - E_{HF}
 \item[$\vardiamond$]The starting point for most Post HF methods is the Slater Determinant obtain from Hartree-Fock Methods.
 \item[$\vardiamond$]{\bf Configuration Interaction (CI) methods}: Express the wavefunction as a linear combination of Slater Determinants with the coeffcients obtained variationally
 \begin{align*}
-|\Psi\rangle = \sum_Ic_I|\Psi_I\rangle
+|\Psi\rangle = \sum_ic_i|\Psi_i\rangle
 \end{align*}
 \item[$\vardiamond$]{\bf Many Body Perturbation Theory}: Treat the HF determinant as the zeroth order solution with the correlation energy as a pertubation to the HF equation.
 \begin{align*}
@@ -715,6 +743,36 @@ where the first term is the exchange functional while the second term is the cor
 \end{frame}
 
 
+\begin{frame}
+\frametitle{\small DFT Flow Chart}
+\scriptsize{
+\tikzstyle{decision} = [ellipse, draw, fill=red!50!yellow, 
+    text width=10em, text badly centered, node distance=2.5cm, inner sep=0pt, minimum height=5em]
+\tikzstyle{block} = [rectangle, draw, fill=green!50!black, 
+    text width=12em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse, fill=green!20,node distance=4cm, minimum height=2em]
+\begin{tikzpicture}[node distance = 2cm, auto]
+    \node [block,fill=gray](initial){Select initial\\$\boldsymbol{\rho^{(n)}(r)=\sum_i^N |\phi^{(n)}_{i}(r)|^2}$};
+    \node [block, right of=initial,node distance=4cm](KSoperator){Contruct Kohn-Sham Operator\\$\boldsymbol{ \hat{h}^{(n)}_{KS}=-\dfrac{1}{2}\nabla^2+v^{(n)}_{\rm eff}(r)}$};
+    \node [block, below of=KSoperator, text width=15.5em,node distance=3cm](solve){Solve\\$\boldsymbol{\hat{h}^{(n)}_{KS}\phi^{(n+1)}_{i}(r)=\varepsilon^{(n+1)}_{i}\phi^{(n+1)}_{i}(r)}$\\$\boldsymbol{\rho^{(n+1)}(r)=\sum_i^N |\phi^{(n+1)}_{i}(r)|^2}$};
+%    \node [block, below of=solve, text width=14em](density){Get new density\\$\rho^{(n+1)}(r)=\sum_i^N |\phi^{(n+1)}_{i}(r)|^2$};
+    \node [decision, below of=solve,node distance=3cm](decide){Density Converged?\\$\boldsymbol{|\rho^{(n+1)}-\rho^{(n)}|\le\epsilon_{tol}}$};
+    \node [block, right of=solve, node distance=4cm, text width=6em, fill=red!50!yellow!60!green](update){Set\\$\boldsymbol{\rho^{(n)}\rightarrow\rho^{(n)}}$\\$\boldsymbol{n\rightarrow n+1}$};
+    \node [block, left of=decide, node distance=4cm, text width=5em,fill=red!80!black] (stop) {Calculate Properties\\END};
+
+    \path [line](initial) -- (KSoperator);
+    \path [line](KSoperator) -- (solve);
+    \path [line](solve) -- (decide);
+%    \path [line](density) -- (decide);
+    \path [line](decide) -- node[near start]{yes}(stop);
+    \path [line](decide) -| node[near start]{no}(update);
+    \path [line](update) |- (KSoperator);
+\end{tikzpicture}
+}
+\end{frame}
+
+
 %\part{Semi-empirical Methods}
 \section{Semi-empirical Methods}
 \begin{frame}
@@ -746,12 +804,37 @@ Semi-empirical methods are fast, very accurate when applied to molecules that ar
 
 \begin{frame}
 \frametitle{\small Heirarchy of Methods}
-%\begin{block}{}
-\begin{center}
-\vspace{-1cm}
-\includegraphics[width=\textwidth,keepaspectratio=true, clip=true]{Elec-Corr}%Elec-Struct/Slide1}
-\end{center}
-%\end{block}
+\footnotesize{
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=13em, text centered, rounded corners, node distance=1.6cm, minimum height=2em]
+\tikzstyle{edge} = []
+\tikzstyle{line} = [draw, -latex']
+    
+\begin{tikzpicture}[node distance = 2cm, auto]
+    % Place nodes;
+    \node [block,fill=green!90!black!20!yellow] (semi) {{\bf Semi-empirical methods}\\CNDO,INDO,AM1,PM3};
+    \node [block, below of=semi,text width=8em,fill=green!90!black!50!yellow] (hf) {{\bf Hartree Fock}\\HF-SCF};
+    \node [edge, left of=hf, node distance=3.5cm](leftedge1){};
+    \node [edge, right of=hf, node distance=3.5cm](rightedge1){};
+    \node [block, below of=leftedge1,fill=green!90!black!90!yellow](excite){{\bf Excitation Hierarchy}\\CIS,CISD,CISDT\\CCS,CCSD,CCSDT};
+    \node [block, below of=rightedge1,fill=green!90!black!90!yellow](perturb){{\bf Pertubation Hierarchy}\\MP2,MP3,MP4};
+    \node [block, below of=excite,fill=green!60!black](mchf){{\bf Multiconfigurational HF}\\MCSCF,CASSCF};
+    \node [block, below of=perturb,fill=green!60!black](mrpt){{\bf Multireference Perturbation}\\CASPT2,CASPT3};
+    \node [edge, below of=mchf](leftedge2){};
+    \node [edge, below of=mrpt](rightedge2){};
+    \node [block, left of=rightedge2, node distance=3.5cm, text width=4em,fill=green!30!black](fullci){\bf Full CI};
+    % Draw edges
+    \path [line] (hf) -- (semi);
+%    \path [line] (hf) -- (leftedge1);
+%   \path [line] (hf) -- (rightedge1);
+    \path [line] (hf) -| (excite);
+    \path [line] (hf) -| (perturb);
+    \path [line] (excite) -- (mchf);
+    \path [line] (perturb) -- (mrpt);
+    \path [line] (mchf) |- (fullci);
+    \path [line] (mrpt) |- (fullci);
+\end{tikzpicture}
+}
 \end{frame}
 
 \section{Basis Sets}
@@ -919,6 +1002,9 @@ E&={\color{red}E_{\mathrm{bond}}}+{\color{blue}E_{\mathrm{angle}}} + {\color{tig
 \let\thefootnote\relax\footnotetext{\tiny http://en.wikipedia.org/wiki/Molecular\_mechanics}
 \end{colorblock}
 \end{columns}
+\begin{itemize}
+\item Commonly used force fields: AMBER, CHARMM, Drieding, UFF, TIP3P, TIP4P
+\end{itemize}
 }
 \end{frame}
 
@@ -933,7 +1019,7 @@ E&={\color{red}E_{\mathrm{bond}}}+{\color{blue}E_{\mathrm{angle}}} + {\color{tig
 \begin{itemize}
 \item What do we do if we want simulate chemical reaction in large systems?
 \item Quantum Mechanics(QM): Accurate, expensive ($\mathcal{O}(N^4)$), suitable for small systems.
-\item Molecular Mechanics(MM): Approximate, does not treat electrons explicitly, suitable for large systems such as enzymes and proteins, cannot simulate bon breaking/forming
+\item Molecular Mechanics(MM): Approximate, does not treat electrons explicitly, suitable for large systems such as enzymes and proteins, cannot simulate bond breaking/forming
 \end{itemize}
 \end{colorblock}
 {
@@ -989,292 +1075,6 @@ H_{21}({\bf R},{\bf r}) & H_{22}({\bf R},{\bf r})
 }
 \end{frame}
 
-\section{Molecular Dynamics}
-\begin{frame}
-\frametitle{\small Molecular Dynamics}
-\footnotesize{
-\begin{columns}
-\column{12cm}
-\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]{\bf Why Molecular Dynamics?}
-\begin{itemize}
-\item Electronic Structure Methods are applicable to systems in gas phase under low pressure (vaccum).
-\item Majority of chemical reactions take place in solution at some temperature with biological reactions usually at specific pH's.
-\item Calculating molecular properties taking into account such environmental effects which can be dynamical in nature are not adequately described by electronic structure methods.
-\end{itemize}
-\end{beamerboxesrounded}
-%\vspace{0.15cm}
-{
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Molecular Dynamics}
-\begin{itemize}
-\item Generate a series of time-correlated points in phase-space (a trajectory).
-\item Propagate the initial conditions, position and velocities in accordance with Newtonian Mechanics. ${\bf F}=m{\bf a}=-{\boldsymbol\nabla}V$
-\item Fundamental Basis is the \textbf{Ergodic Hypothesis}: the average obtained by following a small number of particles over a
-long time is equivalent to averaging over a large number of particles for a short time.
-\end{itemize}
-\end{colorblock}
-}
-\end{columns}
-}
-\end{frame}
-
-\begin{frame}
-\frametitle{\small Molecular Dynamics Theory}
-\footnotesize{
-\begin{itemize}
-\item Solve the time-dependent Schr\"{o}dinger equation
-\begin{align*}
-\imath\hbar\dfrac{\partial}{\partial t}\Psi({\bf R},{\bf r},t) = \hat{H}\Psi({\bf R},{\bf r},t)
-\end{align*}
-with 
-\begin{align*}
-\Psi({\bf R},{\bf r},t) = \chi({\bf R},t)\Phi({\bf r},t)
-\end{align*}
-and 
-\begin{align*}
-\hat{H} = -\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I +\underbrace{\dfrac{-\hbar^2}{2m_e}\nabla^2_i + V_{n-e}(\bf r,R)}_{H_e(\bf r,R)}
-\end{align*}
-\item Obtain coupled equations of motion for electrons and nuclei: Time-Dependent Self-Consistent Field (TD-SCF) approach.
-\begin{align*}
-\imath\hbar\dfrac{\partial\Phi}{\partial t} &= \left[-\sum_i\dfrac{\hbar^2}{2m_e}\nabla^2_i + \langle\chi|V_{n-e}|\chi\rangle\right]\Phi\\
-\imath\hbar\dfrac{\partial\chi}{\partial t} &= \left[-\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I + \langle\Phi|H_e|\Phi\rangle\right]\chi
-\end{align*}
-\end{itemize}
-}
-\end{frame}
-
-\begin{frame}
-%\frametitle{\small Molecular Dynamics Theory}
-\footnotesize{
-\begin{itemize}
-%\item Alternative approach: Decouple electronic and nuclei motions.
-%\item Solve for the clamped nuclei:
-%\begin{align*}
-%\hat{H}_e\Phi_k({\bf r};{\bf R}) = E_k({\bf R})\Phi_k({\bf r};{\bf R})
-%\end{align*}
-%\item Equation of motion for nuclear wavefunction is
-%\begin{align*}
-%\imath\hbar\dfrac{\partial|\chi\rangle}{\partial t} &= \left[-\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I + E({\bf R})\right]|%\chi\rangle
-%\end{align*}
-\item Define nuclear wavefunction as
-\begin{align*}
-\chi({\bf R},t) = A({\bf R},t)\exp\left[iS({\bf R},t)/\hbar\right]
-\end{align*}
-where $A$ and $S$ are real.
-\item Solve the time-dependent equation for nuclear wavefunction and take classical limit ($\hbar\rightarrow0$) to obtain 
-\begin{align*}
-\dfrac{\partial S}{\partial t} + \sum_I\dfrac{\hbar^2}{2M_I}(\nabla_IS)^2 + \langle\Phi|H_e|\Phi\rangle = 0
-\end{align*}
-an equation that is isomorphic with the Hamilton-Jacobi equation with the classical Hamilton function given by
-\begin{align*}
-\mathcal{H}(\{{\bf R}_I\},\{{\bf P}_I\}) = \sum_I \dfrac{\hbar^2}{2M_I}{\bf P}^2_I + V(\{{\bf R}_I\})
-\end{align*}
-where
-\begin{align*}
-{\bf P}_I \equiv \nabla_IS\hspace{1cm}\mathrm{and}\hspace{1cm}
-V(\{{\bf R}_I\}) = \langle\Phi|H_e|\Phi\rangle
-\end{align*}
-\item Obtain equations of nuclear motion from Hamilton's equation
-\begin{align*}
-\dfrac{d{\bf P}_I}{dt} = -\dfrac{d\mathcal{H}}{d{\bf R}_I}&\Rightarrow M\ddot{\bf R}_I = -\nabla _IV\\
-\dfrac{d{\bf R}_I}{dt} &= \dfrac{d\mathcal{H}}{d{\bf P}_I}
-\end{align*}
-\end{itemize}
-}
-\end{frame}
-
-\begin{frame}
-\footnotesize{
-\begin{itemize}
-\item Replace nuclear wavefunction by delta functions centered on nuclear position to obtain
-\begin{align*}
-i\hbar\dfrac{\partial\Phi}{\partial t} = H_e({\bf r},\{{\bf R}_I\})\Phi({\bf r};\{{\bf R}_I\},t)
-\end{align*}
-\item This approach of simultaneously solving the electronic and nuclear degrees of freedom by incorporating feedback in both directions is known as \textbf{Ehrenfest Molecular Dynamics}.
-\item Expand $\Phi$ in terms of many electron wavefunctions or  determinants
-\begin{align*}
-\Phi({\bf r};\{{\bf R}_I\},t) = \sum_i c_i(t)\Phi_i({\bf r};\{{\bf R}_I\})
-\end{align*}
-with matrix elements
-\begin{align*}
-H_{ij} = \langle\Phi_i|H_e|\Phi_j\rangle
-\end{align*} 
-\item Inserting $\Phi$ in the TDSE above, we get
-\begin{align*}
-\imath\hbar\dot{c}_i(t) = c_i(t)H_{ii} -\imath\hbar\sum_{I,i}\dot{\bf R}_I{\bf d}^{ij}_I
-\end{align*}
-with non-adiabtic coupling elements given by
-\begin{align*}
-{\bf d}^{ij}_I({\bf R}_I) = \langle\Phi_i|\nabla_I|\Phi_j\rangle
-\end{align*}
-\end{itemize}
-}
-\end{frame}
-
-\begin{frame}[allowframebreaks]
-\footnotesize{
-\begin{itemize}
-\item Upto this point, no restriction on the nature of $\Phi_i$ i.e. adiabatic or diabatic basis has been made. 
-\item Ehrenfest method rigorously includes non-adiabtic transitions between electronic states within the framework of classical nuclear motion and mean field (TD-SCF) approximation to the electronic structure.
-\item Now suppose, we define $\{\Phi_i\}$ to be the adiabatic basis obtained from solving the time-independent Schr\"{o}dinger equation,
-\begin{align*}
-H_e({\bf r},\{{\bf R}_I\})\Phi_i({\bf r};\{{\bf R}_I\}) = E_i(\{{\bf R}_I\})\Phi_i({\bf r};\{{\bf R}_I\})
-\end{align*}
-\item The classical nuclei now move along the adiabatic or Born-Oppenheimer potential surface. Such dynamics are commonly known as \textbf{Born-Oppenheimer Molecular Dynamics} or BOMD.
-\item If we restrict the dynamics to only the ground electronic state, then we obtain ground state BOMD.
-\item If the Ehrenfest potential $V(\{{\bf R}_I\})$ is approximated to a global potential surface in terms of many-body contributions $\{v_n\}$.
-\begin{align*}
-V(\{{\bf R}_I\}) \approx V^{approx}_e({\bf R}) = \sum^{N}_{I=1}v_1({\bf R}_I) + \sum^N_{I>J}v_2({\bf R}_I,{\bf R}_J) +\sum^N_{I>J>K}v_3({\bf R}_I,{\bf R}_J,{\bf R}_K) + \cdots
-\end{align*}
-\item[] 
-\item Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are determined usually Molecular Mechanics Force Fields. This class of dynamics is most commonly known as {\bf Classical Molecular Dynamics}.
-\item Another approach to obtain equations of motion for \text{ab-initio} molecular dynamics is to apply the Born-Oppenheimer approximation to the full wavefunction $\Psi({\bf r},{\bf R},t)$
-\begin{align*}
-\Psi({\bf r},{\bf R},t) = \sum_k \chi({\bf R},t)\Phi_k({\bf r};{\bf R}(t))
-\end{align*}
-where
-\begin{align*}
-H_e\Phi_k({\bf r};{\bf R}(t)) = E_k({\bf R}(t))\Phi_k({\bf r};{\bf R}(t))
-\end{align*}
-\item Assuming that the nuclear dynamics doesn not change the electronic state, we arrive at the equation of motion for nuclear wavefunction 
-\begin{align*}
-\imath\hbar\dfrac{\partial}{\partial t}\chi({\bf R},t) = \left[\sum_I-\dfrac{\hbar^2}{2M_I}\nabla^2_I + E_k({\bf R})\right]\chi({\bf R},t)
-\end{align*}
-\item The Lagrangian for this system is given by.
-\begin{align*}
-\mathcal{L} = \hat{T} - \hat{V}
-\end{align*}
-\item Corresponding Newton's equation of motion are then obtained from the associated Euler-Lagrange equations,
-\begin{align*}
-\dfrac{d}{dt}\dfrac{\partial\mathcal{L}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}}{\partial{\bf R}_I}
-\end{align*}
-\item The Lagrangian for ground state BOMD is
-\begin{align*}
-\mathcal{L}_\mathrm{BOMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I - \min_{\Phi_0}\langle\Phi|H_e|\Phi\rangle
-\end{align*}
-and equations of motions
-\begin{align*}
-{\color{blue}M_I\ddot{\bf R}_I} = \dfrac{d}{dt}\dfrac{\partial\mathcal{L}_\mathrm{BOMD}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}_\mathrm{BOMD}}{\partial{\bf R}_I} = {\color{blue}-\nabla_I\min_{\Phi_0}\langle\Phi|H_e|\Phi\rangle}
-\end{align*}
-\end{itemize}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\textbf{Extended Lagrangian Molecular Dynamics} (ELMD)}
-Extend the Lagrangian by adding kinetic energy of fictitious particles and obtain their equation of motions from Euler-Lagrange equations.
-\end{colorblock}
-\vspace{-0.3cm}
-\begin{columns}
-\column{6cm}
-\centering{
-\begin{colorblock}{white}{blue!30!black}{black}{green!25!white}{}
-\centering{
-Molecular Orbitals: $\{\phi_i\}$ \\
-Density Matrix: $\displaystyle{{P}_{\mu\nu}=\sum_{i}c^\ast_{\mu i}c_{\nu i}}$}
-\end{colorblock}
-}
-\end{columns}
-}
-\end{frame}
-
-\begin{frame}
-\footnotesize{
-\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{\textbf{Car-Parrinello Molecular Dynamics} (CPMD)}
-{\color{DarkBlue}CPMD and NWCHEM}\let\thefootnote\relax\footnotetext{\tiny R. Car and M. Parrinello, Phys. Rev. Lett. 55 (22), 2471 (1985)}
-\vspace{-0.1cm}
-\begin{align*}
-\mathcal{L}_\mathrm{CPMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \sum_i\dfrac{1}{2}\mu_i\langle\dot{\phi_i}|\dot{\phi_i}\rangle - \langle\Phi_0|H_e|\Phi_0\rangle + \mathrm{constraints}
-\end{align*}
-\end{colorblock}
- \begin{colorblock}{white}{green!30!black}{black}{green!15!white}{\textbf{Atom centered Density Matrix Propagation} (ADMP)}
-{\color{DarkBlue}Gaussian 03/09}\let\thefootnote\relax\footnotetext{\tiny H. B. Schlegel, J. M. Millam, S. S. Iyengar, G. A. Voth, A. D. Daniels, G. E. Scuseria, M. J. Frisch, J. Chem. Phys. 114, 9758 (2001)}
-\vspace{-0.1cm}
-\begin{align*}
-\mathcal{L}_\mathrm{ADMP} = \dfrac{1}{2}\mathrm{Tr}({\bf V}^T{\bf M}{\bf V}) + \dfrac{1}{2}\mu\mathrm{Tr}(\dot{\bf P}\dot{\bf P}) - E({\bf R},{\bf P}) - \mathrm{Tr}[{\boldsymbol\Lambda}({\bf PP}-{\bf P})]
-\end{align*}
-\end{colorblock}
-\begin{colorblock}{white}{red!30!black}{black}{red!15!white}{\textbf{curvy-steps ELMD} (csELMD)}
-{\color{purple}Q-Chem}\let\thefootnote\relax\footnotetext{\tiny J.M. Herbert and M. Head-Gordon, J. Chem. Phys. 121, 11542 (2004)}
-\vspace{-0.1cm}
-\begin{align*}
-\mathcal{L}_\mathrm{csELMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \dfrac{1}{2}\mu\sum_{i<j}\dot{\Delta}_{ij} - E({\bf R},{\bf P}) ;\hspace{0.2cm} {\bf P}(\lambda) = e^{\lambda\Delta}{\bf P}(0)e^{-\lambda\Delta}
-\end{align*}
-\end{colorblock}
-}
-\end{frame}
-
-\beamertemplateshadingbackground{green!10!white}{green!10!white} % New background
-\begin{frame}
-\frametitle{\small Molecular Dynamics: Methods and Programs}
-\begin{columns}
-\column{12cm}
-\begin{itemize}
-\item Electronic energy obtained from 
-\begin{itemize}
-\item {Molecular Mechanics $\Rightarrow$ Classical Molecular Dynamics}
-\begin{enumerate}
-{\footnotesize
-\item LAMMPS
-\item NAMD
-\item Amber
-\item Gromacs
-}
-\end{enumerate}
-\item {Ab-Initio Methods $\Rightarrow$ Quantum or Ab-Initio Molecular Dynamics}
-\begin{enumerate}
-{\footnotesize
-\item Born-Oppenheimer Molecular Dynamics: Gaussian, GAMESS
-\item Extended Lagrangian Molecular Dynamics: VASP, CPMD, Gaussian (ADMP), NWCHEM(CPMD), {\color{red}QChem (curvy-steps ELMD)}
-\item Time Dependent Hartree-Fock and Time Dependent Density Functional Theory: Gaussian, GAMESS, NWCHEM, {\color{red}QChem}
-\item {\color{red}Multiconfiguration Time Dependent Hartree(-Fock), MCTDH(F)}
-\item {\color{red}Non-Adiabatic and  Ehrenfest Molecular Dynamics, Multiple Spawning, Trajectory Surface Hopping}
-\item {\color{red}Quantum Nuclei: QWAIMD(Gaussian), NEO(GAMESS)}
-}
-\end{enumerate}
-\end{itemize}
-\end{itemize}
-\end{columns}
-\end{frame}
-\beamertemplateshadingbackground{blue!5}{blue!5} % back to original background
-\begin{frame}
-%\frametitle{\small Classical Molecular Dynamics}
-\begin{block}{Classical Molecular Dynamics}
-\begin{itemize}
-\item Advantages
-{\scriptsize
-\begin{enumerate}
-\item Large Biological Systems
-\item Long time dynamics
-\end{enumerate}
-}
-\item Disadvantages
-{\footnotesize
-\begin{enumerate}
-\item Cannot describe Quantum Nuclear Effects
-\end{enumerate}
-}
-\end{itemize}
-\end{block}
-\begin{block}{\textit{Ab Initio} and Quantum Dynamics}
-\begin{itemize}
-\item Advantages
-{\footnotesize
-\begin{enumerate}
-\item Quantum Nuclear Effects
-\end{enumerate}
-}
-\item Disadvantages
-{\footnotesize
-\begin{enumerate}
-\item $\sim$ 100 atoms
-\item Full Quantum Dynamics ie treating nuclei quantum mechanically: less than 10 atoms
-\item Picosecond dynamics at best
-\end{enumerate}
-}
-\end{itemize}
-\end{block}
-%{\footnotesize
-%\begin{enumerate}
-%\end{enumerate}
-%}
-\end{frame}
-
 
 \section{Computational Chemistry Programs}
 
@@ -1283,25 +1083,16 @@ Density Matrix: $\displaystyle{{P}_{\mu\nu}=\sum_{i}c^\ast_{\mu i}c_{\nu i}}$}
 \scriptsize{
 \begin{columns}
 \column{12cm}
-\vspace{-1cm}
 \begin{center}
 \begin{tikzpicture}
 \node (tbl) {
 \begin{tabularx}{\textwidth}{ccccccccc}
 \arrayrulecolor{tigersgold}
 \textcolor{white}{\textbf{Software} }& \textcolor{white}{\textbf{QB}} &\textcolor{white}{\textbf {Eric}} & \textcolor{white}{\textbf{Louie}} & \textcolor{white}{\textbf{Oliver}} & \textcolor{white}{\textbf{Painter}} & \textcolor{white}{\textbf{Poseidon}} & \textcolor{orange}{\textbf{Philip}} & \textcolor{orange}{\textbf{Tezpur}}\\
-Amber\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\ 
-Desmond & \checkmark &  &  &  &  &  &  &  \\
-DL\_Poly & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-Gromacs & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-NAMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
-OpenEye & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-CPMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
+CPMD\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
 GAMESS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
 Gaussian &  & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark & \checkmark \\
 NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
-Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark  \\
 [1.0ex]
 \end{tabularx}};
 \begin{pgfonlayer}{background}
@@ -1311,37 +1102,33 @@ Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \che
 %\draw[rounded corners,top color=tigersgold,bottom color=tigerspurple!20,
  %   middle color=tigerspurple!20,draw=tigerspurple!20] ($(tbl.south west)
  %   +(0.12,0.5)$) rectangle ($(tbl.south east)-(0.12,0)$);
-\draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+\draw[rounded corners,top color=black!20!white,bottom color=black!20!white,draw=green!5]
     ($(tbl.north east)-(0.13,0.6)$)
     rectangle ($(tbl.south west)+(0.13,0.2)$);
 \end{pgfonlayer}
 \end{tikzpicture}
 \end{center}
-\vspace{-1cm}
+
 \begin{center}
 \begin{tikzpicture}
 \node (tbl) {
 \begin{tabularx}{\textwidth}{cccccccc}
 \arrayrulecolor{tigersgold}
 \textcolor{white}{\textbf{Software}} & \textcolor{white}{\textbf{Bluedawg}} & \textcolor{white}{\textbf {Ducky}} & \textcolor{white}{\textbf{Lacumba}} & \textcolor{white}{\textbf{Neptune}} & \textcolor{white}{\textbf{Zeke}} & \textcolor{orange}{\textbf{Pelican}} & \textcolor{orange}{\textbf{Pandora}}\\
-Amber\rule{0pt}{3.5ex} &  & \checkmark & \checkmark &  &  & \checkmark & \\ 
-Gromacs & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \\
-LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \\
-NAMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  &\\
-CPMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \\
-Gaussian & \checkmark & \checkmark & \checkmark &  & \checkmark & \checkmark & \\
-NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \\
-Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark  & \\
+CPMD\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark\\
+GAMESS &  &  &  &  &  &  & \checkmark\\
+Gaussian & \checkmark & \checkmark & \checkmark &  & \checkmark & \checkmark & \checkmark\\
+NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
 [1.0ex]
 \end{tabularx}};
 \begin{pgfonlayer}{background}
-\draw[rounded corners,top color=green!40!black,bottom color=green!10!white,
+\draw[rounded corners,top color=blue!40!black,bottom color=blue!10!white,
     draw=green!5!white] ($(tbl.north west)+(0.14,0)$)
     rectangle ($(tbl.north east)-(0.13,0.9)$);
 %\draw[rounded corners,top color=tigersgold,bottom color=tigerspurple!20,
  %   middle color=tigerspurple!20,draw=tigerspurple!20] ($(tbl.south west)
  %   +(0.12,0.5)$) rectangle ($(tbl.south east)-(0.12,0)$);
-\draw[rounded corners,top color=purple!5,bottom color=purple!5,draw=purple!5]
+\draw[rounded corners,top color=black!20!white,bottom color=black!20!white,draw=purple!5]
     ($(tbl.north east)-(0.13,0.6)$)
     rectangle ($(tbl.south west)+(0.13,0.2)$);
 \end{pgfonlayer}
@@ -1368,7 +1155,7 @@ Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \che
 \vspace{-0.5cm}
 \begin{columns}
 \column{12cm}
-\begin{exampleblock}{}
+\begin{block}{}
 \begin{tabular}{|c|c|c|c|}
 \hline
 Job Type & Gaussian & GAMESS & NWCHEM\\
@@ -1391,116 +1178,19 @@ Solvation Models & \checkmark & \checkmark & \checkmark \\
 QM/MM & oniom & \checkmark & qmmm \\
 \hline
 \end{tabular}
-\end{exampleblock}
+\end{block}
 \end{columns}
 }
 \end{frame}
 
 \begin{frame}
-%\footnotesize{
-\vspace{0.5cm}
-\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{Molecular Dynamics Calculations}
-\begin{itemize}
-\item Gaussian:
- \begin{itemize}
-% {\scriptsize
- \item BOMD: Born-Oppenheimer Molecular Dynamics
- \item ADMP: Atom centered Density Matrix Propagation (an extended Lagrangian Molecular Dynamics similar to CPMD) and ground state BOMD
-% }
- \end{itemize}
-\item GAMESS:
-  \begin{itemize}
-  \item DRC: Direct Dynamics, a classical trajectory method based on "on-the-fly" ab-initio or semi-empirical potential energy surfaces
-  \end{itemize}
-\item NWCHEM:
-  \begin{itemize}
-  \item Car-Parrinello: Car Parrinello Molecular Dynamics (CPMD)
-%   \item dynamics: Perform classical molecular dynamics
-  \item DIRDYVTST: Direct Dynamics Calculations using POLYRATE with electronic structure from NWCHEM
-  \end{itemize}
-\end{itemize}
-\end{colorblock}
-%}
-\end{frame}
-
-\begin{frame}
-\frametitle{\small Related HPC Tutorials}
-\footnotesize{
-\begin{itemize}
-\item Fall Semester
-\begin{block}{\small Introduction to Gaussian/Electronic Structure Methods}
-\end{block}
-\item Spring Semester
-%\begin{alertblock}{MD: Programming to Production}
-%April 6$^{\rm th}$
-%\end{alertblock}
-\begin{alertblock}{\small Introduction to Computational Chemistry: Molecular Dynamics}
-April 27$^{\rm th}$
-\end{alertblock}
-\end{itemize}
-}
-\end{frame}
-
-\begin{frame}[allowframebreaks]
-%\frametitle{\small Useful Links/Further Reading}
-\begin{block}{Useful Links}
-\begin{itemize}
-{\footnotesize\color{Blue}
-\item{\color{tigerspurple}Amber:}\url{http://ambermd.org}
-\item{\color{tigerspurple}Desmond:}\url{http://www.deshawresearch.com/resources_desmond.html}
-\item{\color{tigerspurple}DL\_POLY:}\url{http://www.cse.scitech.ac.uk/ccg/software/DL_POLY}
-\item{\color{tigerspurple}Gromacs:}\url{http://www.gromacs.org}
-\item{\color{tigerspurple}LAMMPS:}\url{http://lammps.sandia.gov}
-\item{\color{tigerspurple}NAMD:}\url{http://www.ks.uiuc.edu/Research/namd}
-\item {\color{tigerspurple}CPMD:} \url{http://www.cpmd.org}
-\item {\color{tigerspurple}GAMESS:} \url{http://www.msg.chem.iastate.edu/gamess}
-\item {\color{tigerspurple}Gaussian:} \url{http://www.gaussian.com}
-\item {\color{tigerspurple}NWCHEM:} \url{http://www.nwchem-sw.org}
-\item{\color{tigerspurple}PINY\_MD:}\url{http://homepages.nyu.edu/~mt33/PINY_MD/PINY.html}
-\item {\color{tigerspurple}Basis Set:} \url{https://bse.pnl.gov/bse/portal}
-}
-\end{itemize}
-\end{block}
-\begin{block}{\small Further Reading}
-\begin{itemize}
-{\scriptsize
-\item David Sherill's Notes at Ga Tech: {\color{Blue}\url{http://vergil.chemistry.gatech.edu/notes/index.html}}
-\item Mark Tuckerman's Notes at NYU: {\color{Blue}\url{http://www.nyu.edu/classes/tuckerman/quant.mech/index.html}}
-\item Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory, A. Szabo and N. Ostlund
-\item Introduction to Computational Chemistry, F. Jensen
-\item Essentials of Cmputational Chemistry - Theories and Models, C. J. Cramer
-\item Exploring Chemistry with Electronic Structure Methods, J. B. Foresman and A. Frisch
-\item Ab Initio Molecular Dynamics: Theory and Implementation, D. Marx and J. Hutter{\color{Blue}\url{http://www.theochem.ruhr-uni-bochum.de/research/marx/marx.pdf}}
-\item Molecular Modeling - Principles and Applications, A. R. Leach
-\item Computer Simulation of Liquids, M. P. Allen and D. J. Tildesley
-\item[$\vardiamond$]Modern Electronic Structure Theory, T. Helgaker, P. Jorgensen and J. Olsen (Highly advanced text, second quantization approach to electronic structure theory)
-}
-\end{itemize}
-\end{block}
-\end{frame}
-
-\section{Example Jobs}
-\begin{frame}
-%\frametitle{\small Worked out Examples On LONI Linux Systems}
-\begin{columns}
-\column{1.16\textwidth}
-\vspace{-0.95cm}
-\begin{alertblock}{On LONI Linux Systems}
-\begin{center}
-\includegraphics[width=0.74\textwidth,clip=true]{workshop}
-\end{center}
-\end{alertblock}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{\small Using Gaussian on LONI Systems}
+\frametitle{\small Using Gaussian on LONI/LSU HPC Systems}
 \begin{itemize}
 \item Site specific license% ({\color{tigerspurple}Gaussian 03})
 \begin{enumerate}
  \item {\color{tigersblue}Gaussian 03 and 09}
 \begin{itemize}
- \item {\color{tigersblue}LSU Users}: Eric
+ \item {\color{tigersblue}LSU Users}: Eric, {\color{green!30!black}Pandora, Pelican, Philip, Tezpur}
  \item {\color{tigersblue}Latech Users}: Painter, Bluedawg
 \end{itemize}
  \item {\color{tigerspurple}Gaussian 03}
@@ -1516,82 +1206,19 @@ April 27$^{\rm th}$
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]
-\tiny{
-\begin{exampleblock}{Example Job submission script on Intel x86}
-{\color{white}
-\begin{verbatim}
- #!/bin/tcsh
- #PBS -A your_allocation
- # specify the allocation. Change it to your allocation
- #PBS -q checkpt
- # the queue to be used. 
- #PBS -l nodes=1:ppn=4
- # Number of nodes and processors
- #PBS -l walltime=1:00:00
- # requested Wall-clock time.
- #PBS -o g03_output 
- # name of the standard out file to be "output-file".
- #PBS -j oe 
- # standard error output merge to the standard output file.
- #PBS -N g03test 
- # name of the job (that will appear on executing the qstat command).
- 
- # setup g03 variables
- source $g03root/g03/bsd/g03.login
- set NPROCS=`wc -l $PBS_NODEFILE |gawk '//{print $1}'`
- setenv GAUSS_SCRDIR /scratch/$USER
- # cd to the directory with Your input file
- cd ~apacheco/g03test 
- # Change this line to reflect your input file and output file
- g03 < g03job.inp  > g03job.out
-\end{verbatim}
-}
-\end{exampleblock}
-\begin{alertblock}{Linda Access}
-% If your instition have TCP Linda license, then you can run parallel jobs by adding the following to your job submission script
-\begin{verbatim}
-  set NODELIST = ( -vv -nodelist '"' `cat $PBS_NODEFILE` '"' -mp 4)
-  setenv GAUSS_LFLAGS " $NODELIST "
-  g03l < g03job.inp  > g03job.out
-\end{verbatim}
-\end{alertblock}
-}
+\begin{frame}
+\frametitle{\small Input Files}
+\begin{itemize}
+\item Input files for GAMESS, GAUSSIAN and NWCHEM are written in free format.
+\item Molecule description in either Z-Matrix format or Cartesian Coordinates.
+\item Gaussian: Need to specify number of processors to be used in input file \texttt{\%NProcShared}
+\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]
-\tiny{
-\begin{exampleblock}{Example Job submission script on P5}
-{\color{white}
-\begin{verbatim}
- #!/bin/tcsh
- # @ account_no = your_allocation
- # @ requirements = (Arch == "Power5")
- # @ environment = LL_JOB=TRUE ;  MP_PULSE=1200
- # @ job_type = parallel
- # @ node_usage = shared
- # @ wall_clock_limit = 12:00:00
- # @ initialdir = /home/apacheco/g03test
- # @ class = checkpt
- # @ error = g03_$(jobid).err
- # @ queue
 
- # setup g03 variables
- source $g03root/g03/bsd/g03.login
- # setup and create Gaussian scratch directory
- setenv GAUSS_SCRDIR /scratch/default/$USER
- mkdir -p $GAUSS_SCRDIR
- # cd to the directory with Your input file
- cd ~apacheco/g03test
- # Change this line to reflect your input file and output file
- g03 < g03job.inp  > g03job.out
-\end{verbatim}
-}
-\end{exampleblock}
-}
-\end{frame}
 
 \begin{frame}[fragile]
+\frametitle{\small Gaussian Input}
 \footnotesize{
 % \begin{itemize}
 % \item Geometry Optimzation and Freqeuncy calculation for water molecule
@@ -1646,38 +1273,7 @@ blank line
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{\small Using GAMESS on LONI Systems}
-\begin{itemize}
-\item Add +gamess-12Jan2009R1-intel-11.1 (on Queenbee) to your .soft and resoft
-\end{itemize}
-{\tiny
-\begin{exampleblock}{Job submission script}
-{\color{white}
-\begin{verbatim}
-#!/bin/bash
-#PBS -A your_allocation
-#PBS -q checkpt
-#PBS -l nodes=1:ppn=4
-#PBS -l walltime=00:10:00
-#PBS -j oe
-#PBS -N gamess-exam1
-
-export WORKDIR=$PBS_O_WORKDIR
-export NPROCS=`wc -l $PBS_NODEFILE | gawk '//{print $1}'`
-export SCRDIR=/work/$USER/scr
-if [ ! -e $SCRDIR ]; then mkdir -p $SCRDIR; fi
-rm -f $SCRDIR/*
-
-cd $WORKDIR
-rungms h2o-opt-freq 01 $NPROCS h2o-opt-freq.out  $SCRDIR
-cp -p $SCRDIR/$OUTPUT $WORKDIR/
-\end{verbatim}
-}
-\end{exampleblock}
-}
-\end{frame}
-
-\begin{frame}[fragile]
+\frametitle{\small GAMESS Input}
 \scriptsize{
 % \begin{itemize}
 % \item Geometry Optimzation and Freqeuncy calculation for water molecule
@@ -1732,40 +1328,7 @@ aHOH=104.5
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{\small Using NWCHEM on LONI Systems}
-\begin{itemize}
-\item Add +nwchem-5.1.1-intel-11.1-mvapich-1.1 (on Queenbee) to your .soft and resoft
-\end{itemize}
-{\tiny
-\begin{exampleblock}{Job submission script}
-{\color{white}
-\begin{verbatim}
-#!/bin/sh
-#
-#PBS -q checkpt
-#PBS -M apacheco@cct.lsu.edu
-#PBS -l nodes=1:ppn=4
-#PBS -l walltime=0:30:00
-#PBS -V
-#PBS -o nwchem_h2o.out
-#PBS -e nwchem_h2o.err
-#PBS -N nwchem_h2o 
-
-export EXEC=nwchem
-export EXEC_DIR=/usr/local/packages/nwchem-5.1-mvapich-1.0-intel-10.1/bin/LINUX64/
-export WORK_DIR=$PBS_O_WORKDIR
-export NPROCS=`wc -l $PBS_NODEFILE |gawk '//{print $1}'` 
-
-cd $WORK_DIR
-mpirun_rsh -machinefile $PBS_NODEFILE -np $NPROCS $EXEC_DIR/$EXEC \
-  $WORK_DIR/h2o-opt-freq.nw >& $WORK_DIR/h2o-opt-freq.nwo
-\end{verbatim}
-}
-\end{exampleblock}
-}
-\end{frame}
-
-\begin{frame}[fragile]
+\frametitle{\small NWCHEM Input}
 \tiny{
 % \begin{itemize}
 % \item Geometry Optimzation and Freqeuncy calculation for water molecule
@@ -1831,6 +1394,140 @@ job type
 }
 \end{columns}
 }
+\end{frame}
+
+
+
+\section{Tips for Quantum Chemical Calculations}
+\begin{frame}
+%\frametitle{\small Basis Sets and Method}\vspace{1cm}
+\footnotesize{
+\vspace{0.5cm}
+\begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{Choice of Basis Set}
+\begin{itemize}
+\item STO-3G is too small.
+\item 6-31G* and 6-31G** give reasonable results.
+\item For greater accuracy, use correlation consistent basis sets e.g. cc-pVTZ
+\item For anions and probably excited states, use basis sets with diffuse functions (aug, +). e.g. 6-31+G*, aug-cc-pVTZ
+\end{itemize}
+\end{colorblock}
+\vspace{0.5cm}
+\begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{GAMESS Basis Sets}
+\begin{itemize}
+\item In GAMESS, you can create a file containing basis sets that you want to use
+\item Define \texttt{EXTBAS} variable which points to the basis set file
+\item See pseudo basis example
+\item In input line, if you name your basis set as \texttt{STTGRD}, then add
+\texttt{\$BASIS EXTFIL=.T. GBASIS=STTGRD \$END}
+\end{itemize}
+\end{colorblock}
+}
+\end{frame}
+
+\begin{frame}
+%\frametitle{\small SCF Convergence?}
+\footnotesize{
+\begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{Choice of Method}
+\begin{itemize}
+\item Always pick DFT over HF
+\item In general: HF < DFT $\sim$ MP2 < CCSD < CCSD(T)
+\item Pay attention to scaling behavior
+\end{itemize}
+\end{colorblock}
+\vspace{0.5cm}
+\begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{SCF Convergence Issues}
+\begin{itemize}
+\item Has SCF (HF and DFT) really converged? Important if you use iop(5/13) in Gaussian route card.
+\item If SCF doesn't converge:
+\begin{enumerate}
+{\footnotesize
+\item Increase maximum number of SCF iterations.
+\begin{itemize}
+{\footnotesize
+\item GAMESS: max 200 SCF iterations cannot be increased further.}
+\end{itemize}
+\item Use smaller basis set as an initial guess.
+\item Try level shifting
+\item Use forced convergence method:
+\begin{itemize}
+{\footnotesize
+\item Gaussian: SCF=QC, XQC or DM and item 1 above
+\item GAMESS: SOSCF}
+\end{itemize}
+}
+\end{enumerate}
+\end{itemize}
+\end{colorblock}
+}
+\end{frame}
+
+\begin{frame}
+\footnotesize{
+%\frametitle{\small Geometry Optimizations}
+\begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{Geometry Optimizations}
+\begin{itemize}
+\item Many problems in computational chemistry are optimization problems: i.e., finding the "stationary points" where a multidimensional function has vanishing gradients.
+\item The energy as a function of nuclear coordinates. Minima, transition states may be of interest.
+\item Make sure that the geometry optimization actually converges.
+\item Run a frequency calculation to check whether the geometry is a local minima (zero imaginary frequencies) or a transition state (only one imaginary frequency)
+\item Tighten convergence criterion to remove unwanted imaginary frequencies.
+\item Having more than 3N-6 (3N-5 for linear) frequencies implies that you are not at a minimum. Double check and tighten convergence if necessary.
+\end{itemize}
+\end{colorblock}
+}
+\end{frame}
+
+
+\begin{frame}
+%\frametitle{\small Worked out Examples On LONI Linux Systems}
+\begin{columns}
+\column{1.16\textwidth}
+\vspace{-0.95cm}
+\begin{alertblock}{On LONI Linux Systems}
+\begin{center}
+\includegraphics[width=0.74\textwidth,clip=true]{workshop}
+\end{center}
+\end{alertblock}
+\end{columns}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+%\frametitle{\small Useful Links/Further Reading}
+\begin{block}{Useful Links}
+\begin{itemize}
+{\footnotesize\color{Blue}
+\item{\color{tigerspurple}Amber:}\url{http://ambermd.org}
+\item{\color{tigerspurple}Desmond:}\url{http://www.deshawresearch.com/resources_desmond.html}
+\item{\color{tigerspurple}DL\_POLY:}\url{http://www.cse.scitech.ac.uk/ccg/software/DL_POLY}
+\item{\color{tigerspurple}Gromacs:}\url{http://www.gromacs.org}
+\item{\color{tigerspurple}LAMMPS:}\url{http://lammps.sandia.gov}
+\item{\color{tigerspurple}NAMD:}\url{http://www.ks.uiuc.edu/Research/namd}
+\item {\color{tigerspurple}CPMD:} \url{http://www.cpmd.org}
+\item {\color{tigerspurple}GAMESS:} \url{http://www.msg.chem.iastate.edu/gamess}
+\item {\color{tigerspurple}Gaussian:} \url{http://www.gaussian.com}
+\item {\color{tigerspurple}NWCHEM:} \url{http://www.nwchem-sw.org}
+\item{\color{tigerspurple}PINY\_MD:}\url{http://homepages.nyu.edu/~mt33/PINY_MD/PINY.html}
+\item {\color{tigerspurple}Basis Set:} \url{https://bse.pnl.gov/bse/portal}
+}
+\end{itemize}
+\end{block}
+\begin{block}{\small Further Reading}
+\begin{itemize}
+{\scriptsize
+\item David Sherill's Notes at Ga Tech: {\color{Blue}\url{http://vergil.chemistry.gatech.edu/notes/index.html}}
+\item David Young's Notes on CCL: {\color{Blue}\url{http://www.ccl.net/cca/documents/dyoung/}}
+\item Mark Tuckerman's Notes at NYU: {\color{Blue}\url{http://www.nyu.edu/classes/tuckerman/quant.mech/index.html}}
+\item Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory, A. Szabo and N. Ostlund
+\item Introduction to Computational Chemistry, F. Jensen
+\item Essentials of Computational Chemistry - Theories and Models, C. J. Cramer
+\item Exploring Chemistry with Electronic Structure Methods, J. B. Foresman and A. Frisch
+%\item Ab Initio Molecular Dynamics: Theory and Implementation, D. Marx and J. Hutter{\color{Blue}\url{http://www.theochem.ruhr-uni-bochum.de/research/marx/marx.pdf}}
+%\item Molecular Modeling - Principles and Applications, A. R. Leach
+%\item Computer Simulation of Liquids, M. P. Allen and D. J. Tildesley
+\item[$\vardiamond$]Modern Electronic Structure Theory, T. Helgaker, P. Jorgensen and J. Olsen (Highly advanced text, second quantization approach to electronic structure theory)
+}
+\end{itemize}
+\end{block}
 \end{frame}
 
 \end{document}
