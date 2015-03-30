@@ -1,19 +1,18 @@
-\documentclass[slidestop,mathserif,compress,xcolor=svgnames]{beamer}
-
+\documentclass[slidestop,mathserif,compress,xcolor=svgnames]{beamer} 
 \mode<presentation>
 {  
-  \setbeamertemplate{background canvas}[vertical shading][bottom=blue!10,top=blue!10]
+  \setbeamertemplate{background canvas}[vertical shading][bottom=blue!5,top=blue!5]
   \setbeamertemplate{navigation symbols}{}%{\insertsectionnavigationsymbol}
-  \usetheme{LSU}
+    \usetheme{LSU}
+%  default infolines miniframes shadow sidebar smoothbars smoothtree split tree
+%    \useoutertheme{shadow}
 }
 
 \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
 \usepackage{amsmath,amssymb,amsfonts,subfigure}
-\usepackage{multirow}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{colortbl}
-\usepackage[normalem]{ulem}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 \usetikzlibrary{calc}
@@ -24,11 +23,13 @@
 \usepackage{colortbl}
 \usepackage[english]{babel}
 \usepackage{hyperref}
+\usepackage[normalem]{ulem}
 % \usepackage{movie15}
 \hypersetup{
-  pdftitle={Computational Chemistry packages},
+  pdftitle={Electronic Structure Calculation in Quantum Chemistry},
   pdfauthor={Alexander B. Pacheco, User Services Consultant, Louisiana State University}
 }
+%\usepackage{movie15}
 \usepackage{times}
 
 \setbeamercovered{dynamic}
@@ -42,6 +43,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \definecolor{DarkGreen}{rgb}{0.0,0.3,0.0}
+\definecolor{darkgreen}{rgb}{0.0,0.6,0.0}
 \definecolor{Blue}{rgb}{0.0,0.0,0.8} 
 \definecolor{dodgerblue}{rgb}{0.1,0.1,1.0}
 \definecolor{indigo}{rgb}{0.41,0.1,0.0}
@@ -57,16 +59,15 @@
 
 \setbeamercolor{uppercol}{fg=white,bg=red!30!black}%
 \setbeamercolor{lowercol}{fg=black,bg=red!15!white}%
+\setbeamercolor{uppercol1}{fg=white,bg=blue!30!black}%
+\setbeamercolor{lowercol1}{fg=black,bg=blue!15!white}%%
+\setbeamercolor{uppercol2}{fg=white,bg=green!30!black}%
+\setbeamercolor{lowercol2}{fg=black,bg=green!15!white}%
 \newenvironment{colorblock}[4]
 {
 \setbeamercolor{upperblock}{fg=#1,bg=#2}
 \setbeamercolor{lowerblock}{fg=#3,bg=#4}
 \begin{beamerboxesrounded}[upper=upperblock,lower=lowerblock,shadow=true]}
-{\end{beamerboxesrounded}}
-
-\newenvironment{colorblock2}[2]
-{
-\begin{beamerboxesrounded}[upper=#1,lower=#2,shadow=true]}
 {\end{beamerboxesrounded}}
 \newenvironment{ablock}[0]
 {
@@ -81,18 +82,21 @@
 \begin{beamerboxesrounded}[upper=uppercol2,lower=lowercol2,shadow=true]}
 {\end{beamerboxesrounded}}
 
-\title[Computational Chemistry packages]{Introduction to Computational Chemistry Packages}
+\title[Electronic Structure]{Electronic Structure Calculations in Quantum Chemistry}
 
 
 \author[Alex Pacheco]{\large{Alexander~B.~Pacheco}}
        
-\institute[LONI HPC Workshop, University of Louisiana - Lafayette, 11/09/2011] {\inst{}\footnotesize{User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}}
+\institute[HPC@LSU - http://www.hpc.lsu.edu] {\inst{}\footnotesize{User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}}
 
-\date[\hfill{Nov 9, 2011}]{\scriptsize{LONI HPC Workshop\\University of Louisiana - Lafayette\\Lafayette\\Nov 9, 2011}}
+\date[{Nov 11, 2011\hspace{2cm}}]{\scriptsize{HPC Training\\Louisiana State University\\Baton Rouge\\Nov 16, 2011}}
      
 \subject{Talks}
 % This is only inserted into the PDF information catalog. Can be left
 % out. 
+
+
+
 
 % If you have a file called "university-logo-filename.xxx", where xxx
 % is a graphic format that can be processed by latex or pdflatex,
@@ -111,16 +115,17 @@
 \pgfdeclareimage[height=0.55cm]{hpc-logo}{LONI-2}
 \brlogo{\pgfuseimage{hpc-logo}}
 
+
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
- \AtBeginSection[]
- {
-   \begin{frame}<beamer>
-    \frametitle{\small{Outline}}
-     \footnotesize
-     \tableofcontents[currentsection,currentsubsection]
-   \end{frame}
- }
+%  \AtBeginSection[]
+%  {
+%    \begin{frame}<beamer>
+%     \frametitle{\small{Outline}}
+%      \small
+%      \tableofcontents[currentsection,currentsubsection]
+%    \end{frame}
+%  }
 
 \begin{document}
 \footnotesize
@@ -131,13 +136,10 @@
   \footnotesize
   \frametitle{\small{Outline}}
   \tableofcontents
-  \tableofcontents[part=1]
-  \tableofcontents[part=2]
-  \tableofcontents[part=3]
-  \tableofcontents[part=4]
-  \tableofcontents[part=5]
 \end{frame}
 
+
+%\part{Introduction}
 \section{Introduction}
 \begin{frame}
  \frametitle{\small Introduction}
@@ -188,9 +190,25 @@
   \end{columns}
 \end{frame}
 
-\section{Electronic Structure Methods}
 \begin{frame}
-  \frametitle{\small Electronic Structure Methods}
+  \frametitle{\small Tutorial Goals}
+  \begin{itemize}
+    \item Provide a brief introduction to Electronic Structure Calculations in Quantum Chemistry.
+    \begin{enumerate}
+      \item Overview of Quantum Chemical methods.
+      \item What kind of calculations can we carry out?
+      \item What experimental properties can we study/understand?
+      \item How to create input files?
+      \item Tips and Tricks to run calculations?
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+
+%\part{Ab initio Methods}
+\section{Ab Initio Methods}
+\begin{frame}
+  \frametitle{\small Ab Initio Methods}
   \begin{block}{}
     \begin{itemize}
       \item \emph{Ab Initio}, meaning "from first principles", methods solve the Schr\"{o}dinger equation and does not rely on empirical or experimental data. 
@@ -211,9 +229,10 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small Electronic Structure Methods}
+%   \frametitle{\small Ab Initio Methods}
   \fontsize{9}{10}{
-  \begin{block}{What can we predict with Electronic Structure methods?}
+  \vspace{-0.1cm}
+  \begin{block}{What can we predict with \emph{Ab Initio} methods?}
     \begin{itemize}
       \item Molecular Geometry: Equilibrium and Transition State
       \item Dipole and Quadrupole Moments and polarizabilities
@@ -234,27 +253,157 @@
 \end{frame}
 
 
-\subsection{Wavefunction Methods}
 \begin{frame}
-  \frametitle{\small Ab Initio Wavefunction Methods}
+  %\frametitle{\small Ab Initio Methods}
   \begin{block}{Ab Initio Theory}
-    \fontsize{8}{10}{
     \begin{itemize}
-      \item {\color{blue}Born-Oppenheimer Approximation}: Nuclei are heavier than electrons and can be considered stationary with respect to electrons. Also know as "clamped nuclei" approximations and leads to idea of potential surface.
-      \item[]{\hspace{3cm}$\Psi({\bf r},{\bf R}) = \psi_e({\bf r};{\bf R})\psi_n({\bf R})$}
+      \item {\color{blue}Born-Oppenheimer Approximation}: Nuclei are heavier than electrons and can be considered stationary with respect to electrons. Also know as "clamped nuclei" approximations and leads to idea of potential surface
       \item {\color{blue}Slater Determinants}: Expand the many electron wave function in terms of Slater determinants.
-      \item[]{\hspace{3cm}$\displaystyle{\psi_e({\bf r};{\bf R}) = (N!)^{-1/2}\mathcal{A}\prod^{N}_{i=1}\phi_i({\bf r};{\bf R})}$}
       \item {\color{blue}Basis Sets}: Represent Slater determinants by molecular orbitals, which are linear combination of atomic-like-orbital functions i.e. basis sets
-      \item[] {\hspace{3cm}$\displaystyle{\phi_i = \sum^N_{\mu=1}c_{\mu i}\chi_\mu}$}
-      \item {\color{blue}Variational Theorem}: Expectation value of the energy of a trial wavefunction is always greater than or equal to the true energy
-      \item[]{\hspace{3cm}$E_e = \langle\psi_e\mid\hat{H}_e\mid\psi_e\rangle \ge \varepsilon_0$}
     \end{itemize}
-    }
   \end{block}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small Ab Initio Wavefunction Methods}
+  \frametitle{\small Born-Oppenheimer Approximation}
+  \begin{block}{}
+    \begin{itemize}
+      \item Solve time-independent Schr\"{o}dinger equation
+%       \begin{align*}
+      \item[]\hspace{4cm}$\hat{H}\Psi = E\Psi$
+%       \end{align*}
+      \item For many electron system:
+%       \begin{align*}
+      \item[]\hspace{-0.5cm}$\displaystyle{\hat{H} = -{\color{DarkGreen}\underbrace{\frac{\hbar^2}{2}\sum_\alpha\frac{\nabla^2_\alpha}{M_\alpha}}_{\hat{T}_n}} - {\color{darkgreen}\underbrace{\frac{\hbar^2}{2m_e}\sum_i\nabla^2_i}_{\hat{T}_e}} + {\color{dodgerblue}\underbrace{{\color{Blue}\underbrace{\sum_{\alpha>\beta}\frac{e^2Z_{\alpha}Z_{\beta}}{4\pi\epsilon_0R_{\alpha\beta}}}_{\hat{V}_{nn}}} - {\color{indigo}\underbrace{\sum_{\alpha,i}\frac{e^2Z_{\alpha}}{4\pi\epsilon_0R_{\alpha i}}}_{\hat{V}_{en}}} + {\color{red}\underbrace{\sum_{i>j}\frac{e^2}{4\pi\epsilon_0r_{ij}}}_{\hat{V}_{ee}}}}_{\hat{V}}}}$
+%       \end{align*}
+      \item The wave function $\Psi(R,r)$ of the many electron molecule is a function of nuclear ($R$) and electronic ($r$) coordinates.
+      \item Motion of nuclei and electrons are coupled.
+      \item However, since nuclei are much heavier than electrons, the nuclei appear fixed or stationary.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Born-Oppenheimer Approximation}
+  \begin{itemize}
+    \item Born-Oppenheimer Approximation: Separate electronic and nuclear motion:
+    \begin{align*}
+      \Psi(R,r) = \psi_e(r;R)\psi_n(R)
+    \end{align*}
+    \item Solve electronic part of Schr\"{o}dinger equation
+    \begin{align*}
+      \hat{H}_e\psi_e(r;R) = E_e\psi_e(r;R)
+    \end{align*}
+  \end{itemize}
+  \begin{columns}
+    \column{5cm}
+    \vspace{-0.5cm}
+    \begin{itemize}
+      \item BO approximation leads to the concept of potential energy surface
+      \begin{align*}
+	V(R) = E_e + V_{nn}
+      \end{align*}
+      \item The electronic potential is a function of nuclear coordinates.
+      \item In Molecular Dynamics, the nuclei move along this energy surface obeying Newton's Laws of Motion.
+    \end{itemize}
+    \column{6cm}
+    \vspace{-0.5cm}
+    \begin{exampleblock}{}
+      \includegraphics[width=6cm,keepaspectratio=true,clip=true]{HOH}
+    \end{exampleblock}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Potential Energy Surfaces}
+  \begin{itemize}
+    \item The potential energy surface (PES) is multi-dimensional ($3N-6$ for non-linear molecule and $3N-5$ for linear molecule)
+    \item The PES contains multiple minima and maxima.\let\thefootnote\relax\footnotetext{\tiny Picture taken from Bernard Schlegel's course slide at http://www.chem.wayne.edu/$\sim$hbs/chm6440/}
+    \item Geometry optimization search aims to find the global minimum of the potential surface.
+    \item Transition state or saddle point search aims to find the maximum of this potential surface, usually along the reaction coordinate of interest.
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=6cm,keepaspectratio=true,clip=true]{PES}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Geometry Optimizations}
+  \vspace{-0.6cm}
+  {\scriptsize
+  \begin{columns}
+    \column{12cm}
+    \begin{block}{}
+      \begin{itemize}
+	\item Geometry optimization is used to find minima on the potential energy surface, with these minimum energy structures representing equilibrium structures. 
+	\item Optimization also is used to locate transition structures, which are represented by saddle points on the potential energy surface. 
+	\item Optimization to minima is also referred to as energy minimization. 
+	\item During minimization, the energy of molecules is reduced by adjusting atomic coordinates.% It is applied to model-built structures as well as to those derived from coordinate data banks. 
+	\item Energy minimization is done when using either molecular mechanics or quantum mechanics methods, and it must precede any computational analyses in which these methods are applied. 
+	\item For example, geometry optimization can be used to
+	\begin{enumerate}
+	  {\scriptsize
+	  \item characterize a potential energy surface
+	  \item obtain a structure for a single-point quantum mechanical calculation, which provides a large set of structural and electronic properties
+	  \item prepare a structure for molecular dynamics simulation - if the forces on atoms are too large, the integration algorithm may fail.
+	  }
+	\end{enumerate}
+	%\item The energy obtained from the potential energy function at the optimized geometry is sometimes called a steric or conformational energy. %These energies can be used to calculate differences between stereoisomers and between isologous molecules (i.e., those differing in connectivity but having the same number of each type of functional group). 
+	\item These energies apply to molecules in a hypothetical motionless state at 0 K. Additional information is needed to calculate enthalpies (e.g., thermal energies of translation, vibration, and rotation) and free energies (i.e., entropy). %Programs such as Gaussian provide the information needed for calculating free energies of small molecules. Free energy simulations for macromolecules also are possible.
+      \end{itemize}
+    \end{block}
+  \end{columns}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Wavefunction Methods}
+  \begin{block}{}
+    \begin{itemize}
+      \item The electronic Hamiltonian (in atomic units, $\hbar,m_e,4\pi\epsilon_0,e=1$) to be solved is 
+      \begin{align*}
+	\hat{H}_e = -\frac{1}{2}\sum_i\nabla^2_i - \sum_{\alpha,i}\frac{Z_\alpha}{R_{i\alpha}} + \sum_{i>j}\frac{1}{r_{ij}} + \sum_{\alpha>\beta}\frac{Z_\alpha Z_\beta}{R_{\alpha\beta}}
+      \end{align*}
+      \item Calculate electronic wave function and energy
+      \begin{align*}
+	E_e = \frac{\langle\psi_e\mid\hat{H}_e\mid\psi_e\rangle}{\langle\psi_e\mid\psi_e\rangle}
+      \end{align*}
+      \item The total electronic wave function is written as a Slater Determinant of the one electron functions, i.e. molecular orbitals, MO's
+      \begin{align*}
+	\psi_e = \frac{1}{\sqrt{N!}}\left| \begin{array}{cccc}
+	\phi_1(1) & \phi_2(1) & \cdots & \phi_N(1)\\
+	\phi_1(2) & \phi_2(2) & \cdots & \phi_N(2)\\
+	\cdots & \cdots & \cdots & \cdots \\
+	\phi_1(N) & \phi_2(N) & \cdots & \phi_N(N)\\
+	\end{array} \right|
+      \end{align*}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+%   \frametitle{\small Wavefunction Methods}
+  \begin{block}{}
+    \begin{itemize}
+      \item MO's are written as a linear combination of one electron atomic functions or atomic orbitals (AO's)
+      \begin{align*}
+	\phi_i = \sum^N_{\mu=1}c_{\mu i}\chi_\mu
+      \end{align*}
+      \item[]$c_{\mu i} \Rightarrow$ MO coefficients
+      \item[]$\chi_\mu\Rightarrow$ atomic basis functions.
+      \item Obtain coefficients by minimizing the energy via Variational Theorem.
+      \item Variational Theorem: Expectation value of the energy of a trial wavefunction is always greater than or equal to the true energy
+      \begin{align*}
+	E_e = \langle\psi_e\mid\hat{H}_e\mid\psi_e\rangle \ge \varepsilon_0
+      \end{align*}
+      \item Increasing $N \Rightarrow$ Higher quality of wavefunction $\Rightarrow$ Higher computational cost
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Ab Initio Methods}
+  \vspace{-0.2cm}
   \begin{block}{\small The most popular classes of ab initio electronic structure methods:}
     \begin{itemize}
       \item Hartree-Fock methods
@@ -432,6 +581,7 @@
   }
 \end{frame}
 
+
 \begin{frame}[bg=lightgray]
   \frametitle{\small Scaling}
   \begin{center}
@@ -471,102 +621,153 @@
 \end{frame}
 
 
-\subsection{Density Functional Methods}
+%\part{Density Functional Theory}
+\section{Density Functional Theory}
 \begin{frame}
   \frametitle{\small Density Functional Theory}
-%   \begin{block}{}
+  \fontsize{8}{10}{
+  \begin{columns}
+    \column{12cm}
     \begin{itemize}
       \item Density Functional Theory (DFT) is an alternative to wavefunction based electronic structure methods of many-body systems such as Hartree-Fock and Post Hartree-Fock.
       \item In DFT, the ground state energy is expressed in terms of the total electron density.
-      \item[]{\hspace{4cm}$\rho_0(r) = \langle\Psi_0|\hat{\rho}|\Psi_0\rangle$}
-%       \item We again start with Born-Oppenheimer approximation and write the electronic Hamiltonian as
-%       \item[]{\hspace{4cm}$\hat{H} = \hat{F} + \hat{V}_{ext}$}
-%       \item[]where $\hat{F}$ is the sum of the kinetic energy of electrons and the electron-electron interaction and $\hat{V}_{ext}$ is some external potential.
-%       \item Modern DFT methods result from the Hohenberg-Kohn theorem
-      \begin{block}{Hohenberg-Kohn theorem}
+      \begin{align*}
+	\rho_0(r) = \langle\Psi_0|\hat{\rho}|\Psi_0\rangle
+      \end{align*}
+      \item We again start with Born-Oppenheimer approximation and write the electronic Hamiltonian as
+      \begin{align*}
+	\hat{H} = \hat{F} + \hat{V}_{ext}
+      \end{align*}
+      where $\hat{F}$ is the sum of the kinetic energy of electrons and the electron-electron interaction and $\hat{V}_{ext}$ is some external potential.
+    \end{itemize}
+  \end{columns}
+  }
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{\small DFT}
+  \fontsize{8}{10}{
+  \vspace{-0.5cm}
+  \begin{columns}
+    \column{12cm}
+    \begin{itemize}
+      \item Modern DFT methods result from the Hohenberg-Kohn theorem
       \begin{enumerate}
-	{\footnotesize
+	{\scriptsize
 	\item The external potential $V_{ext}$, and hence total energy is a unique functional of the electron density $\rho(r)$
-	\item[]\hspace{3cm}${\mathrm {Energy}} = \dfrac{\langle\Psi\mid\hat{H}\mid\Psi\rangle}{\langle\Psi\mid\Psi\rangle} \equiv E[\rho]$
+	\begin{align*}
+	  {\mathrm {Energy}} = \dfrac{\langle\Psi\mid\hat{H}\mid\Psi\rangle}{\langle\Psi\mid\Psi\rangle} \equiv E[\rho]
+	\end{align*}
 	\item The ground state energy can be obtained variationally, the density that minimizes the total energy is the exact ground state density
-	\item[]\hspace{3cm}$E[\rho] > E[\rho_0], {\mathrm if }\rho \ne \rho_0$
+	\begin{align*}
+	  E[\rho] > E[\rho_0], {\mathrm if }\rho \ne \rho_0
+	\end{align*}
 	}
       \end{enumerate}
-      \end{block}
-    \end{itemize}
-%   \end{block}
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{\small DFT}
-%   \vspace{-0.4cm}
-%   \begin{block}{}
-    \fontsize{8}{10}{
-    \begin{itemize}
       \item If density is known, then the total energy is:
-      \item[]\hspace{3cm}$E[\rho]=T[\rho]+V_{ne}[\rho] + J[\rho] + E_{nn} + E_{xc}[\rho]$
-      \item[]where 
-      \item[]\hspace{3cm}$\displaystyle{E_{nn}[\rho] = \sum_{A>B}\dfrac{Z_AZ_B}{R_{AB}}}$
-      \item[]\hspace{3cm}$\displaystyle{V_{ne}[\rho] = \int\rho(r)V_{ext}(r)dr}$
-      \item[]\hspace{3cm}$\displaystyle{J[\rho] = \dfrac{1}{2}\int\dfrac{\rho(r_1)\rho(r_2)}{r_{12}}dr_1dr_2}$
-      \item[] and two unknowns, the kinetic energy functional $T[\rho]$ and the exchange-correlation functional $E_{xc}[\rho]$
-%     \end{itemize}
-%     }
-%   \end{block}
-%   \vspace{-0.1cm}
-%   \begin{block}{}
-%     \fontsize{8}{10}{
-%     \begin{itemize}
-      \item To calculate $T[\rho]$, Kohn and Sham introduced the concept of Kohn-Sham orbitals which are eigenvectors of the Kohn-Sham equation 
-      \item[]\hspace{3cm}$\left(-\dfrac{1}{2}\nabla^2+v_{\rm eff}(r)\right)\phi_{i}(r)=\varepsilon_{i}\phi_{i}(r)$
-      \item[]Here, $\varepsilon_i$ is the orbital energy of the corresponding Kohn-Sham orbital, $\phi_i$, and the density for an ''N''-particle system is
-      \item[]\hspace{3cm}$\displaystyle{\rho(r)=\sum_i^N |\phi_{i}(r)|^2}$
+      \begin{align*}
+	E[\rho]=T[\rho]+V_{ne}[\rho] + J[\rho] + E_{nn} + E_{xc}[\rho] 
+      \end{align*}
+      where 
+      \begin{align*}
+	E_{nn}[\rho] = \sum_{A>B}\dfrac{Z_AZ_B}{R_{AB}}  \hspace{1cm}&\hspace{1cm}
+	V_{ne}[\rho] = \int\rho(r)V_{ext}(r)dr \\
+	J[\rho] = \dfrac{1}{2}&\int\dfrac{\rho(r_1)\rho(r_2)}{r_{12}}dr_1dr_2
+      \end{align*}
     \end{itemize}
-    }
-%   \end{block}
+  \end{columns}
+  }
 \end{frame}
 
 
 \begin{frame}
   \frametitle{\small DFT}
-%   \begin{block}{}
-    \fontsize{8}{10}{
+  \fontsize{8}{10}{
+  \begin{columns}
+    \column{12cm}
     \begin{itemize}
+      \item If the density is known, the two unknowns in the energy expression are the kinetic energy functional $T[\rho]$ and the exchange-correlation functional $E_{xc}[\rho]$
+      \item To calculate $T[\rho]$, Kohn and Sham introduced the concept of Kohn-Sham orbitals which are eigenvectors of the Kohn-Sham equation 
+      \begin{align*}
+	\left(-\dfrac{1}{2}\nabla^2+v_{\rm eff}(r)\right)\phi_{i}(r)=\varepsilon_{i}\phi_{i}(r)
+      \end{align*}
+      Here, $\varepsilon_i$ is the orbital energy of the corresponding Kohn-Sham orbital, $\phi_i$, and the density for an ''N''-particle system is
+      \begin{align*}
+	\rho(r)=\sum_i^N |\phi_{i}(r)|^2
+      \end{align*}
       \item The total energy of a system is 
-      \item[]\hspace{3cm}$\displaystyle{E[\rho]  = T_s[\rho] + \int dr\ v_{\rm ext}(r)\rho(r) + V_{H}[\rho] + E_{\rm xc}[\rho]}$
-      \item $T_s$ is the Kohn-Sham kinetic energy
-      \item[]\hspace{3cm}$\displaystyle{T_s[\rho]=\sum_{i=1}^N\int dr\ \phi_i^*(r)\left(-\frac{1}{2}\nabla^2\right)\phi_i(r)}$
-      \item $v_{\rm ext}$ is the external potential acting on the interacting system (at minimum, for a molecular system, the electron-nuclei interaction), $V_H$ is the Hartree (or Coulomb) energy,
-      \item[]\hspace{3cm}$\displaystyle{V_{H}=\dfrac{1}{2}\int drdr^\prime\  \dfrac{\rho(r)\rho(r^\prime)}{|r-r^\prime|}}$
-      \item[]and $E_{xc}$ is the exchange-correlation energy. 
-      \item The Kohn-Sham equations are found by varying the total energy expression with respect to a set of orbitals to yield the Kohn-Sham potential as
-      \item[]\hspace{3cm}$\displaystyle{v_{\rm eff}(r) = v_{\rm ext}(r) + \int \dfrac{\rho(r^\prime)}{|r-r^\prime|}dr^\prime + \dfrac{\delta E_{\rm xc}[\rho]}{\delta\rho(r)}}$
-      \item[]where the last term $\displaystyle{v_{\rm xc}(r)\equiv\dfrac{\delta E_{\rm xc}[\rho]}{\delta\rho(r)}}$ is the exchange-correlation potential.
+      \begin{align*}
+	E[\rho]  = T_s[\rho] + \int dr\ v_{\rm ext}(r)\rho(r) + V_{H}[\rho] + E_{\rm xc}[\rho]
+      \end{align*}
     \end{itemize}
-    }
-%   \end{block}
+  \end{columns}
+  }
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{\small DF}
+  \fontsize{8}{10}{
+  %\vspace{-0.5cm}
+  \begin{columns}
+    \column{12cm}
+    \begin{itemize}
+      \item $T_s$ is the Kohn-Sham kinetic energy which is expressed in terms of the Kohn-Sham orbitals as
+      \begin{align*}
+	T_s[\rho]=\sum_{i=1}^N\int dr\ \phi_i^*(r)\left(-\frac{1}{2}\nabla^2\right)\phi_i(r)
+      \end{align*}
+      $v_{\rm ext}$ is the external potential acting on the interacting system (at minimum, for a molecular system, the electron-nuclei interaction), $V_H$ is the Hartree (or Coulomb) energy,
+      \begin{align*}
+	V_{H}=\dfrac{1}{2}\int drdr^\prime\  \dfrac{\rho(r)\rho(r^\prime)}{|r-r^\prime|}
+      \end{align*}
+      and $E_{xc}$ is the exchange-correlation energy. 
+      \item The Kohn-Sham equations are found by varying the total energy expression with respect to a set of orbitals to yield the Kohn-Sham potential as
+      \begin{align*}
+	v_{\rm eff}(r) = v_{\rm ext}(r) + \int \dfrac{\rho(r^\prime)}{|r-r^\prime|}dr^\prime + \dfrac{\delta E_{\rm xc}[\rho]}{\delta\rho(r)}
+      \end{align*}
+      where the last term $\displaystyle{v_{\rm xc}(r)\equiv\dfrac{\delta E_{\rm xc}[\rho]}{\delta\rho(r)}}$ is the exchange-correlation potential. 
+    \end{itemize}
+  \end{columns}
+  }
 \end{frame}
 
 \begin{frame}
   \frametitle{\small DFT}
-%   \begin{block}{}
-    \fontsize{8}{10}{
+  \fontsize{8}{10}{
+  \begin{columns}
+    \column{12cm}
+    %where the last term
+    %\begin{align*}
+    %v_{\rm xc}(r)\equiv\dfrac{\delta E_{\rm xc}[\rho]}{\delta\rho(r)}
+    %\end{align*}
+    %s the exchange-correlation potential. 
     \begin{itemize}
       \item The exchange-correlation potential, and the corresponding energy expression, are the only unknowns in the Kohn-Sham approach to density functional theory. 
+      %
+      %\item The exchange and correlation energy is expressed as functional of the electron density.
+      %\begin{align*}
+      %E[\rho] = T[\rho] + E_{ne}[\rho] + E_{xc}[\rho] + E_{ee}[\rho] + E_{nn}
+      %\end{align*}
       \item There are many ways to approximate this functional $E_{\rm xc}$, generally divided into two separate terms
-      \item[]\hspace{3cm}$E_{\rm xc}[\rho] = E_{\rm x}[\rho] + E_{\rm c}[\rho]$
-      \item[]where the first term is the exchange functional while the second term is the correlation functional.
+      \begin{align*}
+	E_{\rm xc}[\rho] = E_{\rm x}[\rho] + E_{\rm c}[\rho]
+      \end{align*}
+      where the first term is the exchange functional while the second term is the correlation functional.
       \item Quite a few research groups have developed the exchange and correlation functionals which are fit to empirical data or data from explicity correlated methods.
+      %\item The fitting of the functional is often done with empirical data (Hence DFT is not an "\emph{Ab Initio}" Method)
+      %\item Some density functionals can be considered \emph{Ab Initio} because they do not fit to empirical data.
       \item Popular DFT functionals (according to a recent poll)
       \begin{enumerate}
-	\item[$\vardiamond$] {\scriptsize PBE0 (PBEPBE), B3LYP, PBE, BP86, M06-2X, B2PLYP, B3PW91, B97-D, M06-L, CAM-B3LYP}
-	\item[$\blacksquare$]  {\scriptsize \url{http://www.marcelswart.eu/dft-poll/index.html}}
-	\item[$\blacksquare$]  {\scriptsize \url{http://www.ccl.net/cgi-bin/ccl/message-new?2011+02+16+009}}
+	{\scriptsize
+	\item[$\vardiamond$] PBE0 (PBEPBE), B3LYP, PBE, BP86, M06-2X, B2PLYP, B3PW91, B97-D, M06-L, CAM-B3LYP
+	\item[$\blacksquare$]\url{http://www.marcelswart.eu/dft-poll/index.html}
+	\item[$\blacksquare$]\url{http://www.ccl.net/cgi-bin/ccl/message-new?2011+02+16+009}
+	}
       \end{enumerate}
     \end{itemize}
-    }
-%   \end{block}
+  \end{columns}
+  }
 \end{frame}
 
 
@@ -574,13 +775,13 @@
   \frametitle{\small DFT Flow Chart}
   \scriptsize{
   \tikzstyle{decision} = [ellipse, draw, fill=red!50!yellow,text width=10em, text badly centered, node distance=2.5cm, inner sep=0pt, minimum height=5em]
-  \tikzstyle{block} = [rectangle, draw, fill=green!50!black,text width=12em, text centered, rounded corners, minimum height=4em]
+  \tikzstyle{block} = [rectangle, draw, fill=green!50!black, text width=12em, text centered, rounded corners, minimum height=4em]
   \tikzstyle{line} = [draw, -latex']
   \tikzstyle{cloud} = [draw, ellipse, fill=green!20,node distance=4cm, minimum height=2em]
   \begin{tikzpicture}[node distance = 2cm, auto]
-    \node [block,fill=gray](initial){Select initial\\$\displaystyle{\boldsymbol{\rho^{(n)}(r)=\sum_i^N |\phi^{(n)}_{i}(r)|^2}}$};
+    \node [block,fill=gray](initial){Select initial\\$\boldsymbol{\rho^{(n)}(r)=\sum_i^N |\phi^{(n)}_{i}(r)|^2}$};
     \node [block, right of=initial,node distance=4cm](KSoperator){Contruct Kohn-Sham Operator\\$\boldsymbol{ \hat{h}^{(n)}_{KS}=-\dfrac{1}{2}\nabla^2+v^{(n)}_{\rm eff}(r)}$};
-    \node [block, below of=KSoperator, text width=15.5em,node distance=3cm](solve){Solve\\$\boldsymbol{\hat{h}^{(n)}_{KS}\phi^{(n+1)}_{i}(r)=\varepsilon^{(n+1)}_{i}\phi^{(n+1)}_{i}(r)}$\\$\displaystyle{\boldsymbol{\rho^{(n+1)}(r)=\sum_i^N |\phi^{(n+1)}_{i}(r)|^2}}$};
+    \node [block, below of=KSoperator, text width=15.5em,node distance=3cm](solve){Solve\\$\boldsymbol{\hat{h}^{(n)}_{KS}\phi^{(n+1)}_{i}(r)=\varepsilon^{(n+1)}_{i}\phi^{(n+1)}_{i}(r)}$\\$\boldsymbol{\rho^{(n+1)}(r)=\sum_i^N |\phi^{(n+1)}_{i}(r)|^2}$};
 %    \node [block, below of=solve, text width=14em](density){Get new density\\$\rho^{(n+1)}(r)=\sum_i^N |\phi^{(n+1)}_{i}(r)|^2$};
     \node [decision, below of=solve,node distance=3cm](decide){Density Converged?\\$\boldsymbol{|\rho^{(n+1)}-\rho^{(n)}|\le\epsilon_{tol}}$};
     \node [block, right of=solve, node distance=4cm, text width=6em, fill=red!50!yellow!60!green](update){Set\\$\boldsymbol{\rho^{(n)}\rightarrow\rho^{(n)}}$\\$\boldsymbol{n\rightarrow n+1}$};
@@ -598,15 +799,78 @@
 \end{frame}
 
 
-\subsection{Basis Sets}
+%\part{Semi-empirical Methods}
+\section{Semi-empirical Methods}
+\begin{frame}
+  \frametitle{\small Semi-empirical Methods}
+  \fontsize{8}{10}{
+  \begin{itemize}
+    \item Semi-empirical quantum methods: 
+    \begin{enumerate}
+      \scriptsize{
+      \item[$\vardiamond$]Represents a middle road between the mostly qualitative results from molecular mechanics and the highly computationally demanding quantitative results from \emph{ab initio} methods.
+      \item[$\vardiamond$] Address limitations of the Hartree-Fock claculations, such as speed and low accuracy, by omitting or parametrizing certain integrals
+      }
+    \end{enumerate}
+    \item integrals are either determined directly from experimental data or calculated from analytical formula with \emph{ab initio} methods or from suitable parametric expressions.
+    \item Integral approximations:
+    \begin{enumerate}
+      \scriptsize{
+      \item[$\vardiamond$] Complete Neglect of Differential Overlap (CNDO)
+      \item[$\vardiamond$] Intermediate Neglect of Differential Overlap (INDO)
+      \item[$\vardiamond$] Neglect of Diatomic Differential Overlap (NDDO) ( Used by PM3, AM1, ...)
+      }
+    \end{enumerate} 
+  \end{itemize}
+  \vspace{-0.1cm}
+  \begin{block}{}
+    Semi-empirical methods are fast, very accurate when applied to molecules that are similar to those used for parametrization and are applicable to very large molecular systems.
+  \end{block}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Heirarchy of Methods}
+  \footnotesize{
+  \tikzstyle{block} = [rectangle, draw, fill=blue!20, text width=13em, text centered, rounded corners, node distance=1.6cm, minimum height=2em]
+  \tikzstyle{edge} = []
+  \tikzstyle{line} = [draw, -latex']    
+  \begin{tikzpicture}[node distance = 2cm, auto]
+    % Place nodes;
+    \node [block,fill=green!90!black!20!yellow] (semi) {{\bf Semi-empirical methods}\\CNDO,INDO,AM1,PM3};
+    \node [block, below of=semi,text width=8em,fill=green!90!black!50!yellow] (hf) {{\bf Hartree Fock}\\HF-SCF};
+    \node [edge, left of=hf, node distance=3.5cm](leftedge1){};
+    \node [edge, right of=hf, node distance=3.5cm](rightedge1){};
+    \node [block, below of=leftedge1,fill=green!90!black!90!yellow](excite){{\bf Excitation Hierarchy}\\CIS,CISD,CISDT\\CCS,CCSD,CCSDT};
+    \node [block, below of=rightedge1,fill=green!90!black!90!yellow](perturb){{\bf Pertubation Hierarchy}\\MP2,MP3,MP4};
+    \node [block, below of=excite,fill=green!60!black](mchf){{\bf Multiconfigurational HF}\\MCSCF,CASSCF};
+    \node [block, below of=perturb,fill=green!60!black](mrpt){{\bf Multireference Perturbation}\\CASPT2,CASPT3};
+    \node [edge, below of=mchf](leftedge2){};
+    \node [edge, below of=mrpt](rightedge2){};
+    \node [block, left of=rightedge2, node distance=3.5cm, text width=4em,fill=green!30!black](fullci){\bf Full CI};
+    % Draw edges
+    \path [line] (hf) -- (semi);
+%    \path [line] (hf) -- (leftedge1);
+%   \path [line] (hf) -- (rightedge1);
+    \path [line] (hf) -| (excite);
+    \path [line] (hf) -| (perturb);
+    \path [line] (excite) -- (mchf);
+    \path [line] (perturb) -- (mrpt);
+    \path [line] (mchf) |- (fullci);
+    \path [line] (mrpt) |- (fullci);
+  \end{tikzpicture}
+  }
+\end{frame}
+
+\section{Basis Sets}
 \begin{frame}
   \frametitle{\small Basis Sets}
   \begin{itemize}
     \item %Most electronic structure codes use either a 
       Slater type orbital (STO) or Gaussian type orbital (GTO) to describe the AO's
     \begin{align*}
-      \phi^{\mathrm{STO}}(r) &= x^ly^mz^ne^{-\zeta r}\\
-      \phi^{\mathrm{GTO}}(r) &= x^ly^mz^ne^{-\xi r^2}
+      \chi^{\mathrm{STO}}(r) &= x^ly^mz^ne^{-\zeta r}\\
+      \chi^{\mathrm{GTO}}(r) &= x^ly^mz^ne^{-\xi r^2}
     \end{align*}
     where $L=l+m+n$ is the total angular momentun and $\zeta,\xi$ are orbital exponents. 
   \end{itemize}
@@ -616,7 +880,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small STO or GTO? Which One?}
+  \frametitle{\small STO or GTO}
   \begin{columns}
     \column{5.5cm}
     \vspace{-0.2cm}
@@ -643,33 +907,26 @@
 \end{frame}
 
 \begin{frame}
+  %\item Two main families fo basis sets used in modern computational chemistry calculations:
   \begin{block}{Pople family basis set}
     \begin{enumerate}
       \item Minimal Basis: STO-nG
       \begin{enumerate}
-	\footnotesize{
 	\item[$\vardiamond$]Each atom optimized STO is fit with n GTO's
 	\item[$\vardiamond$]Minimum number of AO's needed
-	}
       \end{enumerate}
       \item Split Valence Basis: 3-21G,4-31G, 6-31G
       \begin{enumerate}
-	\footnotesize{
 	\item[$\vardiamond$]Contracted GTO's optimized per atom.
 	\item[$\vardiamond$]Valence AO's represented by 2 contracted GTO's
-	}
       \end{enumerate}
       \item Polarization: Add AO's with higher angular momentum (L)
       \begin{enumerate}
-	\footnotesize{
 	\item[$\vardiamond$]3-21G* or 3-21G(d),6-31G* or 6-31G(d),6-31G** or 6-31G(d,p)
-	}
       \end{enumerate}
       \item Diffuse function: Add AO with very small exponents for systems with diffuse electron densities
       \begin{enumerate}
-	\footnotesize{
 	\item[$\vardiamond$]6-31+G*, 6-311++G(d,p)
-	}
       \end{enumerate}
     \end{enumerate}
   \end{block}
@@ -713,117 +970,29 @@
   \end{block}
 \end{frame}
 
-\section{Molecular Dynamics}
+
+%\part{Molecular Mechanics}
+\section{Molecular Mechanics}
 \begin{frame}
-  \frametitle{\small Molecular Dynamics}
-  \begin{block}{}
+  \frametitle{\small Molecular Mechanics}
+  \begin{itemize}
+    %\item Molecular mechanics uses Newtonian mechanics to model molecular systems. 
+    \item The potential energy of all systems in molecular mechanics is calculated using force fields. 
+    \item Molecular mechanics can be used to study small molecules as well as large biological systems or material assemblies with many thousands to millions of atoms.
+    \item All-atomistic molecular mechanics methods have the following properties:
     \begin{itemize}
-      \item Molecular Dynamics is a computer simulation of physical movements of atoms and molecules.
-      \item The atoms and molecules are allowed to interact and their trajectories are determined by numerically solving the Newton's equation of motion.
-      \item[] {\hspace{3.5cm}${\color{DarkGreen}{\bf F}_i = -{\boldsymbol \nabla}_iV = m_i{\bf a}_i}$}
-      \item The fundamental principle of Molecular Dynamics is the {\color{Blue}\textbf{Ergodic Hypothesis}:} \textit{the time average of a process is equal to an average over the statistical ensemble}.
-      \item {\color{Blue}Ab-Initio Molecular Dynamics:} Atoms and Molecules move in an average electronic potential obtained from ab-initio methods.
-      \item {\color{Blue}Classical Molecular Dynamics:} Atoms and Molecules move in an empirical potential or one obtained from Molecular Mechanics force fields.
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small General Schematic for MD Program}
-  \vspace{-0.5cm}
-  \begin{columns}
-    \column{4.5cm}
-    \begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{}
-      \begin{enumerate}
-	\item Setup: Read input parameters
-	\item Initialize: Obtain initial positions and velocities
-	\item Evaluate: Potential Energy and Forces on nuclei
-	\item Propagate nuclei using an appropriate time integration algorithm
-	\item Check if Dynamics is complete. 
-	\item If incomplete update variables and goto Step 3.
-	\item If complete end dynamics or carry out all required analysis.
-      \end{enumerate}
-    \end{colorblock}
-    \column{7cm}
-    \begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{}
-      \scriptsize{
-      \tikzstyle{decision} = [ellipse, draw, fill=red!50!yellow,text width=6em, text badly centered, node distance=1.5cm, inner sep=0pt, minimum height=4.5em]
-      \tikzstyle{block} = [rectangle, draw, fill=green!50!black, text width=10em, text centered, rounded corners, minimum height=3em]
-      \tikzstyle{line} = [draw, -latex']
-      \tikzstyle{cloud} = [draw, ellipse, fill=green!20,node distance=1.5cm, minimum height=2em]
-      \begin{tikzpicture}[node distance = 1.35cm, auto]
-	\node [block,fill=gray](setup){{\bf 1. Setup}\\Read Input Parameters};
-	\node [block, below of=setup, fill=gray](initial){{\bf 2. Initialize}\\Positions \& velocities};
-	\node [block, below of=initial](solve){{\bf 3. Evaluate}\\Potential \& Forces};
-	\node [block, below of=solve](integrate){{\bf 4. Propagate}\\Find new \\Potential \& Forces};
-	\node [decision ,left of=integrate,node distance=2.65cm, fill=red!50!yellow!60!green,text width=4.75em, minimum height=2.5em](update){\bf 6. Update};
-	\node [decision, below of=integrate,node distance=1.5cm](decide){{\bf 5. Dynamics Complete?}};
-	\node [decision, right of=decide, text width=4em, node distance=2.65cm,minimum height=2em, fill=red!80!black] (stop) {\bf 7. END};
-
-	\path [line](setup) -- (initial);
-	\path [line](initial) -- (solve);
-	\path [line](solve) -- (integrate);
-	\path [line](integrate) -- (decide);
-	\path [line](decide) -- node[near end]{yes}(stop);
-	\path [line](decide) -| node[near start]{no}(update);
-	\path [line](update) |- (solve);
-      \end{tikzpicture}
+      \footnotesize{
+      \item[$\vardiamond$] Each atom is simulated as a single particle
+      \item[$\vardiamond$] Each particle is assigned a radius (typically the van der Waals radius), polarizability, and a constant net charge (generally derived from quantum calculations and/or experiment)
+      \item[$\vardiamond$] Bonded interactions are treated as "springs" with an equilibrium distance equal to the experimental or calculated bond length
       }
-    \end{colorblock}
-  \end{columns}
-\end{frame}
-
-\subsection{Ab-Initio Molecular Dynamics}
-\begin{frame}
- \frametitle{\small Ab-Initio Molecular Dynamics}
-  \begin{columns}
-    \column{11.5cm}
-    \vspace{-0.5cm}
-    \begin{block}{}
-      \begin{itemize}
-	\item {\color{blue}Born-Oppenheimer Molecular Dynamics (BOMD):} Electronic potential and nuclear forces are obtain on-the-fly during the dynamics.
-	\item[] \hspace{3cm}$\displaystyle{M_I\ddot{\bf R}_I = -{\boldsymbol \nabla}_I \min_{\Phi_0}\langle\Phi|H_e|\Psi\rangle}$
-	\item {\color{blue}Extended Lagrangian Molecular Dynamics (ELMD):} Extend the Lagrangian by adding kinetic energy of fictitious particles and obtain their equation of motions from Euler-Lagrange equations.
-	\item[]$\hspace{2cm}\mathcal{L} = \hat{T} - \hat{V}\hspace{2cm}\dfrac{d}{dt}\dfrac{\partial\mathcal{L}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}}{\partial{\bf R}_I}$
-	\begin{enumerate}
-	  {\scriptsize
-	  \item {\color{tigerspurple}Car-Parrinello Molecular Dynamics (CPMD)}
-	  \item[]$\displaystyle{\mathcal{L}_\mathrm{CPMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \sum_i\dfrac{1}{2}\mu_i\langle\dot{\phi_i}|\dot{\phi_i}\rangle - \langle\Phi_0|H_e|\Phi_0\rangle + \sum_{i,j}{\boldsymbol \Lambda}_{i,j}\left(\langle\phi_i|\phi_j\rangle -\delta_{i,j}\right)}$
-	  \item {\color{tigerspurple}Atom-centered Density Matrix Propagation (ADMP)}
-	  \item[] $\displaystyle{\mathcal{L}_\mathrm{ADMP} = \dfrac{1}{2}\mathrm{Tr}({\bf V}^T{\bf M}{\bf V}) + \dfrac{1}{2}\mu\mathrm{Tr}(\dot{\bf P}\dot{\bf P}) - E({\bf R},{\bf P}) - \mathrm{Tr}[{\boldsymbol\Lambda}({\bf PP}-{\bf P})]}$
-	  \item {\color{tigerspurple}Curvy-steps ELMD (cs-ELMD)}
-	  \item[] $\displaystyle{\mathcal{L}_\mathrm{csELMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \dfrac{1}{2}\mu\sum_{i<j}\dot{\Delta}_{ij} - E({\bf R},{\bf P}) ;\hspace{0.2cm} {\bf P}(\lambda) = e^{\lambda\Delta}{\bf P}(0)e^{-\lambda\Delta}}$
-	  }
-	\end{enumerate}
-      \end{itemize}
-    \end{block}
-  \end{columns}
-\end{frame}
-
-\subsection{Classical Molecular Dynamics}
-\begin{frame}
-  \frametitle{\small Classical Molecular Dynamics}
-  \begin{block}{}
-    \begin{itemize}
-%       \item Nuclei move in an empirical potential or one obtained from Molecular Mechanics.
-      \item The potential energy of all systems in molecular mechanics is calculated using force fields. 
-      \item Molecular mechanics can be used to study small molecules as well as large biological systems or material assemblies with many thousands to millions of atoms.
-      \item All-atomistic molecular mechanics methods have the following properties:
-      \begin{itemize}
-	\footnotesize{
-	\item[$\vardiamond$] Each atom is simulated as a single particle
-	\item[$\vardiamond$] Each particle is assigned a radius (typically the van der Waals radius), polarizability, and a constant net charge (generally derived from quantum calculations and/or experiment)
-	\item[$\vardiamond$] Bonded interactions are treated as "springs" with an equilibrium distance equal to the experimental or calculated bond length
-	}
-      \end{itemize}
-      \item The exact functional form of the potential function, or force field, depends on the particular simulation program being used. 
     \end{itemize}
-  \end{block}
+    \item The exact functional form of the potential function, or force field, depends on the particular simulation program being used. 
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small General form of Molecular Mechanics equations}
-  {\scriptsize    
+  %\frametitle{\small Molecular Mechanics}
   \begin{columns}
     \column{6.5cm}
     \begin{colorblock}{white}{blue!30!black}{black}{blue!8!white}{General form of Molecular Mechanics equations}
@@ -835,210 +1004,144 @@
 	&+\sum_{\mathrm{non bonds}}\left\{ \begin{array}{l}
 	{\color{DarkGreen}\left[\left(\dfrac{\sigma}{r}\right)^{12}-\left(\dfrac{\sigma}{r}\right)^{6}\right] \mathrm{van\,der\,Waals}}\\
 	+ {\color{indigo}\dfrac{q_1q_2}{Dr} \hspace{1.6cm}\mathrm{Electrostatics}}
-       \end{array} \right.
+	\end{array} \right.
       \end{align*}
     \end{colorblock}
     \column{5.2cm}
-     \vspace{0.38cm}
-    \begin{colorblock}{white}{blue!30!black}{black}{blue!8!white}{}
-      \includegraphics[width=5cm,keepaspectratio=true,clip=true]{MM_PEF}
+    \vspace{0.6cm}
+    \begin{colorblock}{white}{blue!30!black}{black}{white!95!black}{}
+      \includegraphics[width=5.2cm,keepaspectratio=true,clip=true]{MM_PEF}
       \let\thefootnote\relax\footnotetext{\tiny Picture taken from }
       \let\thefootnote\relax\footnotetext{\tiny http://en.wikipedia.org/wiki/Molecular\_mechanics}
     \end{colorblock}
   \end{columns}
-  }
+  \begin{itemize}
+    \item Commonly used force fields: AMBER, CHARMM, Drieding, UFF, TIP3P, TIP4P
+  \end{itemize}
 \end{frame}
 
-\section{Computational Chemistry Packages}
+\section{Quantum Mechanics/Molecular Mechanics (QM/MM)}
 \begin{frame}
-  \frametitle{\small Software Installed on LONI Systems}
+  \frametitle{\small QM/MM}
+  \begin{columns}
+    \column{12cm}
+    \begin{colorblock}{white}{blue!30!black}{black}{white!70!black}{}
+      \begin{itemize}
+	\item What do we do if we want simulate chemical reaction in large systems?
+	\item Quantum Mechanics(QM): Accurate, expensive ($\mathcal{O}(N^4)$), suitable for small systems.
+	\item Molecular Mechanics(MM): Approximate, does not treat electrons explicitly, suitable for large systems such as enzymes and proteins, cannot simulate bond breaking/forming
+      \end{itemize}
+    \end{colorblock}
+    {
+    \begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{}
+      \begin{itemize}
+	\item Methods that combine QM and MM are the solution.
+	\item Such methods are called Hybrid QM/MM methods.
+	\item The basic idea is to partition the system into two (or more) parts
+	\begin{enumerate}
+	  \footnotesize{
+	  \item The region of chemical interest is treated using accurate QM methods eg. active site of an enzyme.
+	  \item The rest of the system is treated using MM or less accurate QM methods such as semi-empirical methods or  a combination of the two.
+	  }
+	\end{enumerate}
+	\vspace{-0.3cm}
+	\begin{align*}
+	  \hat{H}_{\rm Total} = \hat{H}_{\rm QM} + \hat{H}_{\rm MM} + \hat{H}^{\rm int}_{\rm QM-MM}
+	\end{align*}
+      \end{itemize}
+    \end{colorblock}
+    }
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small QM/MM}
+  \begin{itemize}
+    \vspace{0.2cm}
+    \begin{colorblock}{white}{blue!30!black}{black}{black!25!white}{}
+      \item[] \textbf{ONIOM:} Divide the system into a real (full) system and the model system. Treat the model system at high and low level. The total energy of the system is given by
+      \begin{align*}
+	E = E(low,real) + E(high,model) - E(low,model)
+      \end{align*}
+    \end{colorblock}
+    \vspace{0.2cm}
+    \begin{colorblock}{white}{blue!30!black}{black}{black!20!white}{}
+      \item[] \textbf{Empirical Valence Bond:} Treat any point on a reaction surface as a combination of two or more valence bond structures
+      \begin{align*}
+	H({\bf R},{\bf r}) = \left|
+	\begin{array}{cc}
+	  H_{11}({\bf R},{\bf r}) & H_{12}({\bf R},{\bf r})\\
+	  H_{21}({\bf R},{\bf r}) & H_{22}({\bf R},{\bf r})
+	\end{array}
+	\right|
+      \end{align*}
+    \end{colorblock}
+    \vspace{0.2cm}
+    \begin{colorblock}{white}{blue!30!black}{black}{black!15!white}{}
+      \item[] \textbf{Effective Fragment Potential:} Divide a large system into fragments and perform \textit{ab initio} or DFT calculations of fragments and their dimers and including the Coulomb field from the whole system.
+    \end{colorblock}
+  \end{itemize}
+\end{frame}
+
+
+\section{Computational Chemistry Programs}
+
+\begin{frame}
+  \frametitle{\small Software Installed on HPC Systems}
   \scriptsize{
-  \begin{center}
-    \begin{tikzpicture}
-      \node (tbl) {
-      \begin{tabularx}{0.85\textwidth}{ccccccc}
-	\arrayrulecolor{tigersgold}
-	\textcolor{white}{\textbf{Software} }& \textcolor{white}{\textbf{QB}} &\textcolor{white}{\textbf {Eric}} & \textcolor{white}{\textbf{Louie}} & \textcolor{white}{\textbf{Oliver}} & \textcolor{white}{\textbf{Painter}} & \textcolor{white}{\textbf{Poseidon}}\\
-	Amber\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\ 
-	Desmond & \checkmark &  &  &  &  &\\
-	DL\_Poly & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	Gromacs & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	NAMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	OpenEye & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	CPMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	GAMESS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	Gaussian &  & \checkmark & \checkmark & \checkmark & \checkmark &  \\
-	NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-	[1.0ex]
-      \end{tabularx}};
-      \begin{pgfonlayer}{background}
-	\draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$) rectangle ($(tbl.north east)-(0.13,0.9)$);
-	\draw[rounded corners,top color=blue!15,bottom color=blue!15,draw=blue!15] ($(tbl.north east)-(0.13,0.6)$) rectangle ($(tbl.south west)+(0.13,0.2)$);
-      \end{pgfonlayer}
-    \end{tikzpicture}
-  \end{center}
-  }
-\end{frame}
-
-\subsection{Gaussian}
-\begin{frame}
-  \frametitle{\small Gaussian}
-  \begin{block}{}
-    \begin{itemize}
-      \item One of the most popular packages in Computational Chemistry.
-      \item Wavefunction based modeling of electronic structure of chemical systems.
-      \item Model Chemistry: Molecular Mechanics (AMBER, Dreiding, UFF force fields), HF (RHF,UHF,ROHF), DFT, MP(2-5), CIS, CISD, CCSD, CCSD(T), G1,G2,CBS, CASSCF,GVB
-      \item Basis Sets: Large Library of basis sets, can also include basis set in input file
-      \item Capability: Energy, Gradients, Geometry Optimization, Transition State search, Frequency analysis, Solvation methods, ONIOM, IRC for reaction path, ADMP and BOMD for Molecular Dynamics.
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Using Gaussian on LONI/LSU HPC Systems}
-  \begin{exampleblock}{}
-    \begin{itemize}
-      \item Site specific license
-      \begin{enumerate}
-	\item {\color{tigersblue}Gaussian 03 and 09}
-	\begin{itemize}
-	  \item {\color{tigersblue}LSU Users}: Eric, {\color{green!30!black}Pandora, Pelican, Philip, Tezpur}
-	  \item {\color{tigersblue}Latech Users}: Painter, Bluedawg
-	\end{itemize}
-	\item {\color{tigerspurple}Gaussian 03}
-	\begin{itemize}
-	  \item {\color{tigerspurple}ULL Users}: Oliver, \sout{Zeke}
-	  \item {\color{tigerspurple}Tulane Users}: Louie, \sout{Ducky}
-	  \item {\color{tigerspurple}Southern Users}: \sout{Lacumba}
-	\end{itemize}
-	\item UNO Users: No License
-      \end{enumerate}
-      \item Add {\texttt +gaussian-03/+gaussian-09} to your .soft file and resoft
-      \item \alert{If your institution has license to both G03 and G09, have only one active at a given time.}
-    \end{itemize}
-  \end{exampleblock}
-\end{frame}
-
-\begin{frame}
   \begin{columns}
-    \column{8.5cm}
-    \vspace{-0.5cm}
-    \begin{exampleblock}{Gaussian Input}
-      \begin{tabular}{lcr}
-	\%chk=h2o-opt-freq.chk   & & {\color{red}checkpoint file} \\
-	\%mem=512mb              & & {\color{red}amount of memory} \\
-	\%NProcShared=4          & & {\color{red}number of smp processors} \\
-				 & & {\color{red}blank line} \\
-	\#p b3lyp/6-31G opt freq & & {\color{red}Job description} \\
-				 & & {\color{red}blank line} \\
-	H2O OPT FREQ B3LYP       & & {\color{red}Job Title} \\
-				 & & {\color{red}blank line} \\
-	0 1                      & & {\color{red}Charge \& Multiplicity} \\
-	O                        & & {\color{red}Molecule Description} \\
-	H 1 r1                   & & {\color{red}in Z-matrix format} \\
-	H 1 r1 2 a1              & & {\color{red}with variables} \\
-				 & & {\color{red}blank line} \\
-	r1 1.05                  & & {\color{red}variable value} \\
-	a1 104.5                 & & {\color{red}} \\
-				 & & {\color{red}blank line} \\
-      \end{tabular}
-    \end{exampleblock}
-  \end{columns}
-\end{frame}
+    \column{12cm}
+    \begin{center}
+      \begin{tikzpicture}
+	\node (tbl) {
+	\begin{tabularx}{\textwidth}{ccccccccc}
+	  \arrayrulecolor{tigersgold}
+	  \textcolor{white}{\textbf{Software} }& \textcolor{white}{\textbf{QB}} &\textcolor{white}{\textbf {Eric}} & \textcolor{white}{\textbf{Louie}} & \textcolor{white}{\textbf{Oliver}} & \textcolor{white}{\textbf{Painter}} & \textcolor{white}{\textbf{Poseidon}} & \textcolor{orange}{\textbf{Philip}} & \textcolor{orange}{\textbf{Tezpur}}\\
+	  CPMD\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
+	  GAMESS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+	  Gaussian &  & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark & \checkmark \\
+	  NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
+	  WIEN2K & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & & \\
+	  [1.0ex]
+	\end{tabularx}};
+	\begin{pgfonlayer}{background}
+	  \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$) rectangle ($(tbl.north east)-(0.13,0.9)$);
+	  \draw[rounded corners,top color=black!20!white,bottom color=black!20!white,draw=green!5]($(tbl.north east)-(0.13,0.6)$) rectangle ($(tbl.south west)+(0.13,0.2)$);
+	\end{pgfonlayer}
+      \end{tikzpicture}
+    \end{center}
 
-
-\subsection{GAMESS}
-\begin{frame}
-  \frametitle{\small GAMESS}
-  \begin{block}{}
-    \begin{itemize}
-      \item Wavefunction based modeling of electronic structure of chemical systems.
-      \item Model Chemistry: HF,DFT,MP2,CI,CCSD(T),AM1,PM3
-      \item Basis Sets: Most not all are available, others can be read from input file.
-      \item Capability: Geometry optimization, Transition State search, Frequency calculations, MEP for reaction, Direct Dynamics.
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \begin{columns}
-    \column{11cm}
-    \begin{exampleblock}{GAMESS Input}
-      {\scriptsize
-      \begin{tabular}{lr}
-	\$CONTRL SCFTYP=RHF RUNTYP=OPTIMIZE       & {\color{red}Job Control Data} \\
-	\quad COORD=ZMT NZVAR=0 \$END             & {\color{red}} \\
-	\$STATPT OPTTOL=1.0E-5 HSSEND=.T. \$END   & {\color{red}Geometry Search Control} \\
-	\$BASIS GBASIS=N31 NGAUSS=6               & {\color{red}Basis Set} \\
-	\quad NDFUNC=1 NPFUNC=1 \$END             & {\color{red}} \\
-	\$DATA                                    & {\color{red}Molecular Data Control} \\
-	H2O OPT                                   & {\color{red}Job Title} \\
-	Cnv 2                                     & {\color{red}Molecule Symmetry group and axis} \\
-						  & {\color{red}} \\
-	O                                         & {\color{red}Molecule Description} \\
-	H 1 rOH                                   & {\color{red}in Z-Matrix} \\
-	H 1 rOH 2 aHOH                            & {\color{red}} \\
-						  & {\color{red}} \\
-	rOH=1.05                                  & {\color{red}Variables} \\
-	aHOH=104.5                                & {\color{red}} \\
-	\$END                                     & {\color{red}End Molecular Data Control} \\
-      \end{tabular}
-      }
-    \end{exampleblock}
-  \end{columns}
-\end{frame}
-
-\subsection{NWChem}
-\begin{frame}
-  \frametitle{\small NWChem}
-  \begin{block}{}
-    \begin{itemize}
-      \item NWChem provides many methods for computing the properties of molecular and periodic systems using standard quantum mechanical descriptions of the electronic wavefunction or density.
-      \item Classical molecular dynamics capabilities provide for the simulation of macromolecules and solutions, including the computation of free energies using a variety of force fields.
-      \item Model Chemistry: Hartree-Fock (RHF,UHF,ROHF), DFT, MP2, CASSCF, CCSD,CCSDT,CCSDTQ etc
-      \item Methods: Single Point Energies, Geometry Optimization, Molecular Dynamics, numerical first and second derivatives, Vibrational Analysis, ONIOM, COSMO, Electron Transfer, vibrational SCF and DFT, Pseudopotential Plane-Wave Electronic Structure, Molecular Dynamics.
-      \item Basis Sets: Vast Library at \url{https://bse.pnl.gov/bse/portal}
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-
-\begin{frame}
-  \fontsize{8}{8}{
-  \begin{columns}
-    \column{7cm}
-    \vspace{-0.5cm}
-    \begin{exampleblock}{NWCHEM Input}
-      \begin{tabular}{lr}
-	title "H2O"            & {\color{red}Job title} \\
-	echo                   & {\color{red}echo contents of input file} \\
-	charge 0               & {\color{red}charge of molecule} \\
-	geometry               & {\color{red}geometry description in} \\
-	\quad zmatrix          & {\color{red}z-matrix format} \\
-	\quad\quad O           & {\color{red}} \\
-	\quad\quad H 1 r1      & {\color{red}} \\
-	\quad\quad H 1 r1 2 a1 & {\color{red}} \\
-	\quad variables        & {\color{red}variables used with values} \\
-	\quad\quad r1 1.05     & {\color{red}} \\
-	\quad\quad a1 104.5    & {\color{red}} \\
-	\quad end              & {\color{red}end z-matrix block} \\
-	end                    & {\color{red}end geometry block} \\
-	basis noprint          & {\color{red}basis description} \\
-	\quad * library 6-31G  & {\color{red}} \\
-	end                    & {\color{red}} \\
-	dft                    & {\color{red}dft calculation options} \\
-	\quad XC b3lyp         & {\color{red}} \\
-	\quad mult 1           & {\color{red}} \\
-	end                    & {\color{red}} \\
-	task dft optimize      & {\color{red}job type: geometry optimization} \\
-	task dft energy        & {\color{red}job type: energy calculation} \\
-	task dft freq          & {\color{red}job type: frequency calculation} \\
-      \end{tabular}
-    \end{exampleblock}
+    \begin{center}
+      \begin{tikzpicture}
+	\node (tbl) {
+	\begin{tabularx}{0.55\textwidth}{cccc}
+	  \arrayrulecolor{tigersgold}
+	  \textcolor{white}{\textbf{Software}} & \textcolor{white}{\textbf{Bluedawg}} & \textcolor{orange}{\textbf{Pelican}} & \textcolor{orange}{\textbf{Pandora}}\\
+	  CPMD\rule{0pt}{3.5ex} & \checkmark &  & \checkmark\\
+	  GAMESS &  &  & \checkmark\\
+	  Gaussian & \checkmark & \checkmark & \checkmark\\
+	  NWCHEM & \checkmark & \checkmark & \checkmark \\
+	  [1.0ex]
+	\end{tabularx}};
+	\begin{pgfonlayer}{background}
+	  \draw[rounded corners,top color=blue!40!black,bottom color=blue!10!white,draw=green!5!white] ($(tbl.north west)+(0.14,0)$) rectangle ($(tbl.north east)-(0.13,0.9)$);
+	  \draw[rounded corners,top color=black!20!white,bottom color=black!20!white,draw=purple!5] ($(tbl.north east)-(0.13,0.6)$) rectangle ($(tbl.south west)+(0.13,0.2)$);
+	\end{pgfonlayer}
+      \end{tikzpicture}
+    \end{center}
   \end{columns}
   }
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Computational Chemistry Programs}
+  \begin{itemize}
+    \item {\color{black}Commercial Software: Q-Chem, Jaguar,CHARMM}
+    \item {\color{tigerspurple}GPL/Free Software: ACES, ABINIT, Octopus}
+    \item {\color{tigersblue}{\bf \url{http://en.wikipedia.org/wiki/Quantum\_chemistry\_computer\_programs}}}
+    \item {\color{tigersblue}{\bf \url{http://www.ccl.net/chemistry/links/software/index.shtml}}}
+    \item {\color{tigersblue}{\bf \url{http://www.redbrick.dcu.ie/~noel/linux4chemistry/}}}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -1073,470 +1176,209 @@
   \end{columns}
 \end{frame}
 
-\subsection{CPMD}
 \begin{frame}
-  \frametitle{\small CPMD}
-  \begin{block}{}
-    \begin{itemize}
-      \item Car Parrinello Molecular Dynamics
-      \item Typical problems CPMD is used for
+  \frametitle{\small Using Gaussian on LONI/LSU HPC Systems}
+  \begin{eblock}{}
+  \begin{itemize}
+    \item Site specific license% ({\color{tigerspurple}Gaussian 03})
+    \begin{enumerate}
+      \item {\color{tigersblue}Gaussian 03 and 09}
       \begin{itemize}
-	\footnotesize{
-	\item Liquid Structures
-	\item Polarization effects
-	\item Bond breaking/formations
-	\begin{itemize}
-	  \item Proton transfer
-	\end{itemize}
-	\item Dynamic/thermal properties (e.g. diffusion)
-	\item Metadynamics
-	\item QM/MM
-	\item Path Integrals
-	\item TDDFT
-	}
+	\item {\color{tigersblue}LSU Users}: Eric, {\color{green!30!black}Pandora, Pelican, Philip, Tezpur}
+	\item {\color{tigersblue}Latech Users}: Painter, Bluedawg
       \end{itemize}
-    \end{itemize}
-  \end{block}
+      \item {\color{tigerspurple}Gaussian 03}
+      \begin{itemize}
+	\item {\color{tigerspurple}ULL Users}: Oliver, \sout{Zeke}
+	\item {\color{tigerspurple}Tulane Users}: Louie, \sout{Ducky}
+	\item {\color{tigerspurple}Southern Users}: \sout{Lacumba}
+      \end{itemize}
+      \item UNO Users: No License
+    \end{enumerate}
+    \item Add {\texttt +gaussian-03/+gaussian-09} to your .soft file and resoft
+    \item \alert{If your institution has license to both G03 and G09, have only one active at a given time.}
+    \item \alert{Only LSU has a LINDA license to run Gaussian on multiple nodes.}
+  \end{itemize}
+  \end{eblock}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small CPMD Input}
-  \scriptsize{
-  \begin{block}{}
-    \begin{itemize}
-      \item Divided into sections
-      \item Only sections pertaining to your simulated model at hand need to be present.
-      \begin{itemize}
-	\scriptsize{
-	\item Common sections: INFO, CPMD, SYSTEM, ATOMS, DFT
-	\item Special sections: PIMD, PATH, RESP, LINRES, TDDFT,  PROP, HARDNESS, CLASSIC, BASIS, VDW, QMMM
-	}
-      \end{itemize}
-      \item Sections are defined \texttt{\&Section\_Name} and followed by \texttt{\&END}, for example,
-      \item[]\texttt{\&ATOMS}  
-      \item[]\texttt{\quad(information)}
-      \item[]\texttt{\&END}
-      \item Each section has their own keywords
-      \item Lines that do not match known keywords are ignored
-      \item KEYWORDS HAVE TO BE IN ALL CAPS
-      \begin{itemize}
-	\scriptsize{
-	\item kEYWORDS starting with a lower case character are ignored
-	\item Useful feature to re-use the input file
-	}
-      \end{itemize}
-      \item Order of keywords is arbitrary
-    \end{itemize}
-  \end{block}
-  }
+  \frametitle{\small Input Files}
+  \begin{itemize}
+    \item Input files for GAMESS, GAUSSIAN and NWCHEM are written in free format.
+    \item Molecule description in either Z-Matrix format or Cartesian Coordinates.
+    \item Gaussian: Need to specify number of processors to be used in input file \texttt{\%NProcShared}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small }
-  \fontsize{7}{9}{
-  \vspace{-0.25cm}
-  \begin{exampleblock}{CPMD Input}
-    \begin{tabular}{lr}
-      \&CPMD & \\
-      \quad OPTIMIZE GEOMETRY XYZ & \\
-      \quad CONVERGENCE ORBITALS & \\
-      \quad\quad 1.0d-7 & \\
-      \quad CONVERGENCE GEOMETRY \\
-      \quad\quad 5.0d-4 & \\
-      \&SYSTEM & \\
-      \quad SYMMETRY & \\
-      \quad \quad SIMPLE CUBIC & \\
-      \quad CELL & \\
-      \quad \quad 16.00 1.0 1.0  0.0  0.0  0.0 & \\
-      \quad CUTOFF & \\
-      \quad \quad 60.0 & \\
-      \&END & \\
-      \&ATOMS & \\
-      \quad *H\_MT\_LDA.psp & \\
-      \quad \quad LMAX=S & \\
-      \quad \quad \quad 2 & \\
-      \quad \quad \quad 8.800   8.000   8.000 & \\
-      \quad \quad \quad 7.200   8.000   8.000 & \\
-      \&END & \\
+  \begin{columns}
+    \column{8.5cm}
+    \vspace{-0.5cm}
+    \begin{eblock}{Gaussian Input: h2o-opt-freq.com}
+      \begin{tabular}{lcr}
+	\%chk=h2o-opt-freq.chk   & & {\color{red}checkpoint file} \\
+	\%mem=512mb              & & {\color{red}amount of memory} \\
+	\%NProcShared=4          & & {\color{red}number of smp processors} \\
+				 & & {\color{red}blank line} \\
+	\#p b3lyp/6-31G opt freq & & {\color{red}Job description} \\
+				 & & {\color{red}blank line} \\
+	H2O OPT FREQ B3LYP       & & {\color{red}Job Title} \\
+				 & & {\color{red}blank line} \\
+	0 1                      & & {\color{red}Charge \& Multiplicity} \\
+	O                        & & {\color{red}Molecule Description} \\
+	H 1 r1                   & & {\color{red}in Z-matrix format} \\
+	H 1 r1 2 a1              & & {\color{red}with variables} \\
+				 & & {\color{red}blank line} \\
+	r1 1.05                  & & {\color{red}variable value} \\
+	a1 104.5                 & & {\color{red}} \\
+				 & & {\color{red}blank line} \\
+      \end{tabular}
+    \end{eblock}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Submission Script for Gaussian}
+  \begin{eblock}{}
+    \begin{tabular}{l}
+      \#!/bin/tcsh\\
+      \#PBS -q checkpt \\
+      \#PBS -l nodes=1:ppn=4\\
+      \#PBS -l walltime=24:00:00\\
+      \#PBS -o g09\_testjobs.out\\
+      \#PBS -j oe\\
+      \#PBS -V \\
+      \#PBS -N h2o-opt-freq\\
+      \\
+      setenv WORK\_DIR \$PBS\_O\_WORKDIR\\
+      cd \$WORK\_DIR\\
+      setenv OMP\_NUM\_THREADS 4\\
+      set NPROCS=`wc -l \$PBS\_NODEFILE |gawk '//{print \$1}'`\\
+      \\
+      g09 < h2o-opt-freq.com > h2o-opt-freq.log
+      \\
     \end{tabular}
-  \end{exampleblock}
-  }
-\end{frame}
-
-
-\subsection{Amber}
-\begin{frame}
-  \frametitle{\small AMBER}
-  \begin{block}{What is AMBER?}
-    \begin{itemize}
-      \item AMBER, Assisted Model Building with Energy Refinement refers to two things
-      \begin{enumerate}
-	{\scriptsize
-	\item A collective name for a suite of programs that allow users to carry out molecular dynamics simulation
-	\item A set of molecular mechanical force fields for the simulation of biomolecules
-	}
-      \end{enumerate}
-    \end{itemize}
-  \end{block}
-  \begin{block}{Capabilities}
-    {\scriptsize
-    \begin{columns}
-      \column{0.4\textwidth}
-      \begin{itemize}
-	\item Classical MD (NVT,NPT,etc)
-	\item Force Fields
-	\item QM/MM
-	\item Free Energy Calculations
-	\item Structural and Trajectory analysis
-      \end{itemize}
-      \column{0.4\textwidth}
-      \begin{itemize}
-	\item Parallelize dynamic codes
-	\item Enhanced sampling (replica exchange MD)
-	\item Explicit Solvent Models with PME
-	\item Implicit Solvent Models with PB or GB approach
-      \end{itemize}
-    \end{columns}
-    }
-  \end{block}
+  \end{eblock}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small Basic Information Flow in AMBER}
-  \begin{block}{}
-    \begin{enumerate}
-      \item obtain and edit initial structure
-      \item prepare input parameter and topology file
-      \item run simulations and save trajectory
-      \item analyze output and trajectory files
-    \end{enumerate}
-    \scriptsize{
-    \tikzstyle{block} = [rectangle, draw, fill=yellow!75!red,text width=6em, text centered, rounded corners, minimum height=4em]
-    \tikzstyle{line} = [draw, -latex']
-    \begin{tikzpicture}[node distance = 2cm, auto]
-      \node [block](step1){\textbf{PDB} file};
-      \node [block, right of=step1, node distance=3cm](step2){\textbf{Preparatory Programs}\\LEaP\\antechamber};
-      \node [block, right of=step2, node distance=3cm](step3){\textbf{Simulation Programs}\\Sander\\PMEMD\\NMode};
-      \node [block, right of=step3, node distance=3cm](step4){\textbf{Analysis Programs}\\Ptraj\\MM/PBSA};
-      \path [line](step1) -- (step2);
-      \path [line](step2) -- (step3);
-      \path [line](step3) -- (step4);
-    \end{tikzpicture}
-    }
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Topology and Parameter File}
-  \begin{block}{Topology information includes}
-    \begin{itemize}
-      \item atom types are assigned to identify different elements and different molecular orbital environments
-      \item charges are assigned to each atom
-      \item connectivities between atoms are established
-    \end{itemize}
-  \end{block}
-  \begin{block}{Parameter information includes}
-    \begin{itemize}
-      \item force constants necessary to describe the bond energy, angle energy, torsion energy, nonbonded interactions (van der Waals and electrostatics)
-      \item other parameters for setting up the energy calculations (GB radii, FEP parameter sets)
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Preparatory Programs}
-  \begin{block}{LEaP}
-    \begin{itemize}
-      \item Includes a tex-based interface - tleap and a graphical user interface - xleap
-      \item Capabilities
-      \begin{enumerate}
-	{\scriptsize
-	\item[$\vardiamond$] Read AMBER force field information
-	\item[$\vardiamond$] Read and write files containing structural information (i.e.PDB files)
-	\item[$\vardiamond$] Construct new residues and molecules
-	\item[$\vardiamond$] Link together residues and create nonbonded complexes of molecules
-	\item[$\vardiamond$] Place counterions around a molecule; Solvate molecules; Mdoify internal coordinates within a molecule
-	\item[$\vardiamond$] Generate files that contain topology and parameters for AMBER
-	\item[$\vardiamond$] Set atomic charges, identify the position of disulphide bridges, delete bonds, addition of atoms, ions, etc ...
-	}
-      \end{enumerate}
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Using tleap/xleap}
-  \begin{block}{\small loading PDB file, adding the disulfide cross links and saving files}
-    \begin{itemize}
-      \item[]source leaprc.ff03\let\thefootnote\relax\footnotetext{\tiny Amber 11 Manual Page 17}
-      \item[]bpti = loadPdb 6pti.mod.pdb
-      \item[]bond bpti.5.SG bpti.55.SG
-      \item[]bond bpti.14.SG bpti.38.SG
-      \item[]bond bpti.30.SG bpti.51.SG
-      \item[]saveAmberParm bpti prmtop prmcrd
-      \item[]quit
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-
-
-\begin{frame}
-  \frametitle{\small Simulation Programs}
-  \begin{block}{Sander}
-    \begin{itemize}
-      \item Sander: Simulated Annealing with NMR-Derived Energy Restraints
-      \begin{enumerate}
-	{\scriptsize
-	\item[$\vardiamond$] Energy minimization, molecular dynamics and NMR refinements
-	\item[$\vardiamond$] Free energy calculations (Umbrella Sampling; SMD; etc)
-	\item[$\vardiamond$] QM/MM implementation (EVB; semi-empirical/AMBER)
-	\item[$\vardiamond$] Polarizable force field (AMOEBA)
-	\item[$\vardiamond$] Enhanced Sampling (REMD; LES, etc)
-	}
-      \end{enumerate}
-      \item Usage: \fontsize{7.5}{10}{\color{blue}\texttt{sander -i mdin -o mdout -p prmtop -c inpcrd -r restrt}}
-    \end{itemize}
-%     \begin{itemize}
-      {\fontsize{6}{2}{
-      \qquad\qquad{\texttt{mdin: input control data for minimization/MD run.}}\\
-      \qquad\qquad{\texttt{mdout: output file for user readable state info and diagnostics}}\\
-      \qquad\qquad{\texttt{prmtop: molecular topology, force fields etc}}\\
-      \qquad\qquad{\texttt{inpcrd: initial coordinates and velocities}}\\
-      \qquad\qquad{\texttt{restrt: restart filename}}
-      }}
-%     \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Perform Minimization}
-  \begin{block}{\small 200 steps of minimization, generalized Born solvent model}
-    \begin{itemize}
-      \item[]\&cntrl\let\thefootnote\relax\footnotetext{\tiny Amber 11 Manual Page 17}
-      \item[]maxcycle=200, 
-      \item[]imin=1, 
-      \item[]cut=12.0, 
-      \item[]igb=1, 
-      \item[]ntb=0, 
-      \item[]ntpr=10,
-      \item[]/
-    \end{itemize}
-  \end{block}
-  \begin{exampleblock}{Run Sander}
-    sander -i min.in -o 6pti.min1 -c prmcrd -r 6pti.min1.xyz
-  \end{exampleblock}
-\end{frame}
-
-
-\subsection{LAMMPS}
-\begin{frame}
-  \frametitle{\small LAMMPS}
-  \begin{itemize}
-    \item LAMMPS stands for Large-scale Atomic/Molecular Parallel Simulator.
-    \item LAMMPS is a classical molecular dynamics code that models an ensemble of particles in a liquid, solid, or gaseous state designed to run efficiently on parallel computers.
-    \item It can model atomic, polymeric, biological, metallic, granular, and coarse-grained systems using a variety of force fields and boundary conditions.
-    \item LAMMPS can model systems with only a few particles up to millions or billions.
-    \item LAMMPS is designed to be easy to modify or extend with new capabilities, such as new force fields, atom types, boundary conditions, or diagnostics.
-    \item LAMMPS runs efficiently on single-processor desktop or laptop machines, but is designed for parallel computers.
-    \item It is an open-source code, distributed freely under the terms of the GNU Public License (GPL).
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Running LAMMPS}
-  \begin{itemize}
-    {\footnotesize
-    \item LAMMPS doesn't
-    \begin{enumerate}
-      {\footnotesize
-      \item Build molecular systems
-      \item Assign force-dield coefficients auto-magically
-      \item Compute lots of diagnostics on-the-fly
-      \item Visualize your output
-      }
-    \end{enumerate}
-    \item LAMMPS version "4 May 2011" is installed on all LONI Dell Linux Clusters.% and LSU HPC machines, Tezpur (Linux) and Pandora (AIX).
-    \item Add the appropriate soft keys to your .soft file
-    \begin{enumerate}
-      {\footnotesize
-      \item[$\vardiamond$]  +lammps-4May11-intel-11.1-mvapich-1.1
-      }
-    \end{enumerate}
-    \item Command line options for running LAMMPS
-    \begin{itemize}
-      {\footnotesize
-      \item[$\vardiamond$] -in inputfile: specify input file
-      \item[$\vardiamond$] -log logfile: specify log file
-      \item[$\vardiamond$] -partition MxN L: Run on (MxN)+L processors with M partitions on N processors each and 1 partition with L processors
-      \item[$\vardiamond$] -screen file: Specify a file to write screen information
-      }
-    \end{itemize}
-    }
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\footnotesize LAMMPS Input}
-  \begin{itemize}
-    {\scriptsize
-    \item Reads an input script in ASCII format one line at a time.
-    \item Input script consists of 4 parts
-    \begin{enumerate}
+  \begin{columns}
+    \column{11cm}
+    \begin{eblock}{GAMESS Input: h2o-opt-freq.inp}
       {\scriptsize
-      \item Initialization: Set parameters that need to be defined before atoms are created or read-in from a file.
-      \item[] \texttt{units, dimension, newton, processors, boundary, atom\_style, atom\_modify}
-      \item Atom definition: \texttt{read\_data, read\_restart, lattice, region, create\_box, create\_atoms, replicate}
-      \item Settings: Once atoms and molecular topology are defined, a variety of settings can be specified: force field coefficients, simulation parameters, output options, etc. 
-      \item[] \texttt{pair\_coeff, bond\_coeff, angle\_coeff, dihedral\_coeff, improper\_coeff, kspace\_style, dielectric, special\_bonds, neighbor, neigh\_modify, group, timestep, reset\_timestep, run\_style, min\_style, min\_modify, fix, compute, compute\_modify, variable}
-      \item Run a simulation: A MD is run using the run command. Energy minimization (molecular statics) is performed using the minimize command. A parallel tempering (replica-exchange) simulation can be run using the temper command.
+      \begin{tabular}{lr}
+	\$CONTRL SCFTYP=RHF RUNTYP=OPTIMIZE       & {\color{red}Job Control Data} \\
+	\quad COORD=ZMT NZVAR=0 \$END             & {\color{red}} \\
+	\$STATPT OPTTOL=1.0E-5 HSSEND=.T. \$END   & {\color{red}Geometry Search Control} \\
+	\$BASIS GBASIS=N31 NGAUSS=6               & {\color{red}Basis Set} \\
+	\quad NDFUNC=1 NPFUNC=1 \$END             & {\color{red}} \\
+	\$DATA                                    & {\color{red}Molecular Data Control} \\
+	H2O OPT                                   & {\color{red}Job Title} \\
+	Cnv 2                                     & {\color{red}Molecule Symmetry group and axis} \\
+						  & {\color{red}} \\
+	O                                         & {\color{red}Molecule Description} \\
+	H 1 rOH                                   & {\color{red}in Z-Matrix} \\
+	H 1 rOH 2 aHOH                            & {\color{red}} \\
+						  & {\color{red}} \\
+	rOH=1.05                                  & {\color{red}Variables} \\
+	aHOH=104.5                                & {\color{red}} \\
+	\$END                                     & {\color{red}End Molecular Data Control} \\
+      \end{tabular}
       }
-    \end{enumerate}
-    \item \url{http://lammps.sandia.gov/doc/Section_commands.html}
+    \end{eblock}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Submission Script for GAMESS}
+  \begin{eblock}{}
+    \begin{tabular}{l}
+      \#!/bin/bash\\
+      \#PBS -q checkpt\\
+      \#PBS -l nodes=1:ppn=4\\
+      \#PBS -l walltime=01:00:00\\
+      \#PBS -V\\
+      \#PBS -j oe\\
+      \#PBS -o gamess-water.out\\
+      \#PBS -N gamess-exam1\\
+      \\
+      export WORKDIR=\$PBS\_O\_WORKDIR\\
+      export NPROCS=`wc -l \$PBS\_NODEFILE | gawk '//{print \$1}'`\\
+      export SCRDIR=/work/\$USER/scr/\\
+      if [ ! -e \$SCRDIR ]; then mkdir -p \$SCRDIR; fi\\
+      rm -f \$SCRDIR/*\\
+      \\
+      cd \$PBS\_O\_WORKDIR\\
+      rungms h2o-opt-freq 01 \$NPROCS h2o-opt-freq.out \$SCRDIR\\
+      \\      
+    \end{tabular}
+  \end{eblock}
+\end{frame}
+
+\begin{frame}
+  \begin{columns}
+    \column{5.5cm}
+    {\tiny
+    \begin{eblock}{NWCHEM Input: h2o-opt-freq.nw}
+      \begin{tabular}{lr}
+	title "H2O"            & {\color{red}Job title} \\
+	echo                   & {\color{red}echo contents of input file} \\
+	charge 0               & {\color{red}charge of molecule} \\
+	geometry               & {\color{red}geometry description in} \\
+	\quad zmatrix          & {\color{red}z-matrix format} \\
+	\quad\quad O           & {\color{red}} \\
+	\quad\quad H 1 r1      & {\color{red}} \\
+	\quad\quad H 1 r1 2 a1 & {\color{red}} \\
+	\quad variables        & {\color{red}variables used with values} \\
+	\quad\quad r1 1.05     & {\color{red}} \\
+	\quad\quad a1 104.5    & {\color{red}} \\
+	\quad end              & {\color{red}end z-matrix block} \\
+	end                    & {\color{red}end geometry block} \\
+	basis noprint          & {\color{red}basis description} \\
+	\quad * library 6-31G  & {\color{red}} \\
+	end                    & {\color{red}} \\
+	dft                    & {\color{red}dft calculation options} \\
+	\quad XC b3lyp         & {\color{red}} \\
+	\quad mult 1           & {\color{red}} \\
+	end                    & {\color{red}} \\
+	task dft optimize      & {\color{red}job type: geometry optimization} \\
+	task dft energy        & {\color{red}job type: energy calculation} \\
+	task dft freq          & {\color{red}job type: frequency calculation} \\
+      \end{tabular}
+    \end{eblock}
     }
-  \end{itemize}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
-  \frametitle{}
-  {\scriptsize
+  \frametitle{\small Submission Script for NWChem}
   \vspace{-0.3cm}
-  \begin{exampleblock}{LAMMPS Input for 3d Lennard-Jones Melt}
-    \begin{tabular}{lr}
-    units   lj & {\color{red}style of units used for a simulation}\\
-    atom\_style  atomic & {\color{red}what style of atoms to use in a simulatio}\\
-     & \\
-    lattice   fcc 0.8442 & {\color{red}Lattice structure}\\
-    region    box block 0 20 0 20 0 20 & {\color{red}define simulation region}\\
-    create\_box  1 box & {\color{red}create simulation box}\\
-    create\_atoms  1 box & {\color{red}create atoms on lattice}\\
-    mass    1 1.0 & {\color{red}}\\
-    velocity  all create 3.0 87287 & {\color{red}}\\
-     & \\
-    pair\_style  lj/cut 2.5 & {\color{red}Formula for Pairwise Interaction}\\
-    pair\_coeff  1 1 1.0 1.0 2.5 & {\color{red}pairwise force field coefficients}\\
-     & \\
-    neighbor  0.3 bin & {\color{red}pairwise neighbor lists}\\
-    neigh\_modify  every 20 delay 0 check no & {\color{red}}\\
-     & \\
-    fix   1 all nve & {\color{red}constant NVE time integration}\\
-     & \\
-    dump    id all atom 10 dump.melt & {\color{red}For visualization}\\
-    thermo    50 & {\color{red}output thermodynamics data}\\
-    run   2500 & {\color{red}Simulation Steps}\\
+  \begin{eblock}{}
+    \begin{tabular}{l}
+      \#!/bin/bash\\
+      \#PBS -q checkpt\\
+      \#PBS -l nodes=1:ppn=4\\
+      \#PBS -l walltime=0:30:00\\
+      \#PBS -V\\
+      \#PBS -o nwchem\_h2o.out\\
+      \#PBS -e nwchem\_h2o.err\\
+      \#PBS -N nwchem\_h2o \\
+      \\
+      export EXEC=nwchem\\
+      export EXEC\_DIR=/usr/local/packages/ \textbackslash \\
+	\quad nwchem-5.1-mvapich-1.0-intel-10.1/bin/LINUX64/\\
+      export WORK\_DIR=\$PBS\_O\_WORKDIR\\
+      export NPROCS=`wc -l \$PBS\_NODEFILE |gawk '//{print \$1}'` \\
+      \\
+      cd \$WORK\_DIR\\
+      mpirun\_rsh -machinefile \$PBS\_NODEFILE -np \$NPROCS \textbackslash \\
+	\quad \$EXEC\_DIR/\$EXEC \$WORK\_DIR/h2o-opt-freq.nw >\& \textbackslash \\
+	\quad \$WORK\_DIR/h2o-opt-freq.nwo\\
+      \\
     \end{tabular}
-  \end{exampleblock}
-  }
+  \end{eblock}
 \end{frame}
-
-
-\subsection{NAMD}
-\begin{frame}
-  \frametitle{\small NAMD}
-  \begin{block}{}
-    \begin{itemize}
-      \item NAMD is a parallel molecular dynamics code designed for high-performance simulation of large biomolecular systems. 
-      \item Based on Charm++ parallel objects, NAMD scales to hundreds of processors on high-end parallel platforms and tens of processors on commodity clusters using gigabit ethernet.
-      \item NAMD uses the popular molecular graphics program VMD for simulation setup and trajectory analysis, but is also file-compatible with AMBER, CHARMM, and X-PLOR.
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small What is needed to run NAMD?}
-  {\scriptsize
-  \begin{itemize}
-    \item Protein Data Bank (pdb) file which stores atomic coordinates and/or velocities for the system.
-    \item Protein Structure File (psf) which stores structural information of the protein, such as various types of bonding interactions.
-    \item A force field parameter file. A force field is a mathematical expression of the potential which atoms in the system experience. CHARMM, X-PLOR, AMBER, and GROMACS are four types of force fields, and NAMD is able to use all of them. The parameter file defines bond strengths, equilibrium lengths, etc. 
-    \item A configuration file, in which the user specifies all the options that NAMD should adopt in running a simulation.
-  \end{itemize}
-  \begin{block}{NAMD configuration file}
-    \begin{itemize}
-      \item A NAMD configuration file contains a set of options and values which determine the exact behavior of NAMD, what features are active or inactive, how long the simulation should continue, etc.
-      \item The following parameters are \textit{required} for every NAMD simulation
-      \item[] \texttt{numsteps, coordinates, structure, parameters, exclude, outputname} and one of the following three: \texttt{temperature, velocities, binvelocities}.
-    \end{itemize}
-  \end{block}
-  }
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small }
-  {\scriptsize
-  \vspace{-0.35cm}
-  \begin{exampleblock}{NAMD Configuration File for decalanin}
-    \begin{tabular}{lcr}
-%     # NAMD CONFIGURATION FILE FOR DECALANIN
-      numsteps  10000  &  &  {\color{red}protocol params}\\
-      & &  \\
-      coordinates alanin.pdb & &  {\color{red}initial config} \\
-      temperature 300K & &  \\
-      seed    12345 & &  \\
-      & &  \\
-      outputname  ./alanin & &  {\color{red}output params} \\
-      binaryoutput  no & &  \\
-      & &  \\
-      timestep  1.0 & &  {\color{red}integrator params} \\
-      & &  \\
-      structure alanin.psf & &  {\color{red}force field params}\\
-      parameters  alanin.params & &  \\
-      exclude   scaled1-4 & &  \\
-      1-4scaling  1.0 & &  \\
-      switching on & &  \\
-      switchdist  8.0 & &  \\
-      cutoff    12.0 & &  \\
-      pairlistdist  13.5 & &  \\
-      margin    0.0 & &  \\
-      stepspercycle 20 & &  \\
-    \end{tabular}
-  \end{exampleblock}
-  }
-\end{frame}
-
-\subsection{Gromacs}
-\begin{frame}
-  \frametitle{\small Gromacs}
-  \begin{block}{}
-    \begin{itemize}
-      \item GROMACS (Groningen Machine for Chemical Simulations) is a versatile package which performs molecular dynamics, i.e. simulates the Newtonian equations of motion for systems with hundreds to millions of particles.
-      \item It is primarily designed for biochemical molecules like proteins and lipids that have a lot of complicated bonded interactions, but since GROMACS is extremely fast at calculating the nonbonded interactions (that usually dominate simulations) many groups are also using it for research on non-biological systems, e.g. polymers. 
-      \item GROMACS calling structure is quite complicated, and it is not recommended that users proceed without at least becoming familiar with the program.
-      \item You will need a protein structure file (pdb file) and a file containing energy minimization data.
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Using Gromacs: Simulation of Peptide in Water}
-  \vspace{-0.2cm}
-  \begin{block}{\small Files at /home/apacheco/CompChem/CMD/GROMACS}
-    \begin{enumerate}
-      {\tiny
-      \item Generate topology file using pdb2gmx
-      \item[] \texttt{{\color{magenta}pdb2gmx\_d} -f {\color{blue}cpeptide.pdb} -o {\color{DarkGreen}cpeptide.gro} -p {\color{DarkGreen}cpeptide.top}}
-      \item Define the water box size
-      \item[] \texttt{{\color{magenta}editconf\_d} -f {\color{blue}cpeptide.gro} -o {\color{DarkGreen}cpeptide.gro} -d 0.5}
-      \item Solvate the peptide
-      \item[] \texttt{{\color{magenta}genbox\_d} -cp {\color{blue}cpeptide.gro} -cs -o {\color{DarkGreen}cpeptide\_b4em.gro} -p {\color{DarkGreen}cpeptide.top}}
-      \item Energy Minimization, step 1: preprocess the input files.
-      \item[] \texttt{{\color{magenta}grompp\_d} -f {\color{red}em} -c {\color{blue}cpeptide\_b4em} -p {\color{blue}cpeptide} -o {\color{DarkGreen}cpeptide\_em}}
-      \item Energy minimization, step 2
-      \item[] \texttt{{\color{magenta}mdrun\_d} -s {\color{blue}cpeptide\_em} -o {\color{DarkGreen}cpeptide\_em} -c {\color{DarkGreen}cpeptide\_b4pr} -v }
-      \item Position Restrained MD, step 1: generate the binary topology file
-      \item[] \texttt{{\color{magenta}grompp\_d} -f {\color{blue}pr} -c {\color{blue}cpeptide\_b4pr} -r {\color{blue}cpeptide\_b4pr} -p {\color{blue}cpeptide} -o {\color{DarkGreen}cpeptide\_pr} }
-      \item Position Restrained MD, step 2: run the simulation
-      \item[] \texttt{{\color{magenta}mdrun\_d} -s {\color{blue}cpeptide\_pr} -o {\color{DarkGreen}cpeptide\_pr} -c {\color{DarkGreen}cpeptide\_b4md} -v}
-      \item MD Simulation, step 1: generate the binary topolgy file
-      \item[]\texttt{{\color{magenta}grompp\_d} -f {\color{blue}md} -c {\color{blue}cpeptide\_b4md}  -p {\color{blue}cpeptide} -o {\color{DarkGreen}cpeptide\_md} }
-      \item MD simulation, step 2: run the simulation
-      \item[] \texttt{{\color{magenta}mdrun\_d} -s {\color{blue}cpeptide\_md} -o {\color{blue}cpeptide\_md} -c {\color{DarkGreen}cpeptide\_after\_md} -v }
-
-      }
-    \end{enumerate}
-  \end{block}
-\end{frame}
-
 
 \section{Exercises}
 \begin{frame}
@@ -1567,11 +1409,12 @@
   \end{block}
   }
 \end{frame}
-% \section{Tips for Quantum Chemical Calculations}
 
+\section{Tips for Quantum Chemical Calculations}
 \begin{frame}
-  \frametitle{\small Choosing Basis Sets}\vspace{1cm}
-  \vspace{-0.5cm}
+  \frametitle{\small Choosing Basis Sets}
+%\frametitle{\small Basis Sets and Method}\vspace{1cm}
+% \vspace{0.5cm}
   \begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{Choice of Basis Set}
     \begin{itemize}
       \item STO-3G is too small.
@@ -1580,7 +1423,7 @@
       \item For anions and probably excited states, use basis sets with diffuse functions (aug, +). e.g. 6-31+G*, aug-cc-pVTZ
     \end{itemize}
   \end{colorblock}
-% \vspace{0.5cm}
+  \vspace{0.5cm}
   \begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{GAMESS Basis Sets}
     \begin{itemize}
       \item In GAMESS, you can create a file containing basis sets that you want to use
@@ -1642,5 +1485,51 @@
   \end{colorblock}
 \end{frame}
 
+\begin{frame}
+  \frametitle{\small Worked out Examples On LONI Linux Systems}
+  \begin{columns}
+    \column{1.16\textwidth}
+    \vspace{-0.95cm}
+    \begin{alertblock}{On LONI Linux Systems}
+      \begin{center}
+	\includegraphics[width=0.63\textwidth,clip=true]{workshop}
+      \end{center}
+    \end{alertblock}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{\small Useful Links/Further Reading}
+  \vspace{-0.25cm}
+  \begin{block}{Useful Links}
+    \begin{itemize}
+      {\tiny
+      \item {\color{tigerspurple}GAMESS:} {\color{Blue}\url{http://www.msg.chem.iastate.edu/gamess}}
+      \item {\color{tigerspurple}Gaussian:} {\color{Blue}\url{http://www.gaussian.com}}
+      \item {\color{tigerspurple}NWCHEM:} {\color{Blue}\url{http://www.nwchem-sw.org}}
+      \item {\color{tigerspurple}Basis Set:} {\color{Blue}\url{https://bse.pnl.gov/bse/portal}}
+      }
+    \end{itemize}
+  \end{block}
+  \vspace{-0.2cm}
+  \begin{block}{\small Further Reading}
+    \begin{itemize}
+      {\tiny
+      \item David Sherill's Notes at Ga Tech: {\color{Blue}\url{http://vergil.chemistry.gatech.edu/notes/index.html}}
+      \item David Young's Notes on CCL: {\color{Blue}\url{http://www.ccl.net/cca/documents/dyoung/}}
+      \item Mark Tuckerman's Notes at NYU: {\color{Blue}\url{http://www.nyu.edu/classes/tuckerman/quant.mech/index.html}}
+      \item Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory, A. Szabo and N. Ostlund
+      \item Introduction to Computational Chemistry, F. Jensen
+      \item Essentials of Computational Chemistry - Theories and Models, C. J. Cramer
+      \item Exploring Chemistry with Electronic Structure Methods, J. B. Foresman and A. Frisch
+%\item Ab Initio Molecular Dynamics: Theory and Implementation, D. Marx and J. Hutter{\color{Blue}\url{http://www.theochem.ruhr-uni-bochum.de/research/marx/marx.pdf}}
+%\item Molecular Modeling - Principles and Applications, A. R. Leach
+%\item Computer Simulation of Liquids, M. P. Allen and D. J. Tildesley
+      \item[$\vardiamond$]Modern Electronic Structure Theory, T. Helgaker, P. Jorgensen and J. Olsen (Highly advanced text, second quantization approach to electronic structure theory)
+      }
+    \end{itemize}
+  \end{block}
+\end{frame}
 
 \end{document}
+
