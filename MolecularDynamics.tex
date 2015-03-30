@@ -3,7 +3,7 @@
 {  
   \setbeamertemplate{background canvas}[vertical shading][bottom=blue!10,top=blue!10]
   \setbeamertemplate{navigation symbols}{}%{\insertsectionnavigationsymbol}
-   \usetheme{BatonRouge}
+  \usetheme{LSU}
 }
 
 \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
@@ -53,77 +53,79 @@
 \newcommand*\const{\textcolor{darkgray}%
   {\textbf{--}}}
 
+
+
 \setbeamercolor{uppercol}{fg=white,bg=red!30!black}%
 \setbeamercolor{lowercol}{fg=black,bg=red!15!white}%
+\setbeamercolor{uppercol1}{fg=white,bg=blue!30!black}%
+\setbeamercolor{lowercol1}{fg=black,bg=blue!15!white}%%
+\setbeamercolor{uppercol2}{fg=white,bg=green!30!black}%
+\setbeamercolor{lowercol2}{fg=black,bg=green!15!white}%
 \newenvironment{colorblock}[4]
 {
 \setbeamercolor{upperblock}{fg=#1,bg=#2}
 \setbeamercolor{lowerblock}{fg=#3,bg=#4}
 \begin{beamerboxesrounded}[upper=upperblock,lower=lowerblock,shadow=true]}
 {\end{beamerboxesrounded}}
-
-\newenvironment{colorblock2}[2]
+\newenvironment{ablock}[0]
 {
-\begin{beamerboxesrounded}[upper=#1,lower=#2,shadow=true]}
+\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]}
 {\end{beamerboxesrounded}}
+\newenvironment{bblock}[0]
+{
+\begin{beamerboxesrounded}[upper=uppercol1,lower=lowercol1,shadow=true]}
+{\end{beamerboxesrounded}}
+\newenvironment{eblock}[0]
+{
+\begin{beamerboxesrounded}[upper=uppercol2,lower=lowercol2,shadow=true]}
+{\end{beamerboxesrounded}}
+
+% Fix font size of nested itemize/enumerate
+\setbeamerfont{itemize/enumerate body}{}
+\setbeamerfont{itemize/enumerate subbody}{size=\scriptsize}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\scriptsize}
 
 \title[Comp. Chem.]{Molecular Dynamics}
 
 
 \author[Alex Pacheco]{Alexander~B.~Pacheco}
        
-\institute[High Performance Computing @ Louisiana State University - http://www.hpc.lsu.edu] {\inst{}User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}
+\institute[HPC@LSU - http://www.hpc.lsu.edu] {\inst{}User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}
 
-\date[July 6, 2011\hspace{2cm}\insertframenumber/\inserttotalframenumber]{\tiny{LSU HPC Training Series\\Louisiana State University\\July 6, 2011}}
+\date[February 8, 2011\hspace{2cm}\insertframenumber/\inserttotalframenumber]{\tiny{LSU HPC Training Series\\Louisiana State University\\February 8, 2011}}
      
 \subject{Talks}
 % This is only inserted into the PDF information catalog. Can be left
 % out. 
 
 
-
-
-% If you have a file called "university-logo-filename.xxx", where xxx
+% If you have a file called ``university-logo-filename.xxx'', where xxx
 % is a graphic format that can be processed by latex or pdflatex,
 % resp., then you can add a logo as follows:
+% Main Logo on bottom left
+\pgfdeclareimage[height=0.55cm]{its-logo}{LONI}
+\logo{\pgfuseimage{its-logo}}
+% University Logo on top left
+\pgfdeclareimage[height=0.55cm]{university-logo}{LSUGeauxPurp}
+\tllogo{\pgfuseimage{university-logo}}
+% Logo at top right
+\pgfdeclareimage[height=0.6cm]{institute-logo}{PUR_BLK_HOR}
+\trlogo{\pgfuseimage{institute-logo}}
+% Logo at bottom right
+\pgfdeclareimage[height=0.55cm]{hpc-logo}{CCT}
+\brlogo{\pgfuseimage{hpc-logo}}
 
-\pgfdeclareimage[height=1.5cm]{loni-logo}{LONI}
-\pgfdeclareimage[height=0.5cm]{gold-logo}{GOLD_LSU}
-\pgfdeclareimage[height=0.8cm]{purple-logo}{PURPLELSU}
-\pgfdeclareimage[height=1.5cm]{lsuccttower-logo}{FULLCOLORTOWER_VERT}%{qtp}
-\pgfdeclareimage[height=0.5cm]{lsutower-logo}{ProcessHorizontal}
-% \logo{\pgfuseimage{purple-logo}}
-
-% put MSRI logo in bottom left
-\setbeamertemplate{sidebar left}{%
-   \vfill%
-   \rlap{\hskip0.02cm%
-         %
-         {\pgfuseimage{loni-logo}}}%
-   \vskip-7pt%
-   \llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
-   \vskip2pt%
-}
-\setbeamertemplate{sidebar right}{%
-   \vfill%
-   \rlap{\hskip-2.1cm%
-         %
-         {\pgfuseimage{purple-logo}}}%
-   \vskip-5pt%
-   \llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
-   \vskip2pt%
-}
 
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
-% \AtBeginSection[]
-% {
-%   \begin{frame}<beamer>
-%     \frametitle{\small{Outline}}
-%     \small
-%     \tableofcontents[currentsection,currentsubsection]
-%   \end{frame}
-% }
+ \AtBeginSection[]
+ {
+   \begin{frame}<beamer>
+     \frametitle{\small{Outline}}
+     \small
+     \tableofcontents[currentsection,currentsubsection]
+   \end{frame}
+ }
 
 \begin{document}
 
@@ -136,7 +138,7 @@
   \tableofcontents
 \end{frame}
 
-\footnotesize
+\scriptsize
 
 %\section{Tutorial Goals}
 %\begin{frame}
@@ -154,379 +156,359 @@
 % \part{Introduction}
 \section{Introduction}
 \begin{frame}
-\frametitle{\small What is Computational Chemistry}
-\begin{itemize}
-\item {\bf Computational Chemistry} is a branch of chemistry that uses principles of computer science to assist in solving chemical problems.
-\item Uses the results of theoretical chemistry, incorporated into efficient computer programs.
-\item Application to single molecule, groups of molecules, liquids or solids.
-\item Calculates the structure and properties such as relative energies, charge distributions, dipole and multipole moments, spectroscopy, reactivity, etc.
-\item Computational Chemistry Methods range from
- \begin{enumerate}
- {\footnotesize
-  \item Highly accurate ({\it Ab-initio},DFT) feasible for small systems
-  \item Less accurate (semi-empirical)
-  \item Very Approximate (Molecular Mechanics, Classical Mechanics) large systems
-}
- \end{enumerate}
-\end{itemize}
+  \frametitle{\small What is Computational Chemistry}
+  \begin{bblock}{}
+    \begin{itemize}
+    \item {\bf Computational Chemistry} is a branch of chemistry that uses principles of computer science to assist in solving chemical problems.
+    \item Uses the results of theoretical chemistry, incorporated into efficient computer programs.
+    \item Application to single molecule, groups of molecules, liquids or solids.
+    \item Calculates the structure and properties such as relative energies, charge distributions, dipole and multipole moments, spectroscopy, reactivity, etc.
+    \item Computational Chemistry Methods range from
+      \begin{enumerate}
+      \item Highly accurate ({\it Ab-initio},DFT) feasible for small systems
+      \item Less accurate (semi-empirical)
+      \item Very Approximate (Molecular Mechanics, Classical Mechanics) large systems
+      \end{enumerate}
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\frametitle{ \small }
-\begin{columns}
-\column{11cm}
-\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{\bf Theoretical Chemistry: broadly can be divided into two main categories}
-\begin{enumerate}
-\item Static Methods {\Large$\Rightarrow$} {\color{blue}Time-Independent Schr\"{o}dinger Equation}
-\begin{enumerate}
- {\footnotesize
-\item[$\vardiamond$] Quantum Chemical/\emph{Ab Initio} /Electronic Structure Methods
-\item[$\vardiamond$] Molecular Mechanics
-}
-\end{enumerate}
-\item Dynamical Methods {\Large$\Rightarrow$} {\color{blue}Time-Dependent Schr\"{o}dinger Equation}
-\begin{enumerate}
- {\footnotesize
-\item[$\vardiamond$] Classical Molecular Dynamics
-\item[$\vardiamond$] Semi-classical and \textit{Ab-Initio} Molecular Dynamics
-}
-\end{enumerate}
-\end{enumerate}
-\end{colorblock}
-\end{columns}
+  \frametitle{ \small }
+  \begin{columns}
+    \column{11cm}
+    \begin{eblock}{Theoretical Chemistry: broadly can be divided into two main categories}
+      \begin{enumerate}
+      \item Static Methods {\Large$\Rightarrow$} {\color{blue}Time-Independent Schr\"{o}dinger Equation}
+        \begin{enumerate}
+        \item[$\vardiamond$] Quantum Chemical/\emph{Ab Initio} /Electronic Structure Methods
+        \item[$\vardiamond$] Molecular Mechanics
+        \end{enumerate}
+      \item Dynamical Methods {\Large$\Rightarrow$} {\color{blue}Time-Dependent Schr\"{o}dinger Equation}
+        \begin{enumerate}
+        \item[$\vardiamond$] Classical Molecular Dynamics
+        \item[$\vardiamond$] Semi-classical and \textit{Ab-Initio} Molecular Dynamics
+        \end{enumerate}
+      \end{enumerate}
+    \end{eblock}
+  \end{columns}
 \end{frame}
 
 %\section{Molecular Dynamics}
 \section{Fundamentals of Molecular Dynamics}
 \begin{frame}
-\frametitle{\small Molecular Dynamics}
-\begin{columns}
-\column{12cm}
-\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]{\bf Why Molecular Dynamics?}
-\begin{itemize}
-\item Electronic Structure Methods are applicable to systems in gas phase under low pressure (vaccum).
-\item Majority of chemical reactions take place in solution at some temperature with biological reactions usually at specific pH's.
-\item Calculating molecular properties taking into account such environmental effects which can be dynamical in nature are not adequately described by electronic structure methods.
-\end{itemize}
-\end{beamerboxesrounded}
-%\vspace{0.15cm}
-{
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Molecular Dynamics}
-\begin{itemize}
-\item Generate a series of time-correlated points in phase-space (a trajectory).
-\item Propagate the initial conditions, position and velocities in accordance with Newtonian Mechanics. ${\bf F}=m{\bf a}=-{\boldsymbol\nabla}V$
-\item Fundamental Basis is the \textbf{Ergodic Hypothesis}: the average obtained by following a small number of particles over a
-long time is equivalent to averaging over a large number of particles for a short time.
-\end{itemize}
-\end{colorblock}
-}
-\end{columns}
+  \frametitle{\small Molecular Dynamics}
+  \begin{ablock}{Why Molecular Dynamics?}
+    \begin{itemize}
+    \item Electronic Structure Methods are applicable to systems in gas phase under low pressure (vaccum).
+    \item Majority of chemical reactions take place in solution at some temperature with biological reactions usually at specific pH's.
+    \item Calculating molecular properties taking into account such environmental effects which can be dynamical in nature are not adequately described by electronic structure methods.
+    \end{itemize}
+  \end{ablock}
+  
+  \begin{bblock}{Molecular Dynamics}
+    \begin{itemize}
+    \item Generate a series of time-correlated points in phase-space (a trajectory).
+    \item Propagate the initial conditions, position and velocities in accordance with Newtonian Mechanics. ${\bf F}=m{\bf a}=-{\boldsymbol\nabla}V$
+    \item Fundamental Basis is the \textbf{Ergodic Hypothesis}: the average obtained by following a small number of particles over a
+      long time is equivalent to averaging over a large number of particles for a short time.
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\frametitle{}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Applications of Molecular Dynamics}
-\begin{itemize}
-\item Liquids, transport phenomena like viscosity and heat flow
-\item Crystal structure, defects 
-\item Solids: Fracture, Friction between two solids
-\item Surface Phenomena, adsorption, diffusion
-\item Clusters are a bridge between molecular systems and solids, catalysis
-\item Biomolecules
-\item Electronic Properties and Dynamics
-\end{itemize}
-\end{colorblock}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Limitations of Molecular Dynamics}
-\begin{itemize}
-\item Use of classical forces: Nuclear quantum effects become important for lighter nuclei (e.g. H, He), low temperatures.
-\item How realistic are the forces?
-\item How long should the simulation run?
-\item Size of system? 
-\end{itemize}
-\end{colorblock}
+  \frametitle{}
+  \begin{bblock}{Applications of Molecular Dynamics}
+    \begin{itemize}
+    \item Liquids, transport phenomena like viscosity and heat flow
+    \item Crystal structure, defects 
+    \item Solids: Fracture, Friction between two solids
+    \item Surface Phenomena, adsorption, diffusion
+    \item Clusters are a bridge between molecular systems and solids, catalysis
+    \item Biomolecules
+    \item Electronic Properties and Dynamics
+    \end{itemize}
+  \end{bblock}
+  \begin{bblock}{Limitations of Molecular Dynamics}
+    \begin{itemize}
+    \item Use of classical forces: Nuclear quantum effects become important for lighter nuclei (e.g. H, He), low temperatures.
+    \item How realistic are the forces?
+    \item How long should the simulation run?
+    \item Size of system? 
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\frametitle{\small General Schematic for Molecular Dynamics Program}
-\vspace{-0.5cm}
-\begin{columns}
-\column{4.5cm}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{}
-\begin{enumerate}
-\item Setup: Read input parameters
-\item Initialize: Obtain initial positions and velocities
-\item Evaluate: Potential Energy and Forces on nuclei
-\item Propagate nuclei using an appropriate time integration algorithm
-\item Check if Dynamics is complete. 
-\item If incomplete update variables and goto Step 3.
-\item If complete end dynamics or carry out all required analysis.
-\end{enumerate}
-\end{colorblock}
-\column{7cm}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{}
-%\begin{center}
-%\includegraphics[width=0.8\textwidth,clip=true]{md-scheme}
-%\end{center}
-\scriptsize{
-\tikzstyle{decision} = [ellipse, draw, fill=red!50!yellow, 
-    text width=6em, text badly centered, node distance=1.5cm, inner sep=0pt, minimum height=4.5em]
-\tikzstyle{block} = [rectangle, draw, fill=green!50!black, 
-    text width=10em, text centered, rounded corners, minimum height=3em]
-\tikzstyle{line} = [draw, -latex']
-\tikzstyle{cloud} = [draw, ellipse, fill=green!20,node distance=1.5cm, minimum height=2em]
-\begin{tikzpicture}[node distance = 1.35cm, auto]
-    \node [block,fill=gray](setup){{\bf 1. Setup}\\Read Input Parameters};
-    \node [block, below of=setup, fill=gray](initial){{\bf 2. Initialize}\\Positions \& velocities};
-    \node [block, below of=initial](solve){{\bf 3. Evaluate}\\Potential \& Forces};
-    \node [block, below of=solve](integrate){{\bf 4. Propagate}\\Find new \\Potential \& Forces};
-    \node [decision ,left of=integrate,node distance=2.65cm, fill=red!50!yellow!60!green,text width=4.75em, minimum height=2.5em](update){\bf 6. Update};
-    \node [decision, below of=integrate,node distance=1.5cm](decide){{\bf 5. Dynamics Complete?}};
-    \node [decision, right of=decide, text width=4em, node distance=2.65cm,minimum height=2em, fill=red!80!black] (stop) {\bf 7. END};
-
-    \path [line](setup) -- (initial);
-    \path [line](initial) -- (solve);
-    \path [line](solve) -- (integrate);
-    \path [line](integrate) -- (decide);
-    \path [line](decide) -- node[near end]{yes}(stop);
-    \path [line](decide) -| node[near start]{no}(update);
-    \path [line](update) |- (solve);
-\end{tikzpicture}
-}
-\end{colorblock}
-\end{columns}
+  \frametitle{\small General Schematic for MD Program}
+  \vspace{-0.5cm}
+  \begin{columns}
+    \column{4.5cm}
+    \begin{bblock}{}
+      \begin{enumerate}
+      \item Setup: Read input parameters
+      \item Initialize: Obtain initial positions and velocities
+      \item Evaluate: Potential Energy and Forces on nuclei
+      \item Propagate nuclei using an appropriate time integration algorithm
+      \item Check if Dynamics is complete. 
+      \item If incomplete update variables and goto Step 3.
+      \item If complete end dynamics or carry out all required analysis.
+      \end{enumerate}
+    \end{bblock}
+    \column{7cm}
+    \begin{bblock}{}
+      %\begin{center}
+      %\includegraphics[width=0.8\textwidth,clip=true]{md-scheme}
+      %\end{center}
+      \scriptsize{
+        \tikzstyle{decision} = [ellipse, draw, fill=red!50!yellow, 
+          text width=6em, text badly centered, node distance=1.5cm, inner sep=0pt, minimum height=4.5em]
+        \tikzstyle{block} = [rectangle, draw, fill=green!50!black, 
+          text width=10em, text centered, rounded corners, minimum height=3em]
+        \tikzstyle{line} = [draw, -latex']
+        \tikzstyle{cloud} = [draw, ellipse, fill=green!20,node distance=1.5cm, minimum height=2em]
+        \begin{tikzpicture}[node distance = 1.35cm, auto]
+          \node [block,fill=gray](setup){{\bf 1. Setup}\\Read Input Parameters};
+          \node [block, below of=setup, fill=gray](initial){{\bf 2. Initialize}\\Positions \& velocities};
+          \node [block, below of=initial](solve){{\bf 3. Evaluate}\\Potential \& Forces};
+          \node [block, below of=solve](integrate){{\bf 4. Propagate}\\Find new \\Potential \& Forces};
+          \node [decision ,left of=integrate,node distance=2.65cm, fill=red!50!yellow!60!green,text width=4.75em, minimum height=2.5em](update){\bf 6. Update};
+          \node [decision, below of=integrate,node distance=1.5cm](decide){{\bf 5. Dynamics Complete?}};
+          \node [decision, right of=decide, text width=4em, node distance=2.65cm,minimum height=2em, fill=red!80!black] (stop) {\bf 7. END};
+          
+          \path [line](setup) -- (initial);
+          \path [line](initial) -- (solve);
+          \path [line](solve) -- (integrate);
+          \path [line](integrate) -- (decide);
+          \path [line](decide) -- node[near end]{yes}(stop);
+          \path [line](decide) -| node[near start]{no}(update);
+          \path [line](update) |- (solve);
+        \end{tikzpicture}
+      }
+    \end{bblock}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
-\frametitle{\small Models for Physical System}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{}
-\begin{itemize}
-\item Model for the physical system being simulated
-\item Choose the potential which is a function $\mathcal{V}({\bf r}_1\cdots{\bf r}_N)$ of the positions of the nuclei, representing the potential energy of the system when the atoms are arranged in that specific configuration.
-\item Forces are obtained as gradients of the potential
-\begin{align*}
-{\bf F}_i = -\nabla_{{\bf r}_i}\mathcal{V}({\bf r}_1\cdots{\bf r}_i\cdots{\bf r}_N)
-\end{align*}
-\item Simplest choice for potential is a sum of pairwise interactions
-\begin{align*}
-\mathcal{V}({\bf r}_1\cdots{\bf r}_N) = \sum_i\sum_{j>i} V(|{\bf r}_i - {\bf r}_j|)
-\end{align*}
-\end{itemize}
-\end{colorblock}
-\end{frame}\begin{frame}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Potential Energy Functions}
-\begin{itemize}
-\item Pair Potentials:
-\begin{enumerate}
-{\footnotesize
-\item Attraction
-\begin{itemize}
-{\footnotesize
-\item Long range
-\item Dispersive forces, instantaneous dipole interactions
-}
-\end{itemize}
-\item Repulsion
-\begin{itemize}
-{\footnotesize
-\item Short range
-\item Exchange forces, overlap of electron cloud.
-}
-\end{itemize}}
-\end{enumerate}
-\item Lennard-Jones (LJ) Potential
-\begin{align*}
-U(r) = 4\epsilon\left[\left(\dfrac{\sigma}{r}\right)^{12} - \left(\dfrac{\sigma}{r}\right)^6\right]
-\end{align*}
-\begin{enumerate}
-{\footnotesize
-\item The LJ potential decays rapidly, significant computation time can be saved by
-neglecting pair interactions beyond a cut-off. [$\mathrm{for}\, r_c > 2.5\sigma,\,U(r)=0$]
-}
-\end{enumerate}
-\item Potential from Molecular Mechanics Force fields like AMBER, CHARMM, Drieding etc or from electronic structure calculations.
-\end{itemize}
-\end{colorblock}
-\end{frame}
-\begin{frame}
-%\frametitle{\small Molecular Mechanics}
-\footnotesize{
-\begin{columns}
-\column{6.5cm}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!8!white}{General form of Molecular Mechanics equations}
-\begin{align*}
-E&={\color{red}E_{\mathrm{bond}}}+{\color{blue}E_{\mathrm{angle}}} + {\color{tigerspurple}E_{\mathrm{torsion}}} + {\color{DarkGreen}E_{\mathrm{vdW}}} + {\color{indigo}E_{\mathrm{elec}}}\\
-&={\color{red}\frac{1}{2}\sum_{\mathrm{bonds}}K_b(b-b_0)^2 \hspace{1.6cm}\mathrm{Bond}}\\
-&+{\color{Blue}\frac{1}{2}\sum_{\mathrm{angles}}K_\theta(\theta-\theta_0)^2 \hspace{1.6cm}\mathrm{Angle}}\\
-&+{\color{tigerspurple}\frac{1}{2}\sum_{\mathrm{dihedrals}}K_\phi\left[1+\cos(n\phi)\right]^2 \hspace{0.55cm}\mathrm{Torsion}}\\
-&+\sum_{\mathrm{non bonds}}\left\{ \begin{array}{l}
-{\color{DarkGreen}\left[\left(\dfrac{\sigma}{r}\right)^{12}-\left(\dfrac{\sigma}{r}\right)^{6}\right] \mathrm{van\,der\,Waals}}\\
-+ {\color{indigo}\dfrac{q_1q_2}{Dr} \hspace{1.6cm}\mathrm{Electrostatics}}
-       \end{array} \right.
-\end{align*}
-\end{colorblock}
-\column{5.2cm}
-\vspace{0.6cm}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!8!white}{}
-\includegraphics[width=5.2cm,keepaspectratio=true,clip=true]{MM_PEF}
-\let\thefootnote\relax\footnotetext{\tiny Picture taken from }
-\let\thefootnote\relax\footnotetext{\tiny http://en.wikipedia.org/wiki/Molecular\_mechanics}
-\end{colorblock}
-\end{columns}
-}
+  \frametitle{\small Models for Physical System}
+  \begin{bblock}{}
+    \begin{itemize}
+    \item Model for the physical system being simulated
+    \item Choose the potential which is a function $\mathcal{V}({\bf r}_1\cdots{\bf r}_N)$ of the positions of the nuclei, representing the potential energy of the system when the atoms are arranged in that specific configuration.
+    \item Forces are obtained as gradients of the potential
+      \begin{align*}
+        {\bf F}_i = -\nabla_{{\bf r}_i}\mathcal{V}({\bf r}_1\cdots{\bf r}_i\cdots{\bf r}_N)
+      \end{align*}
+    \item Simplest choice for potential is a sum of pairwise interactions
+      \begin{align*}
+        \mathcal{V}({\bf r}_1\cdots{\bf r}_N) = \sum_i\sum_{j>i} V(|{\bf r}_i - {\bf r}_j|)
+      \end{align*}
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\frametitle{}
-{\scriptsize
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Initial Positions}
-\begin{enumerate}
-\item From experimental results
-\item Assign to lattice positions
-\end{enumerate}
-\end{colorblock}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Initial Velocity}
-\begin{itemize}
-\item Trajectories from previous simulation
-\item Set to desired temperature of simulation
-\begin{enumerate}
-{\scriptsize
-\item Assign a Maxwell -Boltzmann distribution
-\begin{align*}
-f_v(v_x) =\sqrt{\dfrac{m}{2\pi kT}}\exp\left[\dfrac{-mv^2_x}{2kT}\right]
-\end{align*}
-\item Random Uniform distribution: Random velocities scaled to desired temperature
-\begin{align*}
-v_{desired} = \sqrt{\dfrac{T_{desired}}{T_{current}}}v_{current}
-\end{align*}
-}
-\end{enumerate}
-\item Total linear momentum is zero
-\begin{align*}
-\sum_i m_iv_i = 0\hspace{0.5cm}{\mathrm or}\hspace{0.5cm}
-v^{desired}_j = v^{current}_j - \dfrac{\sum_i m_iv^{current}_i }{m_j}
-\end{align*}
-\end{itemize}
-\end{colorblock}
-}
+  \begin{bblock}{Potential Energy Functions}
+    \begin{itemize}
+    \item Pair Potentials:
+      \begin{enumerate}
+      \item Attraction
+        \begin{itemize}
+        \item Long range
+        \item Dispersive forces, instantaneous dipole interactions
+        \end{itemize}
+      \item Repulsion
+        \begin{itemize}
+        \item Short range
+        \item Exchange forces, overlap of electron cloud.
+        \end{itemize}
+      \end{enumerate}
+    \item Lennard-Jones (LJ) Potential
+      \begin{align*}
+        U(r) = 4\epsilon\left[\left(\dfrac{\sigma}{r}\right)^{12} - \left(\dfrac{\sigma}{r}\right)^6\right]
+      \end{align*}
+      \begin{enumerate}
+      \item The LJ potential decays rapidly, significant computation time can be saved by
+        neglecting pair interactions beyond a cut-off. [$\mathrm{for}\, r_c > 2.5\sigma,\,U(r)=0$]
+      \end{enumerate}
+    \item Potential from Molecular Mechanics Force fields like AMBER, CHARMM, Drieding etc or from electronic structure calculations.
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{Boundary Conditions}
-\begin{itemize}
-\item What do we do at the boundaries of the simulated system?
-\begin{enumerate}
-{\footnotesize
-\item Nothing: Not particularly useful for infinite systems but good for single isolated or finite systems.
-\item Use Periodic Boundary Conditions (PBC) for simulating liquids, solids and clusters.
-}
-\end{enumerate}
-\end{itemize}
-\end{colorblock}
+  %\frametitle{\small Molecular Mechanics}
+  \begin{columns}
+    \column{6.5cm}
+    \begin{bblock}{General form of Molecular Mechanics equations}
+      \begin{align*}
+        E&={\color{red}E_{\mathrm{bond}}}+{\color{blue}E_{\mathrm{angle}}} + {\color{tigerspurple}E_{\mathrm{torsion}}} + {\color{DarkGreen}E_{\mathrm{vdW}}} + {\color{indigo}E_{\mathrm{elec}}}\\
+        &={\color{red}\frac{1}{2}\sum_{\mathrm{bonds}}K_b(b-b_0)^2 \hspace{1.6cm}\mathrm{Bond}}\\
+        &+{\color{Blue}\frac{1}{2}\sum_{\mathrm{angles}}K_\theta(\theta-\theta_0)^2 \hspace{1.6cm}\mathrm{Angle}}\\
+        &+{\color{tigerspurple}\frac{1}{2}\sum_{\mathrm{dihedrals}}K_\phi\left[1+\cos(n\phi)\right]^2 \hspace{0.55cm}\mathrm{Torsion}}\\
+        &+\sum_{\mathrm{non bonds}}\left\{ \begin{array}{l}
+          {\color{DarkGreen}\left[\left(\dfrac{\sigma}{r}\right)^{12}-\left(\dfrac{\sigma}{r}\right)^{6}\right] \mathrm{van\,der\,Waals}}\\
+          + {\color{indigo}\dfrac{q_1q_2}{Dr} \hspace{1.6cm}\mathrm{Electrostatics}}
+        \end{array} \right.
+      \end{align*}
+    \end{bblock}
+    \column{5.2cm}
+%    \vspace{0.6cm}
+    \begin{bblock}{}
+      \includegraphics[width=5.2cm,keepaspectratio=true,clip=true]{MM_PEF}
+      \let\thefootnote\relax\footnotetext{\tiny Picture taken from }
+      \let\thefootnote\relax\footnotetext{\tiny http://en.wikipedia.org/wiki/Molecular\_mechanics}
+    \end{bblock}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Periodic Boundary Conditions}
-\begin{itemize}
-\item Consider a small subset or representative size of the infinite or large system and replicate to infinity (or your desired system size).
-\begin{center}
-\includegraphics[width=0.2\textwidth,clip=true]{pbc}
-\end{center}
-\item For each particle in our simulation box, there are infinite particles located at positions
-\begin{align*}
-{\bf r} + l{\bf a} + m{\bf b} + n{\bf c}\, , \, (l,m,n=-\infty\cdots\infty)
-\end{align*}
-where {\bf a}, {\bf b} and {\bf c} are the lattice dimensions of the box.
-\item Thus each particle interacts not only with the other particles in the simulation box but also with their images in every other box.
-\item The simulated box and its images have the same size, shape and number of atoms with the same position, velocity and acceleration.
-\item How do calculate these infinite interactions which will undoubtedly increase the simulation cost?
-\end{itemize}
-\end{colorblock}
+  \frametitle{}
+  \begin{bblock}{Initial Positions}
+    \begin{enumerate}
+    \item From experimental results
+    \item Assign to lattice positions
+    \end{enumerate}
+  \end{bblock}
+  \begin{bblock}{Initial Velocity}
+    \begin{itemize}
+    \item Trajectories from previous simulation
+    \item Set to desired temperature of simulation
+      \begin{enumerate}
+        {\scriptsize
+        \item Assign a Maxwell -Boltzmann distribution
+          \begin{center}
+            $f_v(v_x) =\sqrt{\dfrac{m}{2\pi kT}}\exp\left[\dfrac{-mv^2_x}{2kT}\right]$
+          \end{center}
+        \item Random Uniform distribution: Random velocities scaled to desired temperature
+          \begin{center}
+            $v_{desired} = \sqrt{\dfrac{T_{desired}}{T_{current}}}v_{current}$
+          \end{center}
+        }
+      \end{enumerate}
+    \item Total linear momentum is zero
+      \begin{center}
+        $\sum_i m_iv_i = 0\hspace{0.5cm}{\mathrm or}\hspace{0.5cm}
+        v^{desired}_j = v^{current}_j - \dfrac{\sum_i m_iv^{current}_i }{m_j}$
+      \end{center}
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Minimum Image Criterion}
-\begin{itemize}
-\item If the potential has a finite range, say $R_c$, then two particles at a distance greater than $R_c$ do not interact with each other.
-\item If the size of the simulation box is large than $2R_c$, then each particle $i$ will at most interact with one particle $j$ in the simulation box or the neighboring box.
-\item Thus interaction between particle $i$ with particle $j$ and its images in the replicated boxes will only consist of one interaction between the closest particle.
-\begin{center}
-\includegraphics[width=0.6\textwidth,clip=true]{minimagecrit}
-\end{center}
-\end{itemize}
-\end{colorblock}
+  \begin{bblock}{Boundary Conditions}
+    \begin{itemize}
+    \item What do we do at the boundaries of the simulated system?
+      \begin{enumerate}
+      \item Nothing: Not particularly useful for infinite systems but good for single isolated or finite systems.
+      \item Use Periodic Boundary Conditions (PBC) for simulating liquids, solids and clusters.
+      \end{enumerate}
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{}
-\begin{itemize}
-\item Periodic Boundary Conditions are well suited for modeling infinite systems such as liquids and solids.
-\item What about surfaces? How do you treat surface effects?
-\item For surface simulation, a model of a slab is used i.e. a thick slice of the material delimited with two free surfaces.
-\item This is done by removing the PBC from one direction, say $z$ direction while maintaining PBC in the $xy$ plane.
-\item  Thus the system is infinite in the $xy$ plane and finite in the $z$ direction.
-\item Removing PBC in two directions gives rise to a wire model.
-\item Removing PBC's completely gives rise to a cluster model.
-\end{itemize}
-\end{colorblock}
+  \begin{bblock}{Periodic Boundary Conditions}
+    \begin{itemize}
+    \item Consider a small subset or representative size of the infinite or large system and replicate to infinity (or your desired system size).
+      \begin{center}
+        \includegraphics[width=0.2\textwidth,clip=true]{pbc}
+      \end{center}
+    \item For each particle in our simulation box, there are infinite particles located at positions
+      \begin{center}
+        ${\bf r} + l{\bf a} + m{\bf b} + n{\bf c}\, , \, (l,m,n=-\infty\cdots\infty)$
+      \end{center}
+      where {\bf a}, {\bf b} and {\bf c} are the lattice dimensions of the box.
+    \item Thus each particle interacts not only with the other particles in the simulation box but also with their images in every other box.
+    \item The simulated box and its images have the same size, shape and number of atoms with the same position, velocity and acceleration.
+    \item How to calculate these infinite interactions which will undoubtedly increase the simulation cost?
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Time Integration}
-\begin{itemize}
-\item The main ingredient of Molecular Dynamics is the time integration algorithm: integrate equation of motions of particles to follow trajectories.
-\item Based on finite difference methods: time is discretized onto a finite grid with the time step $\Delta t$ being the distance between consecutive points on the grid.
-\begin{center}
-\includegraphics[width=0.6\textwidth,clip=true]{trajec}
-\end{center}
-\item From position and time derivative at time $t$, obtain positions and time derivatives at time $t+\Delta t$
-\end{itemize}
-\end{colorblock}
+  \begin{bblock}{Minimum Image Criterion}
+    \begin{itemize}
+    \item If the potential has a finite range, say $R_c$, then two particles at a distance greater than $R_c$ do not interact with each other.
+    \item If the size of the simulation box is large than $2R_c$, then each particle $i$ will at most interact with one particle $j$ in the simulation box or the neighboring box.
+    \item Thus interaction between particle $i$ with particle $j$ and its images in the replicated boxes will only consist of one interaction between the closest particle.
+      \begin{center}
+        \includegraphics[width=0.6\textwidth,clip=true]{minimagecrit}
+      \end{center}
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \begin{bblock}{}
+    \begin{itemize}
+    \item Periodic Boundary Conditions are well suited for modeling infinite systems such as liquids and solids.
+    \item For surface simulation, a model of a slab is used i.e. a thick slice of the material delimited with two free surfaces.
+    \item This is done by removing the PBC from one direction, say $z$ direction while maintaining PBC in the $xy$ plane.
+    \item  Thus the system is infinite in the $xy$ plane and finite in the $z$ direction.
+    \item Removing PBC in two directions gives rise to a wire model.
+    \item Removing PBC's completely gives rise to a cluster model.
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \begin{bblock}{Time Integration}
+    \begin{itemize}
+    \item The main ingredient of Molecular Dynamics is the time integration algorithm: integrate equation of motions of particles to follow trajectories.
+    \item Based on finite difference methods: time is discretized onto a finite grid with the time step $\Delta t$ being the distance between consecutive points on the grid.
+      \begin{center}
+        \includegraphics[width=0.6\textwidth,clip=true]{trajec}
+      \end{center}
+    \item From position and time derivative at time $t$, obtain positions and time derivatives at time $t+\Delta t$
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Verlet Algorithm}
-\begin{itemize}
-\item Taylor expansion around ${\bf r}(t)$
-\begin{align*}
-{\bf r}(t+\Delta t) &= 2{\bf r}(t) + {\bf r}(t-\Delta t) + {\bf a}(t)({\Delta t})^2 + \mathcal{O}(\Delta t)^4\\
-{\bf a}(t) &= (-1/m)\nabla\mathcal{V}({\bf r}(t))\\
-{\bf v}(t) &= \dfrac{{\bf r}(t+\Delta t) - {\bf r}(t-\Delta t) }{2\Delta t}
-\end{align*}
-\end{itemize}
-\end{colorblock}
+  \begin{bblock}{Verlet Algorithm}
+    \begin{itemize}
+    \item Taylor expansion around ${\bf r}(t)$
+      \begin{align*}
+        {\bf r}(t+\Delta t) &= 2{\bf r}(t) + {\bf r}(t-\Delta t) + {\bf a}(t)({\Delta t})^2 + \mathcal{O}(\Delta t)^4\\
+        {\bf a}(t) &= (-1/m)\nabla\mathcal{V}({\bf r}(t))\\
+        {\bf v}(t) &= \dfrac{{\bf r}(t+\Delta t) - {\bf r}(t-\Delta t) }{2\Delta t}
+      \end{align*}
+    \end{itemize}
+  \end{bblock}
 
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Velocity Verlet Algorithm}
-\begin{itemize}
-\item Obtain velocity at half step and position at full step.
-\begin{align*}
-{\bf v}(t+\Delta t/2) &=  {\bf v}(t)  + 1/2{\bf a}(t){\Delta t}\\
-{\bf r}(t+\Delta t) &= {\bf r}(t) + {\bf v}(t+\Delta t/2)\Delta t\\
-{\bf a}(t+\Delta t) &= (-1/m)\nabla\mathcal{V}({\bf r}(t+\Delta t))\\
-{\bf v}(t+\Delta t) &= {\bf v}(t+\Delta t/2) + 1/2{\bf a}(t+\Delta t)\Delta t
-\end{align*}
-\end{itemize}
-\end{colorblock}
+\begin{bblock}{Velocity Verlet Algorithm}
+  \begin{itemize}
+  \item Obtain velocity at half step and position at full step.
+    \begin{align*}
+      {\bf v}(t+\Delta t/2) &=  {\bf v}(t)  + 1/2{\bf a}(t){\Delta t}\\
+      {\bf r}(t+\Delta t) &= {\bf r}(t) + {\bf v}(t+\Delta t/2)\Delta t\\
+      {\bf a}(t+\Delta t) &= (-1/m)\nabla\mathcal{V}({\bf r}(t+\Delta t))\\
+      {\bf v}(t+\Delta t) &= {\bf v}(t+\Delta t/2) + 1/2{\bf a}(t+\Delta t)\Delta t
+    \end{align*}
+  \end{itemize}
+\end{bblock}
 
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Predictor Corrector Algorithm}
-\begin{itemize}
-\item Predictor Step: Predict position and time derivatives  time $t+\Delta t$ by Taylor expansion at time $t$.
-\item Compute Forces as gradient of potentials at the predicted positions. The difference between the predicted acceleration and the calculated acceleration is the "error signal"
-\begin{align*}
-\Delta a(t+\Delta t) = a^C(t+\Delta t) - a^P(t+\Delta t)
-\end{align*}
-\item Corrector Step: Use the "error signal" to correct the positions and its time derivatives. 
-\begin{align*}
-r^C(t+\Delta t)  &= r^P(t+\Delta t) + c_0\Delta a(t+\Delta t)\\
-v^C(t+\Delta t)  &= v^P(t+\Delta t) + c_1\Delta a(t+\Delta t)\\
-a^C(t+\Delta t)  &= a^P(t+\Delta t) + c_2\Delta a(t+\Delta t)\\
-b^C(t+\Delta t)  &= b^P(t+\Delta t) + c_3\Delta a(t+\Delta t)
-\end{align*}
-\item The coefficients maximizes stability and are dependent on specific algorithm
-\item {\color{blue}{\bf Gear Predictor Corrector Algorithm:}\\ $c_0=1/6$, $c_1=5/6$, $c_2=1$ and $c_3=1/3$.}
-\end{itemize}
-\end{colorblock}
+\begin{bblock}{Predictor Corrector Algorithm}
+  \begin{itemize}
+  \item Predictor Step: Predict position and time derivatives  time $t+\Delta t$ by Taylor expansion at time $t$.
+  \item Compute Forces as gradient of potentials at the predicted positions. The difference between the predicted acceleration and the calculated acceleration is the "error signal"
+    \begin{center}
+      $\Delta a(t+\Delta t) = a^C(t+\Delta t) - a^P(t+\Delta t)$
+    \end{center}
+  \item Corrector Step: Use the "error signal" to correct the positions and its time derivatives. 
+    \begin{align*}
+      r^C(t+\Delta t)  &= r^P(t+\Delta t) + c_0\Delta a(t+\Delta t)\\
+      v^C(t+\Delta t)  &= v^P(t+\Delta t) + c_1\Delta a(t+\Delta t)\\
+      a^C(t+\Delta t)  &= a^P(t+\Delta t) + c_2\Delta a(t+\Delta t)\\
+      b^C(t+\Delta t)  &= b^P(t+\Delta t) + c_3\Delta a(t+\Delta t)
+    \end{align*}
+  \item The coefficients maximizes stability and are dependent on specific algorithm
+  \item {\color{blue}{\bf Gear Predictor Corrector Algorithm:}\\ $c_0=1/6$, $c_1=5/6$, $c_2=1$ and $c_3=1/3$.}
+  \end{itemize}
+\end{bblock}
 
-%\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Leap Frog Algorithm}
+%\begin{bblock}{Leap Frog Algorithm}
 %\begin{itemize}
 %\item Similar to the Velocity Verlet algorithm.
 %\begin{align*}
@@ -534,9 +516,9 @@ b^C(t+\Delta t)  &= b^P(t+\Delta t) + c_3\Delta a(t+\Delta t)
 %{\bf v}{(t+\Delta t/2)} &= {\bf v}{(t-\Delta t/2)} + {\bf a}(t)\, \Delta t
 %\end{align*}
 %\end{itemize}
-%\end{colorblock}
+%\end{bblock}
 
-%\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf The Runge-Katta method}
+%\begin{bblock}{The Runge-Katta method}
 %For an initial value problem  specified as follows.
 %\begin{align*}
 %y' = f(t, y) \hspace{0.1cm};\hspace{0.1cm}
@@ -554,787 +536,1257 @@ b^C(t+\Delta t)  &= b^P(t+\Delta t) + c_3\Delta a(t+\Delta t)
 %k_3 = f(t_n + \tfrac{1}{2}h, y_n +   \tfrac{1}{2} h k_2)\hspace{0.1cm} &; \hspace{0.1cm}
 %k_4 = f(t_n + h, y_n + h k_3)
 %\end{align*}
-%\end{colorblock}
+%\end{bblock}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
-\frametitle{\small Analysis of Trajectory}
-\begin{itemize}
-\item Kinetic Energy
-\begin{align*}
-K = \dfrac{1}{2}\sum_im_iv^2_i
-\end{align*}
-\item Temperature: from average kinetic energy using equipartition theorem
-\begin{align*}
-T = \dfrac{2K}{3k_B}
-\end{align*}
-\item Pressure: from virial theorem
-\begin{align*}
-P=\dfrac{Nk_BT}{V} -\dfrac{1}{N_{dim}}\left\langle\sum^N_i{\bf r}_i\cdot{\bf F}_i\right\rangle
-\end{align*}
-where $N$ is number of particles and $N_{dim}$ is dimensionality of the system.
-\item Diffusion Coefficient: related to mean square displacement
-\begin{align*}
-D = \dfrac{1}{2N_{dim}}\lim_{t\rightarrow\infty}\dfrac{\left\langle|{\bf r}(t) - {\bf r}(0)|^2\right\rangle}{t}
-\end{align*}
-\item Spectral analysis
-\begin{enumerate}
-{\footnotesize
-\item FT-VAC: Fourier Transform of Velocity Auto-Correlation function
-\begin{align*}
-V(\omega) = \dfrac{1}{{2\pi}}\int\,\exp(-\imath\omega t)\left\langle{\bf v}(t)\cdot{\bf v}(0)\right\rangle
-\end{align*}
-if mass weighted velocities $\boldsymbol{\cal V}_i=\sqrt{m_i}{\bf v}_i$ are used, then $V(\omega)$ is the kinetic energy spectra.
-\item FT-DAC: Fourier Transform of Dipole Auto-Correlation function, related to IR spectra
-\begin{align*}
-S(\omega) = \dfrac{1}{{2\pi}}\int\,\exp(-\imath\omega t)\left\langle{\boldsymbol \mu}(t)\cdot{\boldsymbol \mu}(0)\right\rangle
-\end{align*}
-\item Short-Time Fourier Transform (STFT): 2D time-frequency spectra to simulate pump-probe experiments 
-\begin{align*}
-{\cal K}(t,\omega) = \frac{1}{2\pi}\int^{\infty}_{-\infty}dt^\prime
-\left\langle{\boldsymbol{\cal V}}(t)\cdot{\boldsymbol{\cal V}}(t^\prime)\right\rangle
-% f(t,t^\prime)
-H(t,t^\prime)\exp(-\imath\omega t^\prime)\label{eq:stft-vac}
-\end{align*}
-where %$f(t,t^\prime)$ is a time correlation function and 
-$H(t,t^\prime)$ is a window function
-}
-\end{enumerate}
-\end{itemize}
+  \frametitle{\small Analysis of Trajectory}
+  \begin{itemize}
+  \item Kinetic Energy
+    \begin{align*}
+      K = \dfrac{1}{2}\sum_im_iv^2_i
+    \end{align*}
+  \item Temperature: from average kinetic energy using equipartition theorem
+    \begin{align*}
+      T = \dfrac{2K}{3k_B}
+    \end{align*}
+  \item Pressure: from virial theorem
+    \begin{align*}
+      P=\dfrac{Nk_BT}{V} -\dfrac{1}{N_{dim}}\left\langle\sum^N_i{\bf r}_i\cdot{\bf F}_i\right\rangle
+    \end{align*}
+    where $N$ is number of particles and $N_{dim}$ is dimensionality of the system.
+  \item Diffusion Coefficient: related to mean square displacement
+    \begin{align*}
+      D = \dfrac{1}{2N_{dim}}\lim_{t\rightarrow\infty}\dfrac{\left\langle|{\bf r}(t) - {\bf r}(0)|^2\right\rangle}{t}
+    \end{align*}
+  \item Spectral analysis
+    \begin{enumerate}
+    \item FT-VAC: Fourier Transform of Velocity Auto-Correlation function
+      \begin{align*}
+        V(\omega) = \dfrac{1}{{2\pi}}\int\,\exp(-\imath\omega t)\left\langle{\bf v}(t)\cdot{\bf v}(0)\right\rangle
+      \end{align*}
+      if mass weighted velocities $\boldsymbol{\cal V}_i=\sqrt{m_i}{\bf v}_i$ are used, then $V(\omega)$ is the kinetic energy spectra.
+    \item FT-DAC: Fourier Transform of Dipole Auto-Correlation function, related to IR spectra
+      \begin{align*}
+        S(\omega) = \dfrac{1}{{2\pi}}\int\,\exp(-\imath\omega t)\left\langle{\boldsymbol \mu}(t)\cdot{\boldsymbol \mu}(0)\right\rangle
+      \end{align*}
+    \item Short-Time Fourier Transform (STFT): 2D time-frequency spectra to simulate pump-probe experiments 
+      \begin{align*}
+        {\cal K}(t,\omega) = \frac{1}{2\pi}\int^{\infty}_{-\infty}dt^\prime
+        \left\langle{\boldsymbol{\cal V}}(t)\cdot{\boldsymbol{\cal V}}(t^\prime)\right\rangle
+        % f(t,t^\prime)
+        H(t,t^\prime)\exp(-\imath\omega t^\prime)\label{eq:stft-vac}
+      \end{align*}
+      where %$f(t,t^\prime)$ is a time correlation function and 
+      $H(t,t^\prime)$ is a window function
+    \end{enumerate}
+  \end{itemize}
 \end{frame}
 
-\beamertemplateshadingbackground{seablue}{seablue} % New background
 \begin{frame}
-\frametitle{\small Example code for MD}
-\begin{itemize}
-\item On LONI and LSU HPC Linux systems: /home/apacheco/CompChem/MD\_Prog2Prod
-\item Equilibration of liquid Hydrogen.
-\item Courtesy: Matt McKenzie, formerly LSU HPC now at NICS.
-\item Input File: fort.40
-\item Output File: fort.44 (energy data) and fort.77 (xyz file of dynamics)
-\item In directory crystal, crystal.f90 to generate lattice structure, courtesy Furio Ercolessi {\color{Blue}\url{http://www.fisica.uniud.it/~ercolessi/md}}
-\end{itemize}
-\begin{center}
-\includemovie[autoplay,text={\includegraphics[height=4cm,keepaspectratio=true]{liquid-H-md}},repeat=10]{}{}
-{liquid-H-md.mpg}
-\end{center}
+  \frametitle{\small Example code for MD}
+  \begin{itemize}
+  \item On LONI and LSU HPC Linux systems: /home/apacheco/CompChem/MD\_Prog2Prod
+  \item Equilibration of liquid Hydrogen.
+  \item Courtesy: Matt McKenzie, formerly LSU HPC now at NICS.
+  \item Input File: fort.40
+  \item Output File: fort.44 (energy data) and fort.77 (xyz file of dynamics)
+  \item In directory crystal, crystal.f90 to generate lattice structure, courtesy Furio Ercolessi {\color{Blue}\url{http://www.fisica.uniud.it/~ercolessi/md}}
+  \end{itemize}
+  \begin{center}
+    \includemovie[autoplay,text={\includegraphics[height=4cm,keepaspectratio=true]{liquid-H-md}},repeat=10]{}{}
+                 {liquid-H-md.mpg}
+  \end{center}
 \end{frame}
-\beamertemplateshadingbackground{blue!5}{blue!5} % back to original background
 
 \section{{\it Ab Initio} Molecular Dynamics Theory} 
 \begin{frame}
-\frametitle{\small {\it Ab Initio} Molecular Dynamics: Theory}
-\begin{itemize}
-\item Solve the time-dependent Schr\"{o}dinger equation
-\begin{align*}
-\imath\hbar\dfrac{\partial}{\partial t}\Psi({\bf R},{\bf r},t) = \hat{H}\Psi({\bf R},{\bf r},t)
-\end{align*}
-with 
-\begin{align*}
-\Psi({\bf R},{\bf r},t) = \chi({\bf R},t)\Phi({\bf r},t)
-\end{align*}
-and 
-\begin{align*}
-\hat{H} = -\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I +\underbrace{\dfrac{-\hbar^2}{2m_e}\nabla^2_i + V_{n-e}(\bf r,R)}_{H_e(\bf r,R)}
-\end{align*}
-\item Obtain coupled equations of motion for electrons and nuclei: Time-Dependent Self-Consistent Field (TD-SCF) approach.
-\begin{align*}
-\imath\hbar\dfrac{\partial\Phi}{\partial t} &= \left[-\sum_i\dfrac{\hbar^2}{2m_e}\nabla^2_i + \langle\chi|V_{n-e}|\chi\rangle\right]\Phi\\
-\imath\hbar\dfrac{\partial\chi}{\partial t} &= \left[-\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I + \langle\Phi|H_e|\Phi\rangle\right]\chi
-\end{align*}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-%\frametitle{\small Molecular Dynamics Theory}
-\begin{itemize}
-%\item Alternative approach: Decouple electronic and nuclei motions.
-%\item Solve for the clamped nuclei:
-%\begin{align*}
-%\hat{H}_e\Phi_k({\bf r};{\bf R}) = E_k({\bf R})\Phi_k({\bf r};{\bf R})
-%\end{align*}
-%\item Equation of motion for nuclear wavefunction is
-%\begin{align*}
-%\imath\hbar\dfrac{\partial|\chi\rangle}{\partial t} &= \left[-\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I + E({\bf R})\right]|%\chi\rangle
-%\end{align*}
-\item Define nuclear wavefunction as
-\begin{align*}
-\chi({\bf R},t) = A({\bf R},t)\exp\left[iS({\bf R},t)/\hbar\right]
-\end{align*}
-where $A$ and $S$ are real.
-\item Solve the time-dependent equation for nuclear wavefunction and take classical limit ($\hbar\rightarrow0$) to obtain 
-\begin{align*}
-\dfrac{\partial S}{\partial t} + \sum_I\dfrac{\hbar^2}{2M_I}(\nabla_IS)^2 + \langle\Phi|H_e|\Phi\rangle = 0
-\end{align*}
-an equation that is isomorphic with the Hamilton-Jacobi equation with the classical Hamilton function given by
-\begin{align*}
-\mathcal{H}(\{{\bf R}_I\},\{{\bf P}_I\}) = \sum_I \dfrac{\hbar^2}{2M_I}{\bf P}^2_I + V(\{{\bf R}_I\})
-\end{align*}
-where
-\begin{align*}
-{\bf P}_I \equiv \nabla_IS\hspace{1cm}\mathrm{and}\hspace{1cm}
-V(\{{\bf R}_I\}) = \langle\Phi|H_e|\Phi\rangle
-\end{align*}
-\item Obtain equations of nuclear motion from Hamilton's equation
-\begin{align*}
-\dfrac{d{\bf P}_I}{dt} = -\dfrac{d\mathcal{H}}{d{\bf R}_I}&\Rightarrow M\ddot{\bf R}_I = -\nabla _IV\\
-\dfrac{d{\bf R}_I}{dt} &= \dfrac{d\mathcal{H}}{d{\bf P}_I}
-\end{align*}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\begin{itemize}
-\item Replace nuclear wavefunction by delta functions centered on nuclear position to obtain
-\begin{align*}
-i\hbar\dfrac{\partial\Phi}{\partial t} = H_e({\bf r},\{{\bf R}_I\})\Phi({\bf r};\{{\bf R}_I\},t)
-\end{align*}
-\item This approach of simultaneously solving the electronic and nuclear degrees of freedom by incorporating feedback in both directions is known as \textbf{Ehrenfest Molecular Dynamics}.
-\item Expand $\Phi$ in terms of many electron wavefunctions or  determinants
-\begin{align*}
-\Phi({\bf r};\{{\bf R}_I\},t) = \sum_i c_i(t)\Phi_i({\bf r};\{{\bf R}_I\})
-\end{align*}
-with matrix elements
-\begin{align*}
-H_{ij} = \langle\Phi_i|H_e|\Phi_j\rangle
-\end{align*} 
-\item Inserting $\Phi$ in the TDSE above, we get
-\begin{align*}
-\imath\hbar\dot{c}_i(t) = c_i(t)H_{ii} -\imath\hbar\sum_{I,i}\dot{\bf R}_I{\bf d}^{ij}_I
-\end{align*}
-with non-adiabatic coupling elements given by
-\begin{align*}
-{\bf d}^{ij}_I({\bf R}_I) = \langle\Phi_i|\nabla_I|\Phi_j\rangle
-\end{align*}
-\end{itemize}
+  \frametitle{\small Ab Initio Molecular Dynamics: Theory}
+  \begin{itemize}
+  \item Solve the time-dependent Schr\"{o}dinger equation
+    \begin{center}
+      $\imath\hbar\dfrac{\partial}{\partial t}\Psi({\bf R},{\bf r},t) = \hat{H}\Psi({\bf R},{\bf r},t)$
+    \end{center}
+    with 
+    \begin{center}
+      $\Psi({\bf R},{\bf r},t) = \chi({\bf R},t)\Phi({\bf r},t)$
+    \end{center}
+    and 
+    \begin{align*}
+      \hat{H} = -\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I +\underbrace{\dfrac{-\hbar^2}{2m_e}\nabla^2_i + V_{n-e}(\bf r,R)}_{H_e(\bf r,R)}
+    \end{align*}
+  \item Obtain coupled equations of motion for electrons and nuclei: Time-Dependent Self-Consistent Field (TD-SCF) approach.
+    \begin{align*}
+      \imath\hbar\dfrac{\partial\Phi}{\partial t} &= \left[-\sum_i\dfrac{\hbar^2}{2m_e}\nabla^2_i + \langle\chi|V_{n-e}|\chi\rangle\right]\Phi\\
+      \imath\hbar\dfrac{\partial\chi}{\partial t} &= \left[-\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I + \langle\Phi|H_e|\Phi\rangle\right]\chi
+    \end{align*}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
-\begin{itemize}
-\item Up to this point, no restriction on the nature of $\Phi_i$ i.e. adiabatic or diabatic basis has been made. 
-\item Ehrenfest method rigorously includes non-adiabatic transitions between electronic states within the framework of classical nuclear motion and mean field (TD-SCF) approximation to the electronic structure.
-\item Now suppose, we define $\{\Phi_i\}$ to be the adiabatic basis obtained from solving the time-independent Schr\"{o}dinger equation,
-\begin{align*}
-H_e({\bf r},\{{\bf R}_I\})\Phi_i({\bf r};\{{\bf R}_I\}) = E_i(\{{\bf R}_I\})\Phi_i({\bf r};\{{\bf R}_I\})
-\end{align*}
-\item The classical nuclei now move along the adiabatic or Born-Oppenheimer potential surface. Such dynamics are commonly known as \textbf{Born-Oppenheimer Molecular Dynamics} or BOMD.
-\item If we restrict the dynamics to only the ground electronic state, then we obtain ground state BOMD.
-\item If the Ehrenfest potential $V(\{{\bf R}_I\})$ is approximated to a global potential surface in terms of many-body contributions $\{v_n\}$.
-\begin{align*}
-V(\{{\bf R}_I\}) \approx V^{approx}_e({\bf R}) = \sum^{N}_{I=1}v_1({\bf R}_I) + \sum^N_{I>J}v_2({\bf R}_I,{\bf R}_J) +\sum^N_{I>J>K}v_3({\bf R}_I,{\bf R}_J,{\bf R}_K) + \cdots
-\end{align*}
-\item[] 
-\item Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are determined usually Molecular Mechanics Force Fields. This class of dynamics is most commonly known as {\bf Classical Molecular Dynamics}.
-\item Another approach to obtain equations of motion for \text{ab-initio} molecular dynamics is to apply the Born-Oppenheimer approximation to the full wavefunction $\Psi({\bf r},{\bf R},t)$
-\begin{align*}
-\Psi({\bf r},{\bf R},t) = \sum_k \chi_k({\bf R},t)\Phi_k({\bf r};{\bf R}(t))
-\end{align*}
-where
-\begin{align*}
-H_e\Phi_k({\bf r};{\bf R}(t)) = E_k({\bf R}(t))\Phi_k({\bf r};{\bf R}(t))
-\end{align*}
-\item Assuming that the nuclear dynamics does not change the electronic state, we arrive at the equation of motion for nuclear wavefunction 
-\begin{align*}
-\imath\hbar\dfrac{\partial}{\partial t}\chi_k({\bf R},t) = \left[\sum_I-\dfrac{\hbar^2}{2M_I}\nabla^2_I + E_k({\bf R})\right]\chi_k({\bf R},t)
-\end{align*}
-\item The Lagrangian for this system is given by.
-\begin{align*}
-\mathcal{L} = \hat{T} - \hat{V}
-\end{align*}
-\item Corresponding Newton's equation of motion are then obtained from the associated Euler-Lagrange equations,
-\begin{align*}
-\dfrac{d}{dt}\dfrac{\partial\mathcal{L}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}}{\partial{\bf R}_I}
-\end{align*}
-\item The Lagrangian for ground state BOMD is
-\begin{align*}
-\mathcal{L}_\mathrm{BOMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I - \min_{\Phi_0}\langle\Phi|H_e|\Phi\rangle
-\end{align*}
-and equations of motions
-\begin{align*}
-{\color{blue}M_I\ddot{\bf R}_I} = \dfrac{d}{dt}\dfrac{\partial\mathcal{L}_\mathrm{BOMD}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}_\mathrm{BOMD}}{\partial{\bf R}_I} = {\color{blue}-\nabla_I\min_{\Phi_0}\langle\Phi|H_e|\Phi\rangle}
-\end{align*}
-\end{itemize}
-\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\textbf{Extended Lagrangian Molecular Dynamics} (ELMD)}
-Extend the Lagrangian by adding kinetic energy of fictitious particles and obtain their equation of motions from Euler-Lagrange equations.
-\end{colorblock}
-\vspace{-0.3cm}
-\begin{columns}
-\column{6cm}
-\centering{
-\begin{colorblock}{white}{blue!30!black}{black}{green!25!white}{}
-\centering{
-Molecular Orbitals: $\{\phi_i\}$ \\
-Density Matrix: $\displaystyle{{P}_{\mu\nu}=\sum_{i}c^\ast_{\mu i}c_{\nu i}}$}
-\end{colorblock}
-}
-\end{columns}
+  %\frametitle{\small Molecular Dynamics Theory}
+  \begin{itemize}
+    %\item Alternative approach: Decouple electronic and nuclei motions.
+    %\item Solve for the clamped nuclei:
+    %\begin{align*}
+    %\hat{H}_e\Phi_k({\bf r};{\bf R}) = E_k({\bf R})\Phi_k({\bf r};{\bf R})
+    %\end{align*}
+    %\item Equation of motion for nuclear wavefunction is
+    %\begin{align*}
+    %\imath\hbar\dfrac{\partial|\chi\rangle}{\partial t} &= \left[-\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I + E({\bf R})\right]|%\chi\rangle
+    %\end{align*}
+  \item Define nuclear wavefunction as
+    \begin{center}
+      $\chi({\bf R},t) = A({\bf R},t)\exp\left[\imath S({\bf R},t)/\hbar\right]$
+    \end{center}
+    where $A$ and $S$ are real.
+  \item Solve the time-dependent equation for nuclear wavefunction and take classical limit ($\hbar\rightarrow0$) to obtain 
+    \begin{center}
+      $\displaystyle{\dfrac{\partial S}{\partial t} + \sum_I\dfrac{\hbar^2}{2M_I}(\nabla_IS)^2 + \langle\Phi|H_e|\Phi\rangle = 0}$
+    \end{center}
+    an equation that is isomorphic with the Hamilton-Jacobi equation with the classical Hamilton function given by
+    \begin{center}
+      $\mathcal{H}(\{{\bf R}_I\},\{{\bf P}_I\}) = \displaystyle{\sum_I} \dfrac{\hbar^2}{2M_I}{\bf P}^2_I + V(\{{\bf R}_I\})$
+    \end{center}
+    where
+    \begin{center}
+      ${\bf P}_I \equiv \nabla_IS\hspace{1cm}\mathrm{and}\hspace{1cm}
+      V(\{{\bf R}_I\}) = \langle\Phi|H_e|\Phi\rangle$
+    \end{center}
+  \item Obtain equations of nuclear motion from Hamilton's equation
+    \begin{align*}
+      \dfrac{d{\bf P}_I}{dt} = -\dfrac{d\mathcal{H}}{d{\bf R}_I}&\Rightarrow M\ddot{\bf R}_I = -\nabla _IV\\
+      \dfrac{d{\bf R}_I}{dt} &= \dfrac{d\mathcal{H}}{d{\bf P}_I}
+    \end{align*}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \begin{itemize}
+  \item Replace nuclear wavefunction by delta functions centered on nuclear position to obtain
+    \begin{center}
+      $\imath\hbar\dfrac{\partial\Phi}{\partial t} = H_e({\bf r},\{{\bf R}_I\})\Phi({\bf r};\{{\bf R}_I\},t)$
+    \end{center}
+  \item This approach of simultaneously solving the electronic and nuclear degrees of freedom by incorporating feedback in both directions is known as \textbf{Ehrenfest Molecular Dynamics}.
+  \item Expand $\Phi$ in terms of many electron wavefunctions or  determinants
+    \begin{center}
+      $\Phi({\bf r};\{{\bf R}_I\},t) = \displaystyle{\sum_i} c_i(t)\Phi_i({\bf r};\{{\bf R}_I\})$
+    \end{center}
+    with matrix elements
+    \begin{center}
+      $H_{ij} = \langle\Phi_i|H_e|\Phi_j\rangle$
+    \end{center} 
+  \item Inserting $\Phi$ in the TDSE above, we get
+    \begin{center}
+      $\imath\hbar\dot{c}_i(t) = c_i(t)H_{ii} -\imath\hbar\displaystyle{\sum_{I,i} \dot{\bf R}_I{\bf d}^{ij}_I}$
+    \end{center}
+    with non-adiabatic coupling elements given by
+    \begin{center}
+      ${\bf d}^{ij}_I({\bf R}_I) = \langle\Phi_i|\nabla_I|\Phi_j\rangle$
+    \end{center}
+  \item Up to this point, no restriction on the nature of $\Phi_i$ i.e. adiabatic or diabatic basis has been made. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \begin{itemize}
+  \item Ehrenfest method rigorously includes non-adiabatic transitions between electronic states within the framework of classical nuclear motion and mean field (TD-SCF) approximation to the electronic structure.
+  \item Now suppose, we define $\{\Phi_i\}$ to be the adiabatic basis obtained from solving the time-independent Schr\"{o}dinger equation,
+    \begin{center}
+      $H_e({\bf r},\{{\bf R}_I\})\Phi_i({\bf r};\{{\bf R}_I\}) = E_i(\{{\bf R}_I\})\Phi_i({\bf r};\{{\bf R}_I\})$
+    \end{center}
+  \item The classical nuclei now move along the adiabatic or Born-Oppenheimer potential surface. Such dynamics are commonly known as \textbf{Born-Oppenheimer Molecular Dynamics} or BOMD.
+  \item If we restrict the dynamics to only the ground electronic state, then we obtain ground state BOMD.
+  \item If the Ehrenfest potential $V(\{{\bf R}_I\})$ is approximated to a global potential surface in terms of many-body contributions $\{v_n\}$.
+    \begin{center}
+      $V(\{{\bf R}_I\}) \approx V^{approx}_e({\bf R}) = \displaystyle{\sum^{N}_{I=1}v_1({\bf R}_I) + \sum^N_{I>J}v_2({\bf R}_I,{\bf R}_J) +\sum^N_{I>J>K}v_3({\bf R}_I,{\bf R}_J,{\bf R}_K)} + \cdots$
+    \end{center}
+  \item Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are determined usually Molecular Mechanics Force Fields. This class of dynamics is most commonly known as {\bf Classical Molecular Dynamics}.
+  \item Another approach to obtain equations of motion for \text{ab-initio} molecular dynamics is to apply the Born-Oppenheimer approximation to the full wavefunction $\Psi({\bf r},{\bf R},t)$
+    \begin{align*}
+      \Psi({\bf r},{\bf R},t) = \sum_k \chi_k({\bf R},t)\Phi_k({\bf r};{\bf R}(t))
+    \end{align*}
+    where
+    \begin{align*}
+      H_e\Phi_k({\bf r};{\bf R}(t)) = E_k({\bf R}(t))\Phi_k({\bf r};{\bf R}(t))
+    \end{align*}
+  \item Assuming that the nuclear dynamics does not change the electronic state, we arrive at the equation of motion for nuclear wavefunction 
+    \begin{align*}
+      \imath\hbar\dfrac{\partial}{\partial t}\chi_k({\bf R},t) = \left[\sum_I-\dfrac{\hbar^2}{2M_I}\nabla^2_I + E_k({\bf R})\right]\chi_k({\bf R},t)
+    \end{align*}
+  \item The Lagrangian for this system is given by.
+    \begin{align*}
+      \mathcal{L} = \hat{T} - \hat{V}
+    \end{align*}
+  \item Corresponding Newton's equation of motion are then obtained from the associated Euler-Lagrange equations,
+    \begin{align*}
+      \dfrac{d}{dt}\dfrac{\partial\mathcal{L}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}}{\partial{\bf R}_I}
+    \end{align*}
+  \item The Lagrangian for ground state BOMD is
+    \begin{align*}
+      \mathcal{L}_\mathrm{BOMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I - \min_{\Phi_0}\langle\Phi|H_e|\Phi\rangle
+    \end{align*}
+    and equations of motions
+    \begin{align*}
+      {\color{blue}M_I\ddot{\bf R}_I} = \dfrac{d}{dt}\dfrac{\partial\mathcal{L}_\mathrm{BOMD}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}_\mathrm{BOMD}}{\partial{\bf R}_I} = {\color{blue}-\nabla_I\min_{\Phi_0}\langle\Phi|H_e|\Phi\rangle}
+    \end{align*}
+  \end{itemize}
+  \begin{bblock}{\textbf{Extended Lagrangian Molecular Dynamics} (ELMD)}
+    Extend the Lagrangian by adding kinetic energy of fictitious particles and obtain their equation of motions from Euler-Lagrange equations.
+  \end{bblock}
+  \vspace{-0.3cm}
+  \begin{columns}
+    \column{6cm}
+    \centering{
+      \begin{eblock}{}
+        \centering{
+          Molecular Orbitals: $\{\phi_i\}$ \\
+          Density Matrix: $\displaystyle{{P}_{\mu\nu}=\sum_{i}c^\ast_{\mu i}c_{\nu i}}$}
+      \end{eblock}
+    }
+  \end{columns}
 \end{frame}
 
 \begin{frame}
-\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{\textbf{Car-Parrinello Molecular Dynamics} (CPMD)}
-{\color{DarkBlue}CPMD and NWCHEM}\let\thefootnote\relax\footnotetext{\tiny R. Car and M. Parrinello, Phys. Rev. Lett. 55 (22), 2471 (1985)}
-\vspace{-0.1cm}
-\begin{align*}
-\mathcal{L}_\mathrm{CPMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \sum_i\dfrac{1}{2}\mu_i\langle\dot{\phi_i}|\dot{\phi_i}\rangle - \langle\Phi_0|H_e|\Phi_0\rangle + \mathrm{constraints}
-\end{align*}
-\end{colorblock}
- \begin{colorblock}{white}{green!30!black}{black}{green!15!white}{\textbf{Atom centered Density Matrix Propagation} (ADMP)}
-{\color{DarkBlue}Gaussian 03/09}\let\thefootnote\relax\footnotetext{\tiny H. B. Schlegel, J. M. Millam, S. S. Iyengar, G. A. Voth, A. D. Daniels, G. E. Scuseria, M. J. Frisch, J. Chem. Phys. 114, 9758 (2001)}
-\vspace{-0.1cm}
-\begin{align*}
-\mathcal{L}_\mathrm{ADMP} = \dfrac{1}{2}\mathrm{Tr}({\bf V}^T{\bf M}{\bf V}) + \dfrac{1}{2}\mu\mathrm{Tr}(\dot{\bf P}\dot{\bf P}) - E({\bf R},{\bf P}) - \mathrm{Tr}[{\boldsymbol\Lambda}({\bf PP}-{\bf P})]
-\end{align*}
-\end{colorblock}
-\begin{colorblock}{white}{red!30!black}{black}{red!15!white}{\textbf{curvy-steps ELMD} (csELMD)}
-{\color{purple}Q-Chem}\let\thefootnote\relax\footnotetext{\tiny J.M. Herbert and M. Head-Gordon, J. Chem. Phys. 121, 11542 (2004)}
-\vspace{-0.1cm}
-\begin{align*}
-\mathcal{L}_\mathrm{csELMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \dfrac{1}{2}\mu\sum_{i<j}\dot{\Delta}_{ij} - E({\bf R},{\bf P}) ;\hspace{0.2cm} {\bf P}(\lambda) = e^{\lambda\Delta}{\bf P}(0)e^{-\lambda\Delta}
-\end{align*}
-\end{colorblock}
+  \begin{eblock}{\textbf{Car-Parrinello Molecular Dynamics} (CPMD) : CPMD \& NWChem}
+    \let\thefootnote\relax\footnotetext{\tiny R. Car and M. Parrinello, Phys. Rev. Lett. 55 (22), 2471 (1985)}
+    \begin{center}
+      $\mathcal{L}_\mathrm{CPMD} = \displaystyle{\sum_I}\dfrac{1}{2}M_I\dot{\bf R}^2_I + \displaystyle{\sum_i}\dfrac{1}{2}\mu_i\langle\dot{\phi_i}|\dot{\phi_i}\rangle - \langle\Phi_0|H_e|\Phi_0\rangle + \mathrm{constraints}$
+    \end{center}
+  \end{eblock}
+
+  \begin{eblock}{\textbf{Atom centered Density Matrix Propagation} (ADMP) : Gaussian 03/09}
+    \let\thefootnote\relax\footnotetext{\tiny H. B. Schlegel, J. M. Millam, S. S. Iyengar, G. A. Voth, A. D. Daniels, G. E. Scuseria, M. J. Frisch, J. Chem. Phys. 114, 9758 (2001)}
+    \begin{center}
+      $\mathcal{L}_\mathrm{ADMP} = \dfrac{1}{2}\mathrm{Tr}({\bf V}^T{\bf M}{\bf V}) + \dfrac{1}{2}\mu\mathrm{Tr}(\dot{\bf P}\dot{\bf P}) - E({\bf R},{\bf P}) - \mathrm{Tr}[{\boldsymbol\Lambda}({\bf PP}-{\bf P})]$
+    \end{center}
+  \end{eblock}
+  \begin{ablock}{\textbf{curvy-steps ELMD} (csELMD) : Q-Chem}
+    \let\thefootnote\relax\footnotetext{\tiny J.M. Herbert and M. Head-Gordon, J. Chem. Phys. 121, 11542 (2004)}
+    \begin{center}
+      $\mathcal{L}_\mathrm{csELMD} = \displaystyle{\sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \dfrac{1}{2}\mu\sum_{i<j}\dot{\Delta}_{ij} - E({\bf R},{\bf P})} ;\hspace{0.2cm} {\bf P}(\lambda) = e^{\lambda\Delta}{\bf P}(0)e^{-\lambda\Delta}$
+    \end{center}
+  \end{ablock}
 \end{frame}
 
 
-\beamertemplateshadingbackground{green!10!white}{green!10!white} % New background
 \begin{frame}
-\frametitle{\small Molecular Dynamics: Methods and Programs}
-\begin{columns}
-\column{12cm}
-\begin{itemize}
-\item Electronic energy obtained from 
-\begin{itemize}
-\item {Molecular Mechanics $\Rightarrow$ Classical Molecular Dynamics}
-\begin{enumerate}
-{\footnotesize
-\item LAMMPS
-\item NAMD
-\item Amber
-\item Gromacs
-}
-\end{enumerate}
-\item {Ab-Initio Methods $\Rightarrow$ Quantum or Ab-Initio Molecular Dynamics}
-\begin{enumerate}
-{\footnotesize
-\item Born-Oppenheimer Molecular Dynamics: Gaussian, GAMESS
-\item Extended Lagrangian Molecular Dynamics: CPMD, Gaussian (ADMP), NWCHEM(CPMD), {\color{red}VASP}, {\color{red}QChem (curvy-steps ELMD)}
-\item Time Dependent Hartree-Fock and Time Dependent Density Functional Theory: Gaussian, GAMESS, NWCHEM, {\color{red}QChem}
-\item {\color{red}Multiconfiguration Time Dependent Hartree(-Fock), MCTDH(F)}
-\item {\color{red}Non-Adiabatic and  Ehrenfest Molecular Dynamics, Multiple Spawning, Trajectory Surface Hopping}
-\item {\color{red}Quantum Nuclei: QWAIMD(Gaussian), NEO(GAMESS)}
-}
-\end{enumerate}
-\end{itemize}
-\end{itemize}
-\end{columns}
+  \frametitle{\small Molecular Dynamics: Methods and Programs}
+  \begin{columns}
+    \column{12cm}
+    \begin{itemize}
+    \item Electronic energy obtained from 
+      \begin{itemize}
+      \item {Molecular Mechanics $\Rightarrow$ Classical Molecular Dynamics}
+        \begin{enumerate}
+        \item LAMMPS
+        \item NAMD
+        \item Amber
+        \item Gromacs
+        \end{enumerate}
+      \item {Ab-Initio Methods $\Rightarrow$ Quantum or Ab-Initio Molecular Dynamics}
+        \begin{enumerate}
+        \item Born-Oppenheimer Molecular Dynamics: Gaussian, GAMESS
+        \item Extended Lagrangian Molecular Dynamics: CPMD, Gaussian (ADMP), NWCHEM(CPMD), {\color{red}VASP}, {\color{red}QChem (curvy-steps ELMD)}
+        \item Time Dependent Hartree-Fock and Time Dependent Density Functional Theory: Gaussian, GAMESS, NWCHEM, {\color{red}QChem}
+        \item {\color{red}Multiconfiguration Time Dependent Hartree(-Fock), MCTDH(F)}
+        \item {\color{red}Non-Adiabatic and  Ehrenfest Molecular Dynamics, Multiple Spawning, Trajectory Surface Hopping}
+        \item {\color{red}Quantum Nuclei: QWAIMD(Gaussian), NEO(GAMESS)}
+        \end{enumerate}
+      \end{itemize}
+    \end{itemize}
+  \end{columns}
 \end{frame}
-\beamertemplateshadingbackground{blue!5}{blue!5} % back to original background
-\begin{frame}
-%\frametitle{\small Classical Molecular Dynamics}
-\begin{colorblock}{white}{tigerspurple!90!white}{black}{tigersgold!85!black}{\bf Classical Molecular Dynamics}
-\begin{itemize}
-\item Advantages
-\begin{enumerate}
-{\footnotesize
-\item Large Biological Systems
-\item Long time dynamics
-}
-\end{enumerate}
-\item Disadvantages
-\begin{enumerate}
-{\footnotesize
-\item Cannot describe Quantum Nuclear Effects
-}
-\end{enumerate}
-\end{itemize}
-\end{colorblock}
-\begin{colorblock}{white}{tigerspurple!90!white}{black}{tigersgold!85!black}{\bf \textit{Ab Initio} and Quantum Dynamics}
-\begin{itemize}
-\item Advantages
-\begin{enumerate}
-{\footnotesize
-\item Quantum Nuclear Effects
-}
-\end{enumerate}
-\item Disadvantages
-\begin{enumerate}
-{\footnotesize
-\item $\sim$ 100 atoms
-\item Full Quantum Dynamics ie treating nuclei quantum mechanically: less than 10 atoms
-\item Picosecond dynamics at best
-}
-\end{enumerate}
 
-\end{itemize}
-\end{colorblock}
-%{\footnotesize
-%\begin{enumerate}
-%\end{enumerate}
-%}
+\begin{frame}
+  %\frametitle{\small Classical Molecular Dynamics}
+  \begin{eblock}{\bf Classical Molecular Dynamics}
+    \begin{itemize}
+    \item Advantages
+      \begin{enumerate}
+      \item Large Biological Systems
+      \item Long time dynamics
+      \end{enumerate}
+    \item Disadvantages
+      \begin{enumerate}
+      \item Cannot describe Quantum Nuclear Effects
+      \end{enumerate}
+    \end{itemize}
+  \end{eblock}
+  \begin{eblock}{\bf \textit{Ab Initio} and Quantum Dynamics}
+    \begin{itemize}
+    \item Advantages
+      \begin{enumerate}
+      \item Quantum Nuclear Effects
+      \end{enumerate}
+    \item Disadvantages
+      \begin{enumerate}
+      \item $\sim$ 100 atoms
+      \item Full Quantum Dynamics ie treating nuclei quantum mechanically: less than 10 atoms
+      \item Picosecond dynamics at best
+      \end{enumerate}
+      
+    \end{itemize}
+  \end{eblock}
+  %{\footnotesize
+  %\begin{enumerate}
+  %\end{enumerate}
+  %}
 \end{frame}
 
 
 \section{Computational Chemistry Programs}
 \begin{frame}
-\frametitle{\small Software Installed on LONI \& LSU HPC Systems}
-\scriptsize{
-\begin{columns}
-\column{12cm}
-\vspace{-1.25cm}
-\begin{center}
-\begin{tikzpicture}
-\node (tbl) {
-\begin{tabularx}{\textwidth}{ccccccccc}
-\arrayrulecolor{tigersgold}
-\textcolor{white}{\textbf{Software} }& \textcolor{white}{\textbf{QB}} &\textcolor{white}{\textbf {Eric}} & \textcolor{white}{\textbf{Louie}} & \textcolor{white}{\textbf{Oliver}} & \textcolor{white}{\textbf{Painter}} & \textcolor{white}{\textbf{Poseidon}} & \textcolor{orange}{\textbf{Philip}} & \textcolor{orange}{\textbf{Tezpur}}\\
-Amber\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\ 
-Desmond & \checkmark &  &  &  &  &  &  &  \\
-DL\_Poly & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-Gromacs & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-NAMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  \checkmark & \checkmark \\
-%OpenEye & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-CPMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
-GAMESS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-Gaussian &  & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark & \checkmark \\
-NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
-%Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark  \\
-%ACES & \checkmark &  &  &  &  &  & {\color{red}\checkmark}  &  \\
-[1.0ex]
-\end{tabularx}};
-\begin{pgfonlayer}{background}
-\draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
-    draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
-    rectangle ($(tbl.north east)-(0.13,0.9)$);
-\draw[rounded corners,top color=gray!50,bottom color=gray!50,draw=black!15]
-    ($(tbl.north east)-(0.13,0.6)$)
-    rectangle ($(tbl.south west)+(0.13,0.2)$);
-\end{pgfonlayer}
-\end{tikzpicture}
-\end{center}
-\vspace{-1.2cm}
-\begin{center}
-\begin{tikzpicture}
-\node (tbl) {
-\begin{tabularx}{\textwidth}{cccccccc}
-\arrayrulecolor{tigersgold}
-\textcolor{white}{\textbf{Software}} & \textcolor{white}{\textbf{Bluedawg}} & \textcolor{white}{\textbf {Ducky}} & \textcolor{white}{\textbf{Lacumba}} & \textcolor{white}{\textbf{Neptune}} & \textcolor{white}{\textbf{Zeke}} & \textcolor{orange}{\textbf{Pelican}} & \textcolor{orange}{\textbf{Pandora}}\\
-Amber\rule{0pt}{3.5ex} &  & \checkmark & \checkmark &  &  & \checkmark & \checkmark \\ 
-Gromacs & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark\\
-LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-NAMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark\\
-CPMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark\\
-GAMESS & & & & & & & \checkmark \\
-Gaussian & \checkmark & \checkmark & \checkmark &  & \checkmark & \checkmark & \checkmark\\
-NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-%Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark  & \checkmark\\
-[1.0ex]
-\end{tabularx}};
-\begin{pgfonlayer}{background}
-\draw[rounded corners,top color=blue!40!black,bottom color=blue!10!white,
-    draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
-    rectangle ($(tbl.north east)-(0.13,0.9)$);
-\draw[rounded corners,top color=gray!50,bottom color=gray!50,draw=red!15]
-    ($(tbl.north east)-(0.13,0.6)$)
-    rectangle ($(tbl.south west)+(0.13,0.2)$);
-\end{pgfonlayer}
-\end{tikzpicture}
-\end{center}
-\end{columns}
-}
+  \frametitle{\small Software Installed on LONI \& LSU HPC Systems}
+  \scriptsize{
+    \begin{columns}
+      \column{12cm}
+      \vspace{-0.5cm}
+      \begin{center}
+        \begin{tikzpicture}
+          \node (tbl) {
+            \begin{tabularx}{0.9\textwidth}{ccccccccc}
+              \arrayrulecolor{tigersgold}
+              \textcolor{white}{\textbf{Software} }& \textcolor{white}{\textbf{QB}} &\textcolor{white}{\textbf {Eric}} & \textcolor{white}{\textbf{Louie}} & \textcolor{white}{\textbf{Oliver}} & \textcolor{white}{\textbf{Painter}} & \textcolor{white}{\textbf{Poseidon}} & \textcolor{white}{\textbf{Bluedawg}} \\
+              Amber\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & & \\ 
+              Gromacs & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+              LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+              NAMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  \checkmark \\
+              CPMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  \checkmark \\
+              GAMESS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \\
+              Gaussian &  & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
+              NWChem & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+              [1.0ex]
+          \end{tabularx}};
+          \begin{pgfonlayer}{background}
+            \draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
+              draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+            rectangle ($(tbl.north east)-(0.13,0.9)$);
+            \draw[rounded corners,top color=gray!50,bottom color=gray!50,draw=black!15]
+            ($(tbl.north east)-(0.13,0.6)$)
+            rectangle ($(tbl.south west)+(0.13,0.2)$);
+          \end{pgfonlayer}
+        \end{tikzpicture}
+      \end{center}
+      \vspace{-0.5cm}
+      \begin{center}
+        \begin{tikzpicture}
+          \node (tbl) {
+            \begin{tabularx}{0.6\textwidth}{cccccc}
+              \arrayrulecolor{tigersgold}
+              \textcolor{white}{\textbf{Software}} & \textcolor{white}{\textbf{Tezpur}} & \textcolor{white}{\textbf{Philip}} & \textcolor{white}{\textbf{Pelican}} & \textcolor{white}{\textbf{Pandora}}\\
+              Amber\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark \\ 
+              Gromacs & \checkmark & \checkmark & \checkmark & \checkmark\\
+              LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark \\
+              NAMD & \checkmark & \checkmark & \checkmark & \checkmark \\
+              CPMD & \checkmark & & \checkmark & \checkmark \\
+              GAMESS & \checkmark & \checkmark & & \checkmark \\
+              Gaussian & \checkmark & \checkmark & \checkmark & \checkmark\\
+              NWChem & \checkmark & & \checkmark & \checkmark \\
+              [1.0ex]
+          \end{tabularx}};
+          \begin{pgfonlayer}{background}
+            \draw[rounded corners,top color=blue!40!black,bottom color=blue!10!white,
+              draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+            rectangle ($(tbl.north east)-(0.13,0.9)$);
+            \draw[rounded corners,top color=gray!50,bottom color=gray!50,draw=red!15]
+            ($(tbl.north east)-(0.13,0.6)$)
+            rectangle ($(tbl.south west)+(0.13,0.2)$);
+          \end{pgfonlayer}
+        \end{tikzpicture}
+      \end{center}
+    \end{columns}
+  }
 \end{frame}
 
 \begin{frame}
-\frametitle{\small Computational Chemistry Programs}
-\begin{itemize}
- \item {\color{black}Other Software: Q-Chem, SIESTA ,CHARMM, VASP, Quantum Expresso, Octopus}
- \item {\color{tigersblue}{\bf \url{http://en.wikipedia.org/wiki/Quantum\_chemistry\_computer\_programs}}}
- \item {\color{tigersblue}{\bf \url{http://www.ccl.net/chemistry/links/software/index.shtml}}}
- \item {\color{tigersblue}{\bf \url{http://www.redbrick.dcu.ie/~noel/linux4chemistry/}}}
-\end{itemize}
+  \frametitle{\small Computational Chemistry Programs}
+  \begin{itemize}
+  \item {\color{black}Other Software: Q-Chem, SIESTA ,CHARMM, VASP, Quantum Expresso, Octopus}
+  \item {\color{tigersblue}{\bf \url{http://en.wikipedia.org/wiki/Quantum\_chemistry\_computer\_programs}}}
+  \item {\color{tigersblue}{\bf \url{http://www.ccl.net/chemistry/links/software/index.shtml}}}
+  \item {\color{tigersblue}{\bf \url{http://www.redbrick.dcu.ie/~noel/linux4chemistry/}}}
+  \end{itemize}
 \end{frame}
 
-\begin{frame}
-%\footnotesize{
-\vspace{0.5cm}
-\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{\bf Molecular Dynamics Calculations}
-\begin{itemize}
-\item CPMD:
- \begin{itemize}
-  \item CP: Car-Parrinello Molecular Dynamics
-  \item BO: Born-Oppenheimer Molecular Dynamics
- \end{itemize}
-\item Gaussian:
- \begin{itemize}
-% {\scriptsize
- \item BOMD: Born-Oppenheimer Molecular Dynamics
- \item ADMP: Atom centered Density Matrix Propagation and ground state BOMD
-% }
- \end{itemize}
-\item GAMESS:
-  \begin{itemize}
-  \item DRC: Direct Dynamics, a classical trajectory method based on "on-the-fly" ab-initio or semi-empirical potential energy surfaces
-  \end{itemize}
-\item NWCHEM:
-  \begin{itemize}
-  \item Car-Parrinello: Car Parrinello Molecular Dynamics (CPMD)
-%   \item dynamics: Perform classical molecular dynamics
-  \item DIRDYVTST: Direct Dynamics Calculations using POLYRATE with electronic structure from NWCHEM
-  \end{itemize}
-\end{itemize}
-\end{colorblock}
-%}
+\begin{frame}<0>
+  \vspace{0.5cm}
+  \begin{eblock}{\bf Molecular Dynamics Calculations}
+    \begin{itemize}
+    \item CPMD:
+      \begin{itemize}
+      \item CP: Car-Parrinello Molecular Dynamics
+      \item BO: Born-Oppenheimer Molecular Dynamics
+      \end{itemize}
+    \item Gaussian:
+      \begin{itemize}
+      \item BOMD: Born-Oppenheimer Molecular Dynamics
+      \item ADMP: Atom centered Density Matrix Propagation and ground state BOMD
+      \end{itemize}
+    \item GAMESS:
+      \begin{itemize}
+      \item DRC: Direct Dynamics, a classical trajectory method based on "on-the-fly" ab-initio or semi-empirical potential energy surfaces
+      \end{itemize}
+    \item NWCHEM:
+      \begin{itemize}
+      \item Car-Parrinello: Car Parrinello Molecular Dynamics (CPMD)
+        %   \item dynamics: Perform classical molecular dynamics
+      \item DIRDYVTST: Direct Dynamics Calculations using POLYRATE with electronic structure from NWCHEM
+      \end{itemize}
+    \end{itemize}
+  \end{eblock}
 \end{frame}
 
 
 %\section{Example Jobs}
 \begin{frame}
-%\frametitle{\small Worked out Examples On LONI Linux Systems}
-\begin{columns}
-\column{1.16\textwidth}
-\vspace{-0.9cm}
-\begin{alertblock}{On LONI/LSU HPC Linux Systems}
-\begin{center}
-\includegraphics[width=0.74\textwidth,clip=true]{workshop}
-\end{center}
-\end{alertblock}
-\end{columns}
+  \frametitle{\small Examples On LONI \& HPC Linux Systems}
+  \begin{columns}
+    \column{1.16\textwidth}
+    \vspace{-0.85cm}
+    \begin{alertblock}{}%On LONI/LSU HPC Linux Systems}
+      \begin{center}
+        \includegraphics[width=0.67\textwidth,clip=true]{workshop}
+      \end{center}
+    \end{alertblock}
+  \end{columns}
 \end{frame}
 
-\section{LAMMPS on LONI Systems}
+\subsection{Gaussian}
+\begin{frame}[fragile,allowframebreaks]
+  \frametitle{\small Gaussian}
+  \begin{bblock}{}
+    \begin{itemize}
+    \item Atom-centered Density Matrix Propagation (ADMP) is an extended Lagrangian technique similar to CPMD which propagates the density matrix constructed from atom-centered gaussian functions.
+    \item ADMP is part of Gaussian 03/09 (link 121) and can carry out ADMP as well as BOMD calculations for ground state electronic structure.
+    \item To run BOMD calculations via link 121, add the keyword "fullscf'' alongwith other admp keywords
+    \end{itemize}
+  \end{bblock}
+  \begin{eblock}{}
+    {\fontsize{5}{5}
+      \begin{verbatim}
+%chk=water-dimer-admp.chk
+%mem=512mb
+%nprocshared=4
+
+#n b3lyp/6-31+G(D) admp(stepsize=1000,maxpoints=10000,NKE=7125) 
+
+ADMP: 1ps dynamics of water dimer at 300K with dt=0.1fs and mu=0.1amu
+  Initial geometry is taken from CPMD calculation on water-dimer
+	NKE => initial energy in microH = Temp*(1.5*(N-1)*k)/(au/J)*1e6
+	
+0 1
+ O     -1.378379      0.000490      0.080874
+ O      1.539977     -0.000171     -0.118836
+ H     -1.809450     -0.765701     -0.319056
+ H     -1.806537      0.764674     -0.319022
+ H      0.579977     -0.001581      0.034614
+ H      1.932548     -0.002433      0.760717
+
+      \end{verbatim}
+    }
+  \end{eblock}
+  \begin{bblock}{}
+    \begin{itemize}
+      \item Gaussian 03/09 also provides BOMD (link 118) for post Hartree-Fock Methods
+      \item Link 118 is expensive compared to Link 121; for ground state BOMD, Link 121 is recommended.
+    \end{itemize}
+  \end{bblock}
+  \begin{eblock}{}
+    {\fontsize{5}{5}
+      \begin{verbatim}
+%chk=formaldehydedecomp-cas-bomd.chk
+%nprocshared=4
+
+#p cas(4,4)/6-31g(d,p) test
+BOMD=(gradientonly,maxpoint=10,readmwvel)
+
+h2co->h2+co
+
+0,1
+ C,0,0.000996921,0.,-0.0351483754
+ O,0,0.0583751372,0.,1.1334216404
+ H,0,1.5618411491,0.,-0.649341231
+ H,0,0.2651862552,0.,-1.0795362823
+
+0
+1.0d14 -2.0d14 3.0d14
+4.0d14 5.0d14 -6.0d14
+7.0d14 -8.0d14 9.0d14
+-10.0d14 11.0d14 12.0d14
+
+      \end{verbatim}
+    }
+  \end{eblock}
+\end{frame}
+
+\subsection{GAMESS}
+\begin{frame}[fragile,allowframebreaks]
+  \frametitle{\small GAMESS}
+  \begin{bblock}{}
+    \begin{itemize}
+      \item Classical Trajectory Calculations within GAMESS are carried out using the DRC (Dynamic Reaction Coordinate) keyword.
+      \item Not to be confused with IRC or Intrinsic Reaction Coordinate which finds the minimum energy path between the transition state and the reactants or products.
+    \end{itemize}
+  \end{bblock}
+  \begin{eblock}{}
+    {\fontsize{4}{5}
+      \begin{verbatim}
+ $CONTRL SCFTYP=RHF RUNTYP=DRC DFTTYP=B3LYP $END
+ $BASIS GBASIS=N31 NGAUSS=6 NDFUNC=1 NPFUNC=1 DIFFSP=.T. $END
+ $DATA
+Water Dimer 6-31+G(D,P) OPT FREQ
+C1
+ O   8.0    -1.379701      0.002449      0.081416
+ O   8.0     1.541565     -0.000860     -0.119477
+ H   1.0    -1.818137     -0.764389     -0.315570
+ H   1.0    -1.803571      0.759242     -0.315426
+ H   1.0     0.581912     -0.007904      0.030592
+ H   1.0     1.932153     -0.012152      0.759183
+ $END
+------- initial temp is 300K as in admp/bomd calculations
+------- initial velocity vector taken from 
+------- /home/apacheco/CompChem/AIMD/CPMD/water-dimer/bo/g09-gms-input.vels
+ $DRC NPRTSM=1 NSTEP=2000 DELTAT=0.5 NMANAL=.TRUE. EKIN=0.6 HESS=MIN
+      VEL(1)=-6.41080769596195e-03   9.40773981527263e-03  2.67984190974773e-03 
+              7.75619391569166e-03  -3.36528283010609e-03 -3.16149484132192e-03 
+             -4.20098248607962e-02   6.91120029668994e-03  1.73187657665007e-02 
+              1.34786953525422e-02  -2.45099229646348e-02  1.65469867766813e-02 
+              9.32936500423984e-03  -3.08495101664572e-02 -1.96113477755845e-02 
+             -1.85637460617558e-03  -4.74561717078300e-02 -7.09855104721334e-03 
+ $END 
+------- hessian at optimized geometry calculated in
+------- /home/apacheco/CompChem/ElecStr/OptFreq/GAMESS/water-dimer
+ $HESS
+ENERGY IS     -152.8035727224 E(NUC) IS       36.5901317657
+ 1  1 2.24977313E-01-3.08584011E-03 2.15513545E-01-1.03405650E-02-1.00996425E-06
+ 1  2-2.57280378E-03-1.05752527E-01-1.36622480E-01-1.10058074E-01-1.05761642E-01
+ ... full hessian at optimized geometry ...
+18  3-9.41697417E-06 6.49613332E-06 1.06343044E-02-1.62844886E-05 1.92196927E-03
+18  4 1.96981522E-01 6.84369935E-04 4.34020160E-01
+ $END
+ $HESS2
+ENERGY IS     -152.8035727224 E(NUC) IS       36.5901317657
+ 1  1 2.24977313E-01-3.08584011E-03 2.15513545E-01-1.03405650E-02-1.00996425E-06
+ 1  2-2.57280378E-03-1.05752527E-01-1.36622480E-01-1.10058074E-01-1.05761642E-01
+  ... full hessian at reference geometry ...
+18  2-4.42611411E-01-7.77174012E-06 9.07081889E-06 6.44610016E-06-7.99116222E-06
+18  3-9.41697417E-06 6.49613332E-06 1.06343044E-02-1.62844886E-05 1.92196927E-03
+18  4 1.96981522E-01 6.84369935E-04 4.34020160E-01
+ $END
+      \end{verbatim}
+    }
+  \end{eblock}
+\end{frame}
+
+\subsection{CPMD}
 \begin{frame}
-\frametitle{\small Using LAMMPS on LONI systems}
-\begin{itemize}
-\item LAMMPS stands for Large-scale Atomic/Molecular Parallel Simulator.
-\item LAMMPS is a classical molecular dynamics code that models an ensemble of particles in a liquid, solid, or gaseous state designed to run efficiently on parallel computers.
-\item It can model atomic, polymeric, biological, metallic, granular, and coarse-grained systems using a variety of force fields and boundary conditions.
-\item LAMMPS can model systems with only a few particles up to millions or billions.
-\item LAMMPS is designed to be easy to modify or extend with new capabilities, such as new force fields, atom types, boundary conditions, or diagnostics.
-\item LAMMPS runs efficiently on single-processor desktop or laptop machines, but is designed for parallel computers.
-\item It is an open-source code, distributed freely under the terms of the GNU Public License (GPL).
-\end{itemize}
-\end{frame}
-
-\begin{frame}[allowframebreaks]
-\begin{itemize}
-{\footnotesize
-\item LAMMPS doesn't
-\begin{enumerate}
-{\footnotesize
-\item Build molecular systems
-\item Assign force-dield coefficients auto-magically
-\item Compute lots of diagnostics on-the-fly
-\item Visualize your output
-}
-\end{enumerate}
-\item LAMMPS version "4 May 2011" is installed on all LONI Dell Linux Clusters and LSU HPC machines, Tezpur (Linux) and Pandora (AIX).
-\item Add the appropriate soft keys to your .soft file
-\begin{enumerate}
-{\footnotesize
-\item Linux: +lammps-4May11-intel-11.1-mvapich-1.1
-\item Pandora: +lammps-4May11
-}
-\end{enumerate}
-\item Running LAMMPS
-\begin{enumerate}
-\begin{columns}
-\column{11cm}
-\vspace{-0.5cm}
-{\footnotesize
-\item[$\vardiamond$] Linux: mpirun -np \$\{no of procs\} \{LAMMPS directory\}/bin/lmp\_linux < inputfile
-\item[$\vardiamond$] Pandora: poe \{LAMMPS directory\}/bin/lmp\_power7 < inputfile
-}
-\end{columns}
-\end{enumerate}
-\item Command line options
-\begin{itemize}
-{\footnotesize
-\item[$\vardiamond$] -in inputfile: specify input file
-\item[$\vardiamond$] -log logfile: specify log file
-\item[$\vardiamond$] -partition MxN L: Run on (MxN)+L processors with M partitions on N processors each and 1 partition with L processors
-%run LAMMPS in multi partition mode.\\
-%\item[]Usage: -partition MxN L : 
-\item[$\vardiamond$] -screen file: Specify a file to write screen information
-}
-\end{itemize}
-}
-\end{itemize}
+  \frametitle{\small CPMD}
+  \begin{bblock}{}
+    \begin{itemize}
+    \item Car Parrinello Molecular Dynamics
+    \item Typical problems CPMD is used for
+      \begin{itemize}
+      \item Liquid Structures
+      \item Polarization effects
+      \item Bond breaking/formations
+	\begin{itemize}
+	\item Proton transfer
+	\end{itemize}
+      \item Dynamic/thermal properties (e.g. diffusion)
+      \item Metadynamics
+      \item QM/MM
+      \item Path Integrals
+      \item TDDFT
+      \end{itemize}
+    \end{itemize}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\frametitle{\footnotesize LAMMPS Input}
-\begin{itemize}
-{\scriptsize
-\item Reads an input script in ASCII format one line at a time.
-\item Input script consists of 4 parts
-\begin{enumerate}
-{\scriptsize
-\item Initialization: Set parameters that need to be defined before atoms are created or read-in from a file.
-\item[] \texttt{units, dimension, newton, processors, boundary, atom\_style, atom\_modify}
-\item Atom definition: \texttt{read\_data, read\_restart, lattice, region, create\_box, create\_atoms, replicate}
-\item Settings: Once atoms and molecular topology are defined, a variety of settings can be specified: force field coefficients, simulation parameters, output options, etc. 
-\item[] \texttt{pair\_coeff, bond\_coeff, angle\_coeff, dihedral\_coeff, improper\_coeff, kspace\_style, dielectric, special\_bonds, neighbor, neigh\_modify, group, timestep, reset\_timestep, run\_style, min\_style, min\_modify, fix, compute, compute\_modify, variable}
-\item Run a simulation: A MD is run using the run command. Energy minimization (molecular statics) is performed using the minimize command. A parallel tempering (replica-exchange) simulation can be run using the temper command.
-}
-\end{enumerate}
-\item \url{http://lammps.sandia.gov/doc/Section_commands.html}
-}
-\end{itemize}
+  \frametitle{\small CPMD Input}
+  \begin{bblock}{}
+    \begin{itemize}
+    \item Divided into sections
+    \item Only sections pertaining to your simulated model at hand need to be present.
+      \begin{itemize}
+      \item Common sections: INFO, CPMD, SYSTEM, ATOMS, DFT
+      \item Special sections: PIMD, PATH, RESP, LINRES, TDDFT,  PROP, HARDNESS, CLASSIC, BASIS, VDW, QMMM
+      \end{itemize}
+    \item Sections are defined \texttt{\&Section\_Name} and followed by \texttt{\&END}, for example,
+    \item[]\texttt{\&ATOMS}  
+    \item[]\texttt{\quad(information)}
+    \item[]\texttt{\&END}
+    \item Each section has their own keywords
+    \item Lines that do not match known keywords are ignored
+    \item KEYWORDS HAVE TO BE IN ALL CAPS
+      \begin{itemize}
+      \item kEYWORDS starting with a lower case character are ignored
+      \item Useful feature to re-use the input file
+      \end{itemize}
+    \item Order of keywords is arbitrary
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{\small }
+  {\fontsize{4}{5}
+  \begin{columns}
+  \column{5cm}
+  \begin{eblock}{CPMD Input}
+    \begin{verbatim}
+&INFO
+ Water Dimer
+ CPMD at 300K
+&END
+
+&CPMD
+ MOLECULAR DYNAMICS CP
+ RESTART WAVEFUNCTION COORDINATES LATEST
+ TRAJECTORY XYZ
+ ISOLATED MOLECULE
+ TEMPERATURE
+  300.0D0
+ MAXSTEP
+  10336
+ TIMESTEP
+  4.0
+ EMASS
+  400.0
+&END
+
+&SYSTEM
+ ANGSTROM
+ SYMMETRY
+  SIMPLE CUBIC
+ CELL
+  16.00 1.0 1.0  0.0  0.0  0.0
+ CUTOFF
+  60.0
+&END
+    \end{verbatim}
+  \end{eblock}
+  \column{5cm}
+  \begin{eblock}{CPMD Input (contd)}
+    \begin{verbatim}
+
+&DFT
+ FUNCTIONAL B3LYP
+ SCREENED EXCHANGE ERFC
+   0.1
+ GC-CUTOFF
+	 5.0e-6
+&END
+
+&ATOMS
+*O_SPRIK_BLYP.psp KLEINMAN-BYLANDER RAGGIO=1.2
+ LMAX=P
+  2
+  -1.372075    0.000000    0.103925
+   1.506485    0.000001   -0.120903
+*H_SPRIK_BLYP.psp KLEINMAN-BYLANDER RAGGIO=1.2
+ LMAX=S
+  4
+  -1.765171   -0.771860   -0.323273
+  -1.765171    0.771862   -0.323267
+   0.544563    0.000000    0.027907
+   1.910502   -0.000003    0.754459
+&END
+    \end{verbatim}
+  \end{eblock}
+  \end{columns}
+  }
+\end{frame}
+
+
+\subsection{Amber}
+\begin{frame}
+  \frametitle{\small AMBER}
+  \begin{bblock}{What is AMBER?}
+    \begin{itemize}
+      \item AMBER, Assisted Model Building with Energy Refinement refers to two things
+      \begin{enumerate}
+	\item A collective name for a suite of programs that allow users to carry out molecular dynamics simulation
+	\item A set of molecular mechanical force fields for the simulation of biomolecules
+      \end{enumerate}
+    \end{itemize}
+  \end{bblock}
+  \begin{bblock}{Capabilities}
+    \begin{columns}
+      \column{0.4\textwidth}
+      \begin{itemize}
+	\item Classical MD (NVT,NPT,etc)
+	\item Force Fields
+	\item QM/MM
+	\item Free Energy Calculations
+	\item Structural and Trajectory analysis
+      \end{itemize}
+      \column{0.4\textwidth}
+      \begin{itemize}
+	\item Parallelize dynamic codes
+	\item Enhanced sampling (replica exchange MD)
+	\item Explicit Solvent Models with PME
+	\item Implicit Solvent Models with PB or GB approach
+      \end{itemize}
+    \end{columns}
+  \end{bblock}
 \end{frame}
 
 \begin{frame}
-\begin{itemize}
-{\scriptsize
-\only<1>{
-\item "dump" command outputs snapshots of atom properties
-\begin{columns}
-\column{11cm}
-\vspace{-0.5cm}
-\begin{align*}
-\begin{array}{cr}
-\mathrm{default\,format\,is\,simple:} & {\rm id,type,x,y,z}\\
-{\rm other\,supported\,formats:} &{\rm XYZ,DCD,XTC}
-\end{array}
-\end{align*}
-\column{0.05cm}
-\end{columns}
-\item Visualization using VMD
-\item[]vmd -lammpstrj dumpfile
-}
-\only<2->{
-\item The LAMMPS distribution includes an examples sub-directory with several sample problems. 
-}
-\only<2>{
-\item crack: crack propagation in a 2d solid
-\begin{center}
-\includemovie[text={\includegraphics[height=4cm,keepaspectratio=true]{crack-init}}]{}{}{crack.mpg}
-\end{center}
-}
-\only<3>{
-\item friction: frictional contact of spherical asperities between 2d surfaces
-\begin{center}
-\includemovie[text={\includegraphics[height=4cm,keepaspectratio=true]{friction-init}}]{}{}{friction.mpg}
-\end{center}
-}
-\only<4>{
-\item micelle: self-assembly of small lipid-like molecules into 2d bilayers
-\begin{center}
-\includemovie[text={\includegraphics[height=4cm,keepaspectratio=true]{micelle-init}}]{}{}{micelle.mpg}
-\end{center}
-}
-}
-\end{itemize}
+  \frametitle{\small Basic Information Flow in AMBER}
+  \begin{eblock}{}
+    \begin{enumerate}
+      \item obtain and edit initial structure
+      \item prepare input parameter and topology file
+      \item run simulations and save trajectory
+      \item analyze output and trajectory files
+    \end{enumerate}
+    \scriptsize{
+    \tikzstyle{block} = [rectangle, draw, fill=yellow!75!red,text width=6em, text centered, rounded corners, minimum height=4em]
+    \tikzstyle{line} = [draw, -latex']
+    \begin{tikzpicture}[node distance = 2cm, auto]
+      \node [block](step1){\textbf{PDB} file};
+      \node [block, right of=step1, node distance=3cm](step2){\textbf{Preparatory Programs}\\LEaP\\antechamber};
+      \node [block, right of=step2, node distance=3cm](step3){\textbf{Simulation Programs}\\Sander\\PMEMD\\NMode};
+      \node [block, right of=step3, node distance=3cm](step4){\textbf{Analysis Programs}\\Ptraj\\MM/PBSA};
+      \path [line](step1) -- (step2);
+      \path [line](step2) -- (step3);
+      \path [line](step3) -- (step4);
+    \end{tikzpicture}
+    }
+  \end{eblock}
 \end{frame}
 
-%\section{Benchmarks}
 \begin{frame}
-\frametitle{Benchmarks}
-\begin{itemize}
-\only<1>{
-\item LAMMPS on LONI \& LSU HPC machines
-\begin{enumerate}
-{\footnotesize
-\item[$\vardiamond$] Atomic fluid with Lennard-Jones Potential
-\item[$\vardiamond$] 32,000 atoms for 100,000 steps
-\item[$\vardiamond$] force cutoff = 2.5$\sigma$, neighbor skin = 0.3$\sigma$, neighbor/atom = 55
-\item[$\vardiamond$] NVE time integration
-}
-\end{enumerate}
-\begin{center}
-\includegraphics[width=0.75\textwidth,clip=true]{lammps}
-\end{center}
-}
-\only<2>{
-\item NAMD on LONI \& LSU HPC machines
-\begin{enumerate}
-{\footnotesize
-\item[$\vardiamond$] Apoa1 Benchmark
-\item[$\vardiamond$] 92,224 atoms, 12\AA cutoff + PME every 4 steps, periodic
-}
-\end{enumerate}
-\begin{center}
-\includegraphics[width=0.8\textwidth,clip=true]{namd}
-\end{center}
-}
-\only<3>{
-\item Gromacs on LONI \& LSU HPC machines
-\begin{enumerate}
-{\footnotesize
-\item[$\vardiamond$] 159 residue protein dihydrofolate reductase (dhfr) with implicit solvent
-\item[$\vardiamond$] 2489 atoms, 1nm cutoff
-\begin{center}
-\includegraphics[width=0.8\textwidth,clip=true]{gromacs}
-\end{center}
-}
-\end{enumerate}
-}
-\end{itemize}
+  \frametitle{\small Topology and Parameter File}
+  \begin{bblock}{Topology information includes}
+    \begin{itemize}
+      \item atom types are assigned to identify different elements and different molecular orbital environments
+      \item charges are assigned to each atom
+      \item connectivities between atoms are established
+    \end{itemize}
+  \end{bblock}
+  \begin{bblock}{Parameter information includes}
+    \begin{itemize}
+      \item force constants necessary to describe the bond energy, angle energy, torsion energy, nonbonded interactions (van der Waals and electrostatics)
+      \item other parameters for setting up the energy calculations (GB radii, FEP parameter sets)
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Preparatory Programs}
+  \begin{bblock}{LEaP}
+    \begin{itemize}
+      \item Includes a tex-based interface - tleap and a graphical user interface - xleap
+      \item Capabilities
+      \begin{enumerate}
+	{\scriptsize
+	\item[$\vardiamond$] Read AMBER force field information
+	\item[$\vardiamond$] Read and write files containing structural information (i.e.PDB files)
+	\item[$\vardiamond$] Construct new residues and molecules
+	\item[$\vardiamond$] Link together residues and create nonbonded complexes of molecules
+	\item[$\vardiamond$] Place counterions around a molecule; Solvate molecules; Mdoify internal coordinates within a molecule
+	\item[$\vardiamond$] Generate files that contain topology and parameters for AMBER
+	\item[$\vardiamond$] Set atomic charges, identify the position of disulphide bridges, delete bonds, addition of atoms, ions, etc ...
+	}
+      \end{enumerate}
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Using tleap/xleap}
+  \begin{bblock}{loading PDB file, adding the disulfide cross links and saving files}
+    \begin{itemize}
+      \item[]source leaprc.ff03\let\thefootnote\relax\footnotetext{\tiny Amber 11 Manual Page 17}
+      \item[]bpti = loadPdb 6pti.mod.pdb
+      \item[]bond bpti.5.SG bpti.55.SG
+      \item[]bond bpti.14.SG bpti.38.SG
+      \item[]bond bpti.30.SG bpti.51.SG
+      \item[]saveAmberParm bpti prmtop prmcrd
+      \item[]quit
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{\small Simulation Programs}
+  \begin{bblock}{Sander}
+    \begin{itemize}
+      \item Sander: Simulated Annealing with NMR-Derived Energy Restraints
+      \begin{enumerate}
+	\item[$\vardiamond$] Energy minimization, molecular dynamics and NMR refinements
+	\item[$\vardiamond$] Free energy calculations (Umbrella Sampling; SMD; etc)
+	\item[$\vardiamond$] QM/MM implementation (EVB; semi-empirical/AMBER)
+	\item[$\vardiamond$] Polarizable force field (AMOEBA)
+	\item[$\vardiamond$] Enhanced Sampling (REMD; LES, etc)
+      \end{enumerate}
+      \item Usage: \fontsize{7.5}{10}{\color{blue}\texttt{sander -i mdin -o mdout -p prmtop -c inpcrd -r restrt}}
+    \end{itemize}
+    \begin{description}
+      {\tiny
+      \item[mdin:] input control data for minimization/MD run.
+      \item[mdout:] output file for user readable state info and diagnostics
+      \item[prmtop:] molecular topology, force fields etc
+      \item[inpcrd:] initial coordinates and velocities
+      \item[restrt:] restart filename
+      }
+    \end{description}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Perform Minimization}
+  \begin{eblock}{200 steps of minimization, generalized Born solvent model}
+    \begin{itemize}
+      \item[]\&cntrl\let\thefootnote\relax\footnotetext{\tiny Amber 11 Manual Page 17}
+      \item[]maxcycle=200, 
+      \item[]imin=1, 
+      \item[]cut=12.0, 
+      \item[]igb=1, 
+      \item[]ntb=0, 
+      \item[]ntpr=10,
+      \item[]/
+    \end{itemize}
+  \end{eblock}
+  \begin{eblock}{Run Sander}
+    sander -i min.in -o 6pti.min1 -c prmcrd -r 6pti.min1.xyz
+  \end{eblock}
+\end{frame}
+
+
+\subsection{LAMMPS}
+\begin{frame}
+  \frametitle{\small LAMMPS}
+  \begin{itemize}
+    \item LAMMPS stands for Large-scale Atomic/Molecular Parallel Simulator.
+    \item LAMMPS is a classical molecular dynamics code that models an ensemble of particles in a liquid, solid, or gaseous state designed to run efficiently on parallel computers.
+    \item It can model atomic, polymeric, biological, metallic, granular, and coarse-grained systems using a variety of force fields and boundary conditions.
+    \item LAMMPS can model systems with only a few particles up to millions or billions.
+    \item LAMMPS is designed to be easy to modify or extend with new capabilities, such as new force fields, atom types, boundary conditions, or diagnostics.
+    \item LAMMPS runs efficiently on single-processor desktop or laptop machines, but is designed for parallel computers.
+    \item It is an open-source code, distributed freely under the terms of the GNU Public License (GPL).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Running LAMMPS}
+  \begin{itemize}
+    \item LAMMPS doesn't
+    \begin{enumerate}
+      \item Build molecular systems
+      \item Assign force-dield coefficients auto-magically
+      \item Compute lots of diagnostics on-the-fly
+      \item Visualize your output
+    \end{enumerate}
+    \item LAMMPS version "4 May 2011" is installed on all LONI Dell Linux Clusters.% and LSU HPC machines, Tezpur (Linux) and Pandora (AIX).
+    \item Add the appropriate soft keys to your .soft file
+    \begin{enumerate}
+      \item[$\vardiamond$]  +lammps-4May11-intel-11.1-mvapich-1.1
+    \end{enumerate}
+    \item Command line options for running LAMMPS
+    \begin{itemize}
+      \item[$\vardiamond$] -in inputfile: specify input file
+      \item[$\vardiamond$] -log logfile: specify log file
+      \item[$\vardiamond$] -partition MxN L: Run on (MxN)+L processors with M partitions on N processors each and 1 partition with L processors
+      \item[$\vardiamond$] -screen file: Specify a file to write screen information
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small LAMMPS Input}
+  \begin{itemize}
+    \item Reads an input script in ASCII format one line at a time.
+    \item Input script consists of 4 parts
+    \begin{enumerate}
+      \item Initialization: Set parameters that need to be defined before atoms are created or read-in from a file.
+      \item[] \texttt{units, dimension, newton, processors, boundary, atom\_style, atom\_modify}
+      \item Atom definition: \texttt{read\_data, read\_restart, lattice, region, create\_box, create\_atoms, replicate}
+      \item Settings: Once atoms and molecular topology are defined, a variety of settings can be specified: force field coefficients, simulation parameters, output options, etc. 
+      \item[] \texttt{pair\_coeff, bond\_coeff, angle\_coeff, dihedral\_coeff, improper\_coeff, kspace\_style, dielectric, special\_bonds, neighbor, neigh\_modify, group, timestep, reset\_timestep, run\_style, min\_style, min\_modify, fix, compute, compute\_modify, variable}
+      \item Run a simulation: A MD is run using the run command. Energy minimization (molecular statics) is performed using the minimize command. A parallel tempering (replica-exchange) simulation can be run using the temper command.
+    \end{enumerate}
+    \item \url{http://lammps.sandia.gov/doc/Section_commands.html}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{}
+  \begin{eblock}{LAMMPS Input for 3d Lennard-Jones Melt}
+    {\tiny
+    \begin{tabular}{lr}
+    units   lj & {\color{red}style of units used for a simulation}\\
+    atom\_style  atomic & {\color{red}what style of atoms to use in a simulatio}\\
+     & \\
+    lattice   fcc 0.8442 & {\color{red}Lattice structure}\\
+    region    box block 0 20 0 20 0 20 & {\color{red}define simulation region}\\
+    create\_box  1 box & {\color{red}create simulation box}\\
+    create\_atoms  1 box & {\color{red}create atoms on lattice}\\
+    mass    1 1.0 & {\color{red}}\\
+    velocity  all create 3.0 87287 & {\color{red}}\\
+     & \\
+    pair\_style  lj/cut 2.5 & {\color{red}Formula for Pairwise Interaction}\\
+    pair\_coeff  1 1 1.0 1.0 2.5 & {\color{red}pairwise force field coefficients}\\
+     & \\
+    neighbor  0.3 bin & {\color{red}pairwise neighbor lists}\\
+    neigh\_modify  every 20 delay 0 check no & {\color{red}}\\
+     & \\
+    fix   1 all nve & {\color{red}constant NVE time integration}\\
+     & \\
+    dump    id all atom 10 dump.melt & {\color{red}For visualization}\\
+    thermo    50 & {\color{red}output thermodynamics data}\\
+    run   2500 & {\color{red}Simulation Steps}\\
+    \end{tabular}
+    }
+  \end{eblock}
+  \begin{itemize}
+    {\tiny
+    \item "dump" command outputs snapshots of atom properties
+    \begin{columns}
+      \column{11cm}
+      \vspace{-0.5cm}
+      \begin{align*}
+        \begin{array}{cr}
+          \mathrm{default\,format\,is\,simple:} & {\rm id,type,x,y,z}\\
+                 {\rm other\,supported\,formats:} &{\rm XYZ,DCD,XTC}
+        \end{array}
+      \end{align*}
+      \column{0.05cm}
+    \end{columns}
+    \item Visualization using VMD
+    \item[]vmd -lammpstrj dumpfile
+    }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{itemize}
+    \only<1->{
+    \item The LAMMPS distribution includes an examples sub-directory with several sample problems. 
+    }
+    \only<1>{
+    \item crack: crack propagation in a 2d solid
+      \begin{center}
+        \includemovie[text={\includegraphics[height=4cm,keepaspectratio=true]{crack-init}}]{}{}{crack.mpg}
+      \end{center}
+    }
+    \only<2>{
+    \item friction: frictional contact of spherical asperities between 2d surfaces
+      \begin{center}
+        \includemovie[text={\includegraphics[height=4cm,keepaspectratio=true]{friction-init}}]{}{}{friction.mpg}
+      \end{center}
+    }
+    \only<3>{
+    \item micelle: self-assembly of small lipid-like molecules into 2d bilayers
+      \begin{center}
+        \includemovie[text={\includegraphics[height=4cm,keepaspectratio=true]{micelle-init}}]{}{}{micelle.mpg}
+      \end{center}
+    }
+  \end{itemize}
+\end{frame}
+
+
+\subsection{NAMD}
+\begin{frame}
+  \frametitle{\small NAMD}
+  \begin{bblock}{}
+    \begin{itemize}
+      \item NAMD is a parallel molecular dynamics code designed for high-performance simulation of large biomolecular systems. 
+      \item Based on Charm++ parallel objects, NAMD scales to hundreds of processors on high-end parallel platforms and tens of processors on commodity clusters using gigabit ethernet.
+      \item NAMD uses the popular molecular graphics program VMD for simulation setup and trajectory analysis, but is also file-compatible with AMBER, CHARMM, and X-PLOR.
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small What is needed to run NAMD?}
+  \begin{itemize}
+    \item Protein Data Bank (pdb) file which stores atomic coordinates and/or velocities for the system.
+    \item Protein Structure File (psf) which stores structural information of the protein, such as various types of bonding interactions.
+    \item A force field parameter file. A force field is a mathematical expression of the potential which atoms in the system experience. CHARMM, X-PLOR, AMBER, and GROMACS are four types of force fields, and NAMD is able to use all of them. The parameter file defines bond strengths, equilibrium lengths, etc. 
+    \item A configuration file, in which the user specifies all the options that NAMD should adopt in running a simulation.
+  \end{itemize}
+  \begin{bblock}{NAMD configuration file}
+    \begin{itemize}
+      \item A NAMD configuration file contains a set of options and values which determine the exact behavior of NAMD, what features are active or inactive, how long the simulation should continue, etc.
+      \item The following parameters are \textit{required} for every NAMD simulation
+      \item[] \texttt{numsteps, coordinates, structure, parameters, exclude, outputname} and one of the following three: \texttt{temperature, velocities, binvelocities}.
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small }
+  {\tiny
+  \begin{eblock}{NAMD Configuration File for decalanin}
+    \begin{tabular}{lcr}
+%     # NAMD CONFIGURATION FILE FOR DECALANIN
+      numsteps  10000  &  &  {\color{red}protocol params}\\
+      & &  \\
+      coordinates alanin.pdb & &  {\color{red}initial config} \\
+      temperature 300K & &  \\
+      seed    12345 & &  \\
+      & &  \\
+      outputname  ./alanin & &  {\color{red}output params} \\
+      binaryoutput  no & &  \\
+      & &  \\
+      timestep  1.0 & &  {\color{red}integrator params} \\
+      & &  \\
+      structure alanin.psf & &  {\color{red}force field params}\\
+      parameters  alanin.params & &  \\
+      exclude   scaled1-4 & &  \\
+      1-4scaling  1.0 & &  \\
+      switching on & &  \\
+      switchdist  8.0 & &  \\
+      cutoff    12.0 & &  \\
+      pairlistdist  13.5 & &  \\
+      margin    0.0 & &  \\
+      stepspercycle 20 & &  \\
+    \end{tabular}
+  \end{eblock}
+  }
+\end{frame}
+
+\subsection{Gromacs}
+\begin{frame}
+  \frametitle{\small Gromacs}
+  \begin{bblock}{}
+    \begin{itemize}
+      \item GROMACS (Groningen Machine for Chemical Simulations) is a versatile package which performs molecular dynamics, i.e. simulates the Newtonian equations of motion for systems with hundreds to millions of particles.
+      \item It is primarily designed for biochemical molecules like proteins and lipids that have a lot of complicated bonded interactions, but since GROMACS is extremely fast at calculating the nonbonded interactions (that usually dominate simulations) many groups are also using it for research on non-biological systems, e.g. polymers. 
+      \item GROMACS calling structure is quite complicated, and it is not recommended that users proceed without at least becoming familiar with the program.
+      \item You will need a protein structure file (pdb file) and a file containing energy minimization data.
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Using Gromacs: Simulation of Peptide in Water}
+  \begin{eblock}{Files at /home/apacheco/CompChem/CMD/GROMACS}
+    \begin{enumerate}
+      {\tiny
+      \item Generate topology file using pdb2gmx
+      \item[] \texttt{{\color{magenta}pdb2gmx\_d} -f {\color{blue}cpeptide.pdb} -o {\color{DarkGreen}cpeptide.gro} -p {\color{DarkGreen}cpeptide.top}}
+      \item Define the water box size
+      \item[] \texttt{{\color{magenta}editconf\_d} -f {\color{blue}cpeptide.gro} -o {\color{DarkGreen}cpeptide.gro} -d 0.5}
+      \item Solvate the peptide
+      \item[] \texttt{{\color{magenta}genbox\_d} -cp {\color{blue}cpeptide.gro} -cs -o {\color{DarkGreen}cpeptide\_b4em.gro} -p {\color{DarkGreen}cpeptide.top}}
+      \item Energy Minimization, step 1: preprocess the input files.
+      \item[] \texttt{{\color{magenta}grompp\_d} -f {\color{red}em} -c {\color{blue}cpeptide\_b4em} -p {\color{blue}cpeptide} -o {\color{DarkGreen}cpeptide\_em}}
+      \item Energy minimization, step 2
+      \item[] \texttt{{\color{magenta}mdrun\_d} -s {\color{blue}cpeptide\_em} -o {\color{DarkGreen}cpeptide\_em} -c {\color{DarkGreen}cpeptide\_b4pr} -v }
+      \item Position Restrained MD, step 1: generate the binary topology file
+      \item[] \texttt{{\color{magenta}grompp\_d} -f {\color{blue}pr} -c {\color{blue}cpeptide\_b4pr} -r {\color{blue}cpeptide\_b4pr} -p {\color{blue}cpeptide} -o {\color{DarkGreen}cpeptide\_pr} }
+      \item Position Restrained MD, step 2: run the simulation
+      \item[] \texttt{{\color{magenta}mdrun\_d} -s {\color{blue}cpeptide\_pr} -o {\color{DarkGreen}cpeptide\_pr} -c {\color{DarkGreen}cpeptide\_b4md} -v}
+      \item MD Simulation, step 1: generate the binary topolgy file
+      \item[]\texttt{{\color{magenta}grompp\_d} -f {\color{blue}md} -c {\color{blue}cpeptide\_b4md}  -p {\color{blue}cpeptide} -o {\color{DarkGreen}cpeptide\_md} }
+      \item MD simulation, step 2: run the simulation
+      \item[] \texttt{{\color{magenta}mdrun\_d} -s {\color{blue}cpeptide\_md} -o {\color{blue}cpeptide\_md} -c {\color{DarkGreen}cpeptide\_after\_md} -v }
+
+      }
+    \end{enumerate}
+  \end{eblock}
+\end{frame}
+
+\section{Benchmarks}
+\begin{frame}
+  \frametitle{\small Benchmarks}
+  \begin{itemize}
+    \only<1>{
+    \item LAMMPS on LONI \& LSU HPC machines
+      \begin{enumerate}
+        \item[$\vardiamond$] Atomic fluid with Lennard-Jones Potential
+        \item[$\vardiamond$] 32,000 atoms for 100,000 steps
+        \item[$\vardiamond$] force cutoff = 2.5$\sigma$, neighbor skin = 0.3$\sigma$, neighbor/atom = 55
+        \item[$\vardiamond$] NVE time integration
+      \end{enumerate}
+      \begin{center}
+        \includegraphics[width=0.75\textwidth,clip=true]{lammps}
+      \end{center}
+    }
+    \only<2>{
+    \item NAMD on LONI \& LSU HPC machines
+      \begin{enumerate}
+        \item[$\vardiamond$] Apoa1 Benchmark
+        \item[$\vardiamond$] 92,224 atoms, 12\AA cutoff + PME every 4 steps, periodic
+      \end{enumerate}
+      \begin{center}
+        \includegraphics[width=0.8\textwidth,clip=true]{namd}
+      \end{center}
+    }
+    \only<3>{
+    \item Gromacs on LONI \& LSU HPC machines
+      \begin{enumerate}
+        \item[$\vardiamond$] 159 residue protein dihydrofolate reductase (dhfr) with implicit solvent
+        \item[$\vardiamond$] 2489 atoms, 1nm cutoff
+          \begin{center}
+            \includegraphics[width=0.8\textwidth,clip=true]{gromacs}
+          \end{center}
+      \end{enumerate}
+    }
+  \end{itemize}
 \end{frame}
 
 \section{Molecular Dynamics on GPU}
 \begin{frame}
-\frametitle{\small Molecular Dynamics on GPU}
-\begin{itemize}
-\item Using a graphics processing unit (GPU) for molecular simulations.
-\item MD programs capable of GPU computing
-\begin{enumerate}
-{\footnotesize
-\item LAMMPS
-\item NAMD
-\item GROMACS
-\item Amber/PMEMD
-}
-\end{enumerate}
-\item Not all features of the MD programs are capable of GPU computing.
-\end{itemize}
+  \frametitle{\small Molecular Dynamics on GPU}
+  \begin{itemize}
+  \item Using a graphics processing unit (GPU) for molecular simulations.
+  \item MD programs capable of GPU computing
+    \begin{enumerate}
+      \item LAMMPS
+      \item NAMD
+      \item GROMACS
+      \item Amber/PMEMD
+    \end{enumerate}
+  \item Not all features of the MD programs are capable of GPU computing.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{\small Molecular Dynamics on GPU}
-\begin{itemize}
-\item Coming Soon: 2  Philip nodes with 3  GPU's each.
-\begin{itemize}
-{\footnotesize
-\item Intel Xeon X5650
-\begin{enumerate}
-{\footnotesize
-\item[$\vardiamond$] 2.66GHz Dual Hexa-core with hyperthreading: 12 cores, 24 threads
-\item[$\vardiamond$] Memory : 48GB
-\item[$\vardiamond$] L3 Cache: 12MB
-}
-\end{enumerate}
-\item Tesla M2070
-\begin{enumerate}
-{\footnotesize
-\item[$\vardiamond$] 448 CUDA cores (14 Multiprocessor $\times$ 32 CUDA Cores/MP )
-\item[$\vardiamond$] GPU Clock Speed: 1.15GHz
-\item[$\vardiamond$] Total Memory: 5.25GB
-}
-\end{enumerate}
-}
-\end{itemize}
-\item Compilers: CUDA 4.0, PGI Accelerator
-\item Infiniband Interconnect between the two nodes.
-\item For optimum scaling, ratio for CPU core:GPU should be 1. 
-\item LAMMPS and NAMD can bind  GPU to multiple cores but performance degrades.
-\end{itemize}
+  \frametitle{\small Molecular Dynamics on GPU}
+  \begin{itemize}
+  \item 2  Philip nodes with 3  GPU's each.
+    \begin{itemize}
+      \item Intel Xeon X5650
+        \begin{enumerate}
+          \item[$\vardiamond$] 2.66GHz Dual Hexa-core with hyperthreading: 12 cores, 24 threads
+          \item[$\vardiamond$] Memory : 48GB
+          \item[$\vardiamond$] L3 Cache: 12MB
+        \end{enumerate}
+      \item Tesla M2070
+        \begin{enumerate}
+          \item[$\vardiamond$] 448 CUDA cores (14 Multiprocessor $\times$ 32 CUDA Cores/MP )
+          \item[$\vardiamond$] GPU Clock Speed: 1.15GHz
+          \item[$\vardiamond$] Total Memory: 5.25GB
+        \end{enumerate}
+    \end{itemize}
+  \item Compilers: CUDA 4.0, PGI Accelerator
+  \item Infiniband Interconnect between the two nodes.
+  \item For optimum scaling, ratio for CPU core:GPU should be 1. 
+  \item LAMMPS and NAMD can bind  GPU to multiple cores but performance degrades.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{\small LAMMPS on GPU}
-\begin{itemize}
-\item Need to use \texttt{newton off}
-\item \texttt{fix\_gpu} should be used in order to initialize and configure the GPUs for use
-\item[] \texttt{fix ID group-ID gpu mode first last split}
-\item[] \texttt{mode} can be force or force/neigh
-\item currently limited to a few \texttt{pair\_styles} and PPPM
-\begin{center}
-\includegraphics[width=0.7\textwidth,clip=true]{lammps-gpu}
-\end{center}
-\end{itemize}
+  \frametitle{\small LAMMPS on GPU}
+  \begin{itemize}
+  \item Need to use \texttt{newton off}
+  \item \texttt{package gpu} should be used in order to initialize and configure the GPUs for use
+  \item[] \texttt{package gpu mode first last split}
+  \item[] \texttt{mode} can be force or force/neigh
+  \item currently limited to a few \texttt{pair\_styles} and PPPM
+    \begin{center}
+      \includegraphics[width=0.7\textwidth,clip=true]{lammps-gpu}
+    \end{center}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{\small NAMD on GPU}
-\begin{itemize}
-\item command line options to add
-\item[] \texttt{+idlepoll +devices 0,1}
-\item[] If \texttt{+devices} options is not added then all available GPU's will be used
-\item[] Each CPU will be assigned a GPU cyclically
-\item[] i.e. \texttt{mpirun -np 4 namd2 +idlepoll +devices 0,1} will bind CPU 0 and 2 to GPU device 0 and CPU 1 to GPU device 1
-\begin{center}
-\includegraphics[width=0.7\textwidth,clip=true]{namd-gpu}
-\end{center}
-\end{itemize}
+  \frametitle{\small NAMD on GPU}
+  \begin{itemize}
+  \item command line options to add
+  \item[] \texttt{+idlepoll +devices 0,1}
+  \item[] If \texttt{+devices} options is not added then all available GPU's will be used
+  \item[] Each CPU will be assigned a GPU cyclically
+  \item[] i.e. \texttt{mpirun -np 4 namd2 +idlepoll +devices 0,1} will bind CPU 0 and 2 to GPU device 0 and CPU 1 to GPU device 1
+    \begin{center}
+      \includegraphics[width=0.7\textwidth,clip=true]{namd-gpu}
+    \end{center}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{\small Gromacs on GPU}
-\begin{itemize}
-\item Use mdrun compiled with cuda: \texttt{mdrun-gpu}
-\item \texttt{mdrun-gpu} can only run on 1 GPU, multiple GPUs functionality not available yet
-\item Usage: same as serial or parallel mdrun
-\begin{center}
-\includegraphics[width=0.8\textwidth,clip=true]{gromacs-gpu}
-\end{center}
-\end{itemize}
+  \frametitle{\small Gromacs on GPU}
+  \begin{itemize}
+  \item Use mdrun compiled with cuda: \texttt{mdrun-gpu}
+  \item \texttt{mdrun-gpu} can only run on 1 GPU, multiple GPUs functionality not available yet
+  \item Usage: same as serial or parallel mdrun
+    \begin{center}
+      \includegraphics[width=0.8\textwidth,clip=true]{gromacs-gpu}
+    \end{center}
+  \end{itemize}
 \end{frame}
 
 
-\begin{frame}<0>
-\frametitle{\small Related HPC Tutorials}
-%\begin{itemize}
-%\item Fall Semester
-\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{HPC Training in Fall}
-\begin{itemize}
-\item{ Introduction to Electronic Structure Calculation in Quantum Chemistry using Gaussian, GAMESS and NWCHEM.}
-\end{itemize}
-\end{colorblock}
-%\item Spring Semester
-%\begin{alertblock}{MD: Programming to Production}
-%April 6$^{\rm th}$
-%\end{alertblock}
-%\begin{alertblock}{\small Introduction to Computational Chemistry: Molecular Dynamics}
-%April 27$^{\rm th}$
-%\end{alertblock}
-%\item LONI HPC workshops
-\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{LONI HPC Workshops}
-\begin{itemize}
-\item  {Introduction to Computational Chemistry}:
-Condensed tutorial on Electronic Structure and Molecular Dynamics.
-\end{itemize}
-\end{colorblock}
-%\item LONI/HPC Moodle
-\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{LONI HPC Moodle}
-\begin{enumerate}
-{\footnotesize
-\item HPC 108: How to use CPMD
-\item HPC 109: Intro to Gaussian
-}
-\end{enumerate}
-\end{colorblock}
-%\end{itemize}
+\begin{frame}
+  \frametitle{\small Related HPC Tutorials}
+  %\begin{itemize}
+  %\item Fall Semester
+  \begin{eblock}{HPC Training in Fall}
+    \begin{itemize}
+    \item Introduction to Electronic Structure Calculation in Quantum Chemistry using Gaussian, GAMESS and NWCHEM.
+    \end{itemize}
+  \end{eblock}
+  \begin{eblock}{HPC Training in Spring}
+    \begin{itemize}
+    \item Molecular Dynamics.
+    \item Introduction to Autodock and Autodock Tools. March 28$^\mathrm{th}$
+    \end{itemize}
+  \end{eblock}
+  %\item LONI/HPC Moodle
+  \begin{eblock}{LONI HPC Moodle}
+    \begin{enumerate}
+      \item HPC 108: How to use CPMD
+      \item HPC 109: Intro to Gaussian
+    \end{enumerate}
+  \end{eblock}
+  %\end{itemize}
 \end{frame}
 
-\begin{frame}[allowframebreaks]
-%\frametitle{\small Useful Links/Further Reading}
-\begin{block}{Useful Links}
-\begin{itemize}
-{\footnotesize\color{Blue}
-\item{\color{tigerspurple}Amber:}\url{http://ambermd.org}
-\item{\color{tigerspurple}Desmond:}\url{http://www.deshawresearch.com/resources_desmond.html}
-\item{\color{tigerspurple}DL\_POLY:}\url{http://www.cse.scitech.ac.uk/ccg/software/DL_POLY}
-\item{\color{tigerspurple}Gromacs:}\url{http://www.gromacs.org}
-\item{\color{tigerspurple}LAMMPS:}\url{http://lammps.sandia.gov}
-\item{\color{tigerspurple}NAMD:}\url{http://www.ks.uiuc.edu/Research/namd}
-\item {\color{tigerspurple}CPMD:} \url{http://www.cpmd.org}
-\item {\color{tigerspurple}GAMESS:} \url{http://www.msg.chem.iastate.edu/gamess}
-\item {\color{tigerspurple}Gaussian:} \url{http://www.gaussian.com}
-\item {\color{tigerspurple}NWCHEM:} \url{http://www.nwchem-sw.org}
-\item{\color{tigerspurple}PINY\_MD:}\url{http://homepages.nyu.edu/~mt33/PINY_MD/PINY.html}
-\item {\color{tigerspurple}Basis Set:} \url{https://bse.pnl.gov/bse/portal}
-}
-\end{itemize}
-\end{block}
-\begin{block}{\small Further Reading}
-\begin{itemize}
-{\scriptsize
-\item A Molecular Dynamics Primer by Furio Ercolessi {\color{Blue}\url{http://www.fisica.uniud.it/~ercolessi/md}}
-\item Molecular Modeling - Principles and Applications, A. R. Leach.
-\item Computer Simulation of Liquids, M. P. Allen and D. J. Tildesley.
-\item Mark Tuckerman's Notes at NYU: {\color{Blue}\url{http://www.nyu.edu/classes/tuckerman/quant.mech/index.html}}
-\item Ab Initio Molecular Dynamics: Theory and Implementation, D. Marx and J. Hutter{\color{Blue}\url{http://www.theochem.ruhr-uni-bochum.de/research/marx/marx.pdf}}
-\item Quantum Dynamics with Trajectories: Introduction to Quantum Hydrodynamics, R. E. Wyatt.
-\item Quantum Dynamics of Complex Molecular Systems, Editors: D. A. Micha and I. Burghardt
-\item Energy Transfer Dynamics in Biomaterial Systems. Editors: I. Burghardt, V. May, D. A. Micha and E. R. Bittner .
-%\item David Sherill's Notes at Ga Tech: {\color{Blue}\url{http://vergil.chemistry.gatech.edu/notes/index.html}}
-%\item Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory, A. Szabo and N. Ostlund.
-%\item Introduction to Computational Chemistry, F. Jensen.
-%\item Essentials of Computational Chemistry - Theories and Models, C. J. Cramer.
-%\item Exploring Chemistry with Electronic Structure Methods, J. B. Foresman and A. Frisch
-%\item[$\vardiamond$]Modern Electronic Structure Theory, T. Helgaker, P. Jorgensen and J. Olsen (Highly advanced text, second quantization approach to electronic structure theory)
-}
-\end{itemize}
-\end{block}
+\begin{frame}
+  \frametitle{\small Useful Links}
+  \begin{bblock}{}
+    \begin{itemize}
+      {\color{Blue}
+      \item{\color{tigerspurple}Amber:}\url{http://ambermd.org}
+      \item{\color{tigerspurple}Desmond:}\url{http://www.deshawresearch.com/resources_desmond.html}
+      \item{\color{tigerspurple}DL\_POLY:}\url{http://www.cse.scitech.ac.uk/ccg/software/DL_POLY}
+      \item{\color{tigerspurple}Gromacs:}\url{http://www.gromacs.org}
+      \item{\color{tigerspurple}LAMMPS:}\url{http://lammps.sandia.gov}
+      \item{\color{tigerspurple}NAMD:}\url{http://www.ks.uiuc.edu/Research/namd}
+      \item {\color{tigerspurple}CPMD:} \url{http://www.cpmd.org}
+      \item {\color{tigerspurple}GAMESS:} \url{http://www.msg.chem.iastate.edu/gamess}
+      \item {\color{tigerspurple}Gaussian:} \url{http://www.gaussian.com}
+      \item {\color{tigerspurple}NWCHEM:} \url{http://www.nwchem-sw.org}
+      \item{\color{tigerspurple}PINY\_MD:}\url{http://homepages.nyu.edu/~mt33/PINY_MD/PINY.html}
+      \item {\color{tigerspurple}Basis Set:} \url{https://bse.pnl.gov/bse/portal}
+      }
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small Further Reading}
+  \begin{bblock}{}
+    \begin{itemize}
+      \item A Molecular Dynamics Primer by Furio Ercolessi {\color{Blue}\url{http://www.fisica.uniud.it/~ercolessi/md}}
+      \item Molecular Modeling - Principles and Applications, A. R. Leach.
+      \item Computer Simulation of Liquids, M. P. Allen and D. J. Tildesley.
+      \item Mark Tuckerman's Notes at NYU: {\color{Blue}\url{http://www.nyu.edu/classes/tuckerman/quant.mech/index.html}}
+      \item Ab Initio Molecular Dynamics: Theory and Implementation, D. Marx and J. Hutter{\color{Blue}\url{http://www.theochem.ruhr-uni-bochum.de/research/marx/marx.pdf}}
+      \item Quantum Dynamics with Trajectories: Introduction to Quantum Hydrodynamics, R. E. Wyatt.
+      \item Quantum Dynamics of Complex Molecular Systems, Editors: D. A. Micha and I. Burghardt
+      \item Energy Transfer Dynamics in Biomaterial Systems. Editors: I. Burghardt, V. May, D. A. Micha and E. R. Bittner .
+    \end{itemize}
+  \end{bblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\small }
+  \begin{eblock}{Next Week}
+    LONI Programming Workshop, Feb 13-16 in 338 Johnston Hall
+  \end{eblock}
+
+  \begin{eblock}{Next HPC Training}
+    Introduction to Eclipse Parallel Tools Platform, Feb 29 in 307 Frey CSC
+  \end{eblock}
 \end{frame}
 
 \end{document}
