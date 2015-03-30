@@ -1,21 +1,11 @@
 \documentclass[slidestop,mathserif,compress,xcolor=svgnames]{beamer} 
 \mode<presentation>
 {  
-%   \setbeamertemplate{background canvas}[vertical shading][bottom=DarkBlue!5,top=DarkBlue!5]
-  % \setbeamertemplate{background canvas}[vertical shading][bottom=red!1,top=red!1]
-%  \setbeamertemplate{navigation symbols}[vertical]
+  \setbeamertemplate{background canvas}[vertical shading][bottom=blue!5,top=blue!5]
   \setbeamertemplate{navigation symbols}{}%{\insertsectionnavigationsymbol}
-%    \usetheme{Pittsburgh}
    \usecolortheme{tigers}
    \useinnertheme{rounded}
-%   \usecolortheme{bayou}
   \usefonttheme[onlysmall]{structureitalicserif}
-%  \setbeamertemplate{blocks}[rounded][shadow=true]
-
-% \useheadtemplate{\vbox{%
-% \tinycolouredline{structure}%
-% {\color{tigersblue}\textbf{\hfill\insertshortinstitute\hfill}}%
-% }}  
 \usefoottemplate{\vbox{%
 \tinycolouredline{structure}%
 {\color{tigersgold}\textbf{\insertshortinstitute\hfill\insertshortdate}}%
@@ -24,6 +14,14 @@
 
 \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
 \usepackage{amsmath,amssymb,amsfonts,subfigure}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
 \usepackage[latin1]{inputenc}
 \usepackage{colortbl}
 \usepackage[english]{babel}
@@ -46,8 +44,34 @@
 \usepackage{amsmath}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
+\definecolor{DarkGreen}{rgb}{0.0,0.3,0.0}
+\definecolor{Blue}{rgb}{0.0,0.0,0.8} 
+\definecolor{dodgerblue}{rgb}{0.1,0.1,1.0}
+\definecolor{indigo}{rgb}{0.41,0.1,0.0}
+\definecolor{seagreen}{rgb}{0.1,1.0,0.1}
 \DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
 \DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+\newcommand*\up{\textcolor{green}{%
+  \ensuremath{\blacktriangle}}}
+\newcommand*\down{\textcolor{red}{%
+  \ensuremath{\blacktriangledown}}}
+\newcommand*\const{\textcolor{darkgray}%
+  {\textbf{--}}}
+
+\setbeamercolor{uppercol}{fg=white,bg=red!30!black}%
+\setbeamercolor{lowercol}{fg=black,bg=red!15!white}%
+\newenvironment{colorblock}[4]
+{
+\setbeamercolor{upperblock}{fg=#1,bg=#2}
+\setbeamercolor{lowerblock}{fg=#3,bg=#4}
+\begin{beamerboxesrounded}[upper=upperblock,lower=lowerblock,shadow=true]}
+{\end{beamerboxesrounded}}
+
+\newenvironment{colorblock2}[2]
+{
+\begin{beamerboxesrounded}[upper=#1,lower=#2,shadow=true]}
+{\end{beamerboxesrounded}}
+
 \title[Comp. Chem.]{Introduction to Computational Chemistry}
 
 
@@ -55,9 +79,7 @@
        
 \institute[High Performance Computing @ Louisiana State University - http://www.hpc.lsu.edu] {\inst{}\footnotesize{User Services Consultant\\LSU HPC \& LONI\\sys-help@loni.org}}
 
-% \date[LSU HPC Training Series - Nov 10, 2010]{\tiny{LSU HPC Training Series\\Louisiana State University\\November 10, 2010}}
-%\date[Nov 10, 2010]{\tiny{LONI Worshop Series}}
-\date[February 18, 2011]{\scriptsize{LONI Worshop Series\\Southern University, Baton Rouge\\February 18, 2011}}
+\date[\hfill{March 25, 2011\hspace{2cm}\insertframenumber/\inserttotalframenumber}]{\scriptsize{LONI Worshop Series\\Tulane University, New Orleans\\March 25, 2011}}
      
 \subject{Talks}
 % This is only inserted into the PDF information catalog. Can be left
@@ -99,14 +121,14 @@
 
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
- \AtBeginSection[]
- {
-   \begin{frame}<beamer>
-     \frametitle{\small{Outline}}
-     \small
-     \tableofcontents[currentsection,currentsubsection]
-   \end{frame}
- }
+% \AtBeginSection[]
+% {
+%   \begin{frame}<beamer>
+%    \frametitle{\small{Outline}}
+%     \small
+%     \tableofcontents[currentsection,currentsubsection]
+%   \end{frame}
+% }
 
 \begin{document}
 
@@ -117,51 +139,42 @@
   \footnotesize
   \frametitle{\small{Outline}}
   \tableofcontents
-%  \tableofcontents[part=1]
-%  \tableofcontents[part=2]
-%  \tableofcontents[part=3]
-%  \tableofcontents[part=4]
-%  \tableofcontents[part=5]
+  \tableofcontents[part=1]
+  \tableofcontents[part=2]
+  \tableofcontents[part=3]
+  \tableofcontents[part=4]
+  \tableofcontents[part=5]
 \end{frame}
 
 \normalsize
-% \begin{frame}
-%   \frametitle{\small Outline}
-%  \begin{itemize}
-%   \item Using Globus Procedures on LONI Systems.
-%   \begin{enumerate}
-%    \item Setting up Globus Environment on LONI.
-%    \item Creating Grid Certificate.
-%    \item Submitting Jobs using Globus.
-%    \item Moving Files using Globus
-%   \end{enumerate}
-%  \end{itemize}
-% \end{frame}
-
 
 %\part{Introduction}
 \section{Introduction}
-\begin{frame}[allowframebreaks]
+\begin{frame}
 \frametitle{\small What is Computational Chemistry}
 \begin{itemize}
-\item {\bf Computational Chemistry} is a branch of chemistry that uses principles of computer science to assist in solving chemical problems.
-\item Uses the results of theoretical chemistry, incorporated into efficient computer programs.
+\item {\bf Computational Chemistry} is a branch of chemistry that uses computer science to assist in solving chemical problems.
+\item Incorporates the results of theoretical chemistry into efficient computer programs.
 \item Application to single molecule, groups of molecules, liquids or solids.
-\item Calculates the structure and properties such as relative energies, charge distributions, dipole and multipole moments, spectroscopy, reactivity, etc.
+\item Calculates the structure and properties of interest.
 \item Computational Chemistry Methods range from
  \begin{enumerate}
   \item Highly accurate ({\it Ab-initio},DFT) feasible for small systems
   \item Less accurate (semi-empirical)
   \item Very Approximate (Molecular Mechanics) large systems
  \end{enumerate}
-\vspace{0.5cm}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+%\frametitle{\small What is Computational Chemistry}
 \begin{columns}
 \column{11cm}
-\begin{block}{Theoretical Chemistry: broadly be divided into two main categories}
+\begin{block}{Theoretical Chemistry: broadly can be divided into two main categories}
 \begin{enumerate}
 \item Static Methods {\Large$\Rightarrow$} {\color{blue}Time-Independent Schr\"{o}dinger Equation}
 \begin{enumerate}
-\item[$\vardiamond$] Quantum Chemical or \emph{Ab Initio} or Electronic Structure Methods
+\item[$\vardiamond$] Quantum Chemical/\emph{Ab Initio} /Electronic Structure Methods
 \item[$\vardiamond$] Molecular Mechanics
 \end{enumerate}
 \item Dynamical Methods {\Large$\Rightarrow$} {\color{blue}Time-Dependent Schr\"{o}dinger Equation}
@@ -172,58 +185,7 @@
 \end{enumerate}
 \end{block}
 \end{columns}
-\end{itemize}
 
-\end{frame}
-
-\begin{frame}<0>[allowframebreaks]
-\frametitle{\small Schr\"{o}dinger Equations}
-\begin{itemize}
-\item Dynamical Methods $\Rightarrow$ Solve the time-dependent Schr\"{o}dinger Equations (TDSE) 
-\begin{align*}
-\imath\hbar\dfrac{\partial}{\partial t} \Psi({\bf R},{\bf r},t) &= H({\bf R},{\bf r},t)\Psi({\bf R},{\bf r},t)\\
- &= [T({\bf R}) +T({\bf r})+ V({\bf R},{\bf r},t)]\Psi({\bf R},{\bf r},t)
-\end{align*}
-where
-\begin{itemize}
-\item $H\Rightarrow$ Hamiltonian
-\item $\Psi({\bf R},{\bf r},t)\Rightarrow$ wavefunction
-\item ${\bf R}\Rightarrow$Nuclear Coordinates
-\item ${\bf r}\Rightarrow$Electronic Coordinates
-\item V$\Rightarrow$ Electronic and Nuclear Potential
-\item T$\Rightarrow$ Kinetic energy operator
-\end{itemize}
-%\item $V$ is a time-dependent potential depending on the nuclear and electronic coordinates
-%\item $T$ is the kinetic energy operator given as
-%\begin{align*}
-% T({\bf R})&=\sum^{M}_{i=1}\frac{1}{2M_i}\nabla^2_i\\
-% T({\bf r})&=\sum^{N}_{i=1}\frac{1}{2m_e}\nabla^2_i
-%\end{align*}
-%\item Slight Digression
-\begin{itemize}
-\item Static or Electronic Structure Methods $\Rightarrow$ make potential time-independent and solve the Time Independent Schr\"{o}dinger equation (TISE)
-%\item If the potential energy is time-independent, the Hamiltonian becomes time-independent and yields the total energy which is a constant.
-\begin{align*}
-H({\bf R},{\bf r},t)=H({\bf R},{\bf r}) &= T({\bf R}) + T({\bf r}) + V({\bf R},{\bf r})\\
-%H({\bf R},{\bf r})\Psi({\bf R},{\bf r},t) &= E({\bf R},{\bf r})\Psi({\bf R},{\bf r},t)\\
-%\end{align*}
-%\item Separating the space and time variables in the TDSE%\frac{-\hbar^2}{2M}{\bf \nabla}^2
-%\begin{align*}
-%H({\bf R},{\bf r})\Psi({\bf R},{\bf r},t) &= E({\bf R},{\bf r})\Psi({\bf R},{\bf r},t) = \imath\hbar\dfrac{\partial}{\partial t} \Psi({\bf R},{\bf r},t)\\
-\Psi({\bf R},{\bf r},t) &= \Psi({\bf R},{\bf r})e^{\imath Et}\\
-%\end{align*}
-%\item Neglecting the phase factor, the starting point is the time-independent Schr\"{o}dinger equation (TISE)
-%\begin{align*}
-H({\bf R},{\bf r})\Psi({\bf R},{\bf r}) &= E({\bf R},{\bf r})\Psi({\bf R},{\bf r})
-\end{align*}
-\end{itemize}
-%\item {\bf The TISE is the starting point for "Electronic Structure Calculations"} such as Hartree-Fock, DFT, MP2, CI, CC etc
-%\item Approximations to solutions of TDSE results in
-%\begin{enumerate}
-%\item Classical Molecular Dynamics
-%\item \textit{Ab Initio} Molecular Dynamics
-%\end{enumerate}
-\end{itemize}
 \end{frame}
 
 
@@ -234,7 +196,7 @@ H({\bf R},{\bf r})\Psi({\bf R},{\bf r}) &= E({\bf R},{\bf r})\Psi({\bf R},{\bf r
 \footnotesize{
 \begin{block}{}
 \begin{itemize}
-\item \emph{Ab Initio} meaning "from first principles" methods solve the Schr\"{o}dinger equation and does not rely on empirical data. 
+\item \emph{Ab Initio} meaning "from first principles" methods solve the Schr\"{o}dinger equation and does not rely on empirical or experimental data. 
 \item Begining with fundamental and physical properties, calculate how electrons and nuclei interact.
 \item The Schr\"{o}dinger equation can be solved exactly only for a few systems
 \begin{itemize}
@@ -246,19 +208,20 @@ H({\bf R},{\bf r})\Psi({\bf R},{\bf r}) &= E({\bf R},{\bf r})\Psi({\bf R},{\bf r
 }
 \end{itemize}
 \item For complex systems, \emph{Ab Initio} methods make assumptions to obtain approximate solutions to the  Schr\"{o}dinger equations and solve it numerically.
-\item "Cost" of calculations increases with the accuracy of the calculation and size of the system.
+\item "Computational Cost" of calculations increases with the accuracy of the calculation and size of the system.
 \end{itemize}
 \end{block}
 }
 \end{frame}
+
 \begin{frame}
-\frametitle{\small Ab Initio Methods}
+%\frametitle{\small Ab Initio Methods}
 \footnotesize{
-\vspace{-0.5cm}
+\vspace{-0.1cm}
 \begin{block}{What can we predict with \emph{Ab Initio} methods?}
 \begin{itemize}
 \footnotesize{
- \item Molecular Geometry, Equilibrium and Transition State
+ \item Molecular Geometry: Equilibrium and Transition State
  \item Dipole and Quadrupole Moments and polarizabilities
  \item Thermochemical data like Free Energy, Energy of reaction.
  \item Potential Energy surfaces, Barrier heights
@@ -276,8 +239,10 @@ H({\bf R},{\bf r})\Psi({\bf R},{\bf r}) &= E({\bf R},{\bf r})\Psi({\bf R},{\bf r
 \end{block}
 }
 \end{frame}
+
+
 \begin{frame}
-\frametitle{\small Ab Initio Methods}
+%\frametitle{\small Ab Initio Methods}
 \footnotesize{
 \begin{block}{Ab Initio Theory}
 \begin{itemize}
@@ -289,8 +254,7 @@ H({\bf R},{\bf r})\Psi({\bf R},{\bf r}) &= E({\bf R},{\bf r})\Psi({\bf R},{\bf r
 }
 \end{frame}
 
-
-\begin{frame}[allowframebreaks]
+\begin{frame}
 \frametitle{\small Born-Oppenheimer Approximation}
 \footnotesize{
 \begin{itemize}
@@ -305,6 +269,14 @@ H({\bf R},{\bf r})\Psi({\bf R},{\bf r}) &= E({\bf R},{\bf r})\Psi({\bf R},{\bf r
 \item The wave function $\Psi(R,r)$ of the many electron molecule is a function of nuclear ($R$) and electronic ($r$) coordinates.
 \item Motion of nuclei and electrons are coupled.
 \item However, since nuclei are much heavier than electrons, the nuclei appear fixed or stationary.
+\end{itemize}
+}
+\end{frame}
+
+\begin{frame}
+%\frametitle{\small Born-Oppenheimer Approximation}
+\footnotesize{
+\begin{itemize}
 \item Born-Oppenheimer Approximation: Separate electronic and nuclear motion:
 \begin{align*}
 \Psi(R,r) = \psi_e(r;R)\psi_n(R)
@@ -339,20 +311,20 @@ V(R) = E_e + V_{nn}
 %\column{0.5\textwidth}
 \begin{itemize}
 \item The potential energy surface (PES) is multi-dimensional ($3N-6$ for non-linear molecule and $3N-5$ for linear molecule)
-\item The PES contains multiple minima and maxima.
+\item The PES contains multiple minima and maxima.\let\thefootnote\relax\footnotetext{\tiny Picture taken from Bernard Schlegel's course slide at http://www.chem.wayne.edu/$\sim$hbs/chm6440/}
 \item Geometry optimization search aims to find the global minimum of the potential surface.
 \item Transition state or saddle point search aims to find the maximum of this potential surface, usually along the reaction coordinate of interest.
 \end{itemize}
 %\column{0.5\textwidth}
 \begin{center}
-\includegraphics[width=7cm,keepaspectratio=true,clip=true]{PES}
+\includegraphics[width=6cm,keepaspectratio=true,clip=true]{PES}
 \end{center}
 %\end{columns}
 }
 \end{frame}
 
 
-\begin{frame}[allowframebreaks]
+\begin{frame}
 \frametitle{\small Wavefunction Methods}
 \footnotesize{
 \begin{itemize}
@@ -373,6 +345,14 @@ E_e = \frac{\langle\psi_e\mid\hat{H}_e\mid\psi_e\rangle}{\langle\psi_e\mid\psi_e
 \phi_1(N) & \phi_2(N) & \cdots & \phi_N(N)\\
 \end{array} \right|
 \end{align*}
+\end{itemize}
+}
+\end{frame}
+
+\begin{frame}
+%\frametitle{\small Wavefunction Methods}
+\footnotesize{
+\begin{itemize}
 \item MO's are written as a linear combination of one electron atomic functions or atomic orbitals (AO's)
 \begin{align*}
 \phi_i = \sum^N_{\mu=1}c_{\mu i}\chi_\mu
@@ -380,7 +360,7 @@ E_e = \frac{\langle\psi_e\mid\hat{H}_e\mid\psi_e\rangle}{\langle\psi_e\mid\psi_e
 $c_{\mu i} \Rightarrow$ MO coefficients\\
 $\chi_\mu\Rightarrow$ atomic basis functions.
 \item Obtain coefficients by minimizing the energy via Variational Theorem.
-\item Variational Theorem: Expectation value of the energy is always greater than or equal to the true energy
+\item Variational Theorem: Expectation value of the energy of a trial wavefunction is always greater than or equal to the true energy
 \begin{align*}
 E_e = \langle\psi_e\mid\hat{H}_e\mid\psi_e\rangle \ge \varepsilon_0
 \end{align*}
@@ -392,7 +372,8 @@ E_e = \langle\psi_e\mid\hat{H}_e\mid\psi_e\rangle \ge \varepsilon_0
 \begin{frame}
 \frametitle{\small Ab Initio Methods}
 \footnotesize{
-\begin{block}{The most popular classes of ab initio electronic structure methods:}
+\vspace{-0.2cm}
+\begin{block}{\small The most popular classes of ab initio electronic structure methods:}
   \begin{itemize}
 \item Hartree-Fock methods
   \begin{itemize}
@@ -457,7 +438,7 @@ E = \langle\Psi|\hat{H}|\Psi\rangle
 \end{frame}
 
 \begin{frame}
-\frametitle{\small Hartree-Fock}
+%\frametitle{\small Hartree-Fock}
 \footnotesize{
 \begin{enumerate}
 \item $\hat{J}_j\Rightarrow$ Coulomb operator $\Rightarrow$ average potential at $x$ due to charge distribution from electron in orbital $\chi_i$ defined as
@@ -470,13 +451,15 @@ E = \langle\Psi|\hat{H}|\Psi\rangle
 \end{align*}
 \item The Hartree-Fock equation are solved numerically or in a space spanned by a set of basis functions (Hartree-Fock-Roothan equations)
 \begin{columns}
-\column{6cm}
+\column{4cm}
+\vspace{-0.5cm}
 \begin{align*}
 \chi_i &= \sum^K_{\mu=1}C_{\mu i}\tilde{\chi}_\mu\\
 \sum_\nu F_{\mu\nu}C_{\nu i} &= \varepsilon_i\sum_\nu S_{\mu\nu}C_{\nu i}\\
-{\bf FC}&={\bf SC}{\boldsymbol\epsilon}
+{\bf FC}&={\bf SC}{\boldsymbol\varepsilon}
 \end{align*}
-\column{5cm}
+\column{4cm}
+\vspace{-0.35cm}
 \begin{align*}
 S_{\mu\nu} &= \int dx_1\tilde{\chi}^\ast_\mu(x_1)\tilde{\chi}_\nu(x_1)\\
 F_{\mu\nu} &= \int dx_1\tilde{\chi}^\ast_\mu(x_1)\hat{f}(x_1)\tilde{\chi}_\nu(x_1)
@@ -487,7 +470,7 @@ F_{\mu\nu} &= \int dx_1\tilde{\chi}^\ast_\mu(x_1)\hat{f}(x_1)\tilde{\chi}_\nu(x_
 \end{frame}
 
 \begin{frame}
-\frametitle{\small Hartree-Fock}
+%\frametitle{\small Hartree-Fock}
 \footnotesize{
 \begin{columns}
 \column{12cm}
@@ -504,7 +487,7 @@ F_{\mu\nu} &= \int dx_1\tilde{\chi}^\ast_\mu(x_1)\hat{f}(x_1)\tilde{\chi}_\nu(x_
 \item Form overlap matrix ${\bf S}$
 \item Guess initial MO coefficients ${\bf C}$
 \item Form Fock Matrix ${\bf F}$
-\item Solve ${\bf FC}={\bf SC}{\boldsymbol\epsilon}$
+\item Solve ${\bf FC}={\bf SC}{\boldsymbol\varepsilon}$
 \item Use new MO coefficients ${\bf C}$ to build new Fock Matrix ${\bf F}$
 \item Repeat steps 5 and 6 until ${\bf C}$ no longer changes from one iteration to the next.
 \end{enumerate}
@@ -513,7 +496,7 @@ F_{\mu\nu} &= \int dx_1\tilde{\chi}^\ast_\mu(x_1)\hat{f}(x_1)\tilde{\chi}_\nu(x_
 }
 \end{frame}
 
-\begin{frame}[allowframebreaks]
+\begin{frame}
 \frametitle{\small What are Post Hartree-Fock Methods}
 \footnotesize{
 \begin{columns}
@@ -536,6 +519,7 @@ E_{corr} = E_0 - E_{HF}
 \end{columns}
 }
 \end{frame}
+
 \begin{frame}
 \scriptsize{
 \begin{columns}
@@ -573,6 +557,10 @@ where $|\Psi_0\rangle$ is a Slater determinant obtained from HF calculations and
 \vspace{-1cm}
 \includegraphics[width=\textwidth,keepaspectratio=true,clip=true]{Scaling}%Elec-Struct/Slide2}
 \end{center}
+\vspace{-1cm}
+\begin{itemize}
+\item N = Number of Basis Functions
+\end{itemize}
 %\end{block}
 \end{frame}
 
@@ -598,8 +586,10 @@ where $\hat{F}$ is the sum of the kinetic energy of electrons and the electron-e
 \end{columns}
 }
 \end{frame}
+
+
 \begin{frame}
-\frametitle{\small Density Functional Theory}
+%\frametitle{\small Density Functional Theory II}
 \footnotesize{
 \vspace{-0.5cm}
 \begin{columns}
@@ -610,7 +600,7 @@ where $\hat{F}$ is the sum of the kinetic energy of electrons and the electron-e
 {\footnotesize
 \item The external potential $V_{ext}$, and hence total energy is a unique functional of the electron density $\rho(r)$
 \begin{align*}
-{\mathrm Energy} = \dfrac{\langle\Psi\mid\hat{H}\mid\Psi\rangle}{\langle\Psi\mid\Psi\rangle} \equiv E[\rho]
+{\mathrm {Energy}} = \dfrac{\langle\Psi\mid\hat{H}\mid\Psi\rangle}{\langle\Psi\mid\Psi\rangle} \equiv E[\rho]
 \end{align*}
 \item The ground state energy can be obtained variationally, the density that minimizes the total energy is the exact ground state density
 \begin{align*}
@@ -632,8 +622,10 @@ J[\rho] = \dfrac{1}{2}&\int\dfrac{\rho(r_1)\rho(r_2)}{r_{12}}dr_1dr_2
 \end{columns}
 }
 \end{frame}
+
+
 \begin{frame}
-\frametitle{\small Density Functional Theory}
+%\frametitle{\small Density Functional Theory III}
 \footnotesize{
 \begin{columns}
 \column{12cm}
@@ -655,10 +647,12 @@ E[\rho]  = T_s[\rho] + \int dr\ v_{\rm ext}(r)\rho(r) + V_{H}[\rho] + E_{\rm xc}
 \end{columns}
 }
 \end{frame}
+
+
 \begin{frame}
-\frametitle{\small Density Functional Theory}
-\scriptsize{
-\vspace{-0.5cm}
+%\frametitle{\small Density Functional Theory IV}
+\footnotesize{
+%\vspace{-0.5cm}
 \begin{columns}
 \column{12cm}
 \begin{itemize}
@@ -674,15 +668,16 @@ and $E_{xc}$ is the exchange-correlation energy.
 \item The Kohn-Sham equations are found by varying the total energy expression with respect to a set of orbitals to yield the Kohn-Sham potential as
 \begin{align*}
 v_{\rm eff}(r) = v_{\rm ext}(r) + \int \dfrac{\rho(r^\prime)}{|r-r^\prime|}dr^\prime + \dfrac{\delta E_{\rm xc}[\rho]}{\delta\rho(r)}
-\end{align*}where the last term
-$\displaystyle{v_{\rm xc}(r)\equiv\dfrac{\delta E_{\rm xc}[\rho]}{\delta\rho(r)}}$
-is the exchange-correlation potential. 
+\end{align*}
+where the last term $\displaystyle{v_{\rm xc}(r)\equiv\dfrac{\delta E_{\rm xc}[\rho]}{\delta\rho(r)}}$ is the exchange-correlation potential. 
 \end{itemize}
 \end{columns}
 }
 \end{frame}
+
+
 \begin{frame}
-\frametitle{\small Density Functional Theory}
+%\frametitle{\small Density Functional Theory V}
 \footnotesize{
 \begin{columns}
 \column{12cm}
@@ -703,10 +698,10 @@ is the exchange-correlation potential.
 E_{\rm xc}[\rho] = E_{\rm x}[\rho] + E_{\rm c}[\rho]
 \end{align*}
 where the first term is the exchange functional while the second term is the correlation functional.
-\item Quite a few research groups have developed the exchange and correlation functionals which are fit to empirical data.
+\item Quite a few research groups have developed the exchange and correlation functionals which are fit to empirical data or data from explicity correlated methods.
 %\item The fitting of the functional is often done with empirical data (Hence DFT is not an "\emph{Ab Initio}" Method)
 %\item Some density functionals can be considered \emph{Ab Initio} because they do not fit to empirical data.
-\item Popular DFT functionals (according to recent poll)
+\item Popular DFT functionals (according to a recent poll)
 \begin{enumerate}
 {\footnotesize
 \item[$\vardiamond$] { PBE0 (PBEPBE), B3LYP, PBE, BP86, M06-2X, B2PLYP, B3PW91, B97-D, M06-L, CAM-B3LYP}
@@ -726,8 +721,14 @@ where the first term is the exchange functional while the second term is the cor
 \frametitle{\small Semi-empirical Methods}
 \footnotesize{
 \begin{itemize}
-\item Semi-empirical quantum methods: represents a middle road between the mostly qualitative results from molecular mechanics and the highly computationally demanding quantitative results from \emph{ab initio} methods.
-\item Address limitations of the Hartree-Fock claculations, such as speed and low accuracy, by omitting or parametrizing certain integrals
+\item Semi-empirical quantum methods: 
+\begin{enumerate}
+\footnotesize{
+\item[$\vardiamond$]Represents a middle road between the mostly qualitative results from molecular mechanics and the highly computationally demanding quantitative results from \emph{ab initio} methods.
+\item[$\vardiamond$] Address limitations of the Hartree-Fock claculations, such as speed and low accuracy, by omitting or parametrizing certain integrals
+}
+\end{enumerate}
+\item integrals are either determined directly from experimental data or calculated from analytical formula with \emph{ab initio} methods or from suitable parametric expressions.
 \item Integral approximations:
 \begin{enumerate}
 \footnotesize{
@@ -736,10 +737,9 @@ where the first term is the exchange functional while the second term is the cor
 \item[$\vardiamond$] Neglect of Diatomic Differential Overlap (NDDO) ( Used by PM3, AM1, ...)
 }
 \end{enumerate} 
-\item integrals are either determined directly from experimental data or calculated from analytical formula with \emph{ab initio} methods or from suitable parametric expressions.
 \end{itemize}
 \begin{block}{}
-Semi-empirical methods are fast, very accurate when applied to moecules that are similar to those used for parametrization and are applicable to very large molecular systems.
+Semi-empirical methods are fast, very accurate when applied to molecules that are similar to those used for parametrization and are applicable to very large molecular systems.
 \end{block}
 }
 \end{frame}
@@ -754,65 +754,8 @@ Semi-empirical methods are fast, very accurate when applied to moecules that are
 %\end{block}
 \end{frame}
 
-
-%\part{Molecular Mechanics}
-\section{Molecular Mechanics}
-\begin{frame}[allowframebreaks]
-\frametitle{\small Molecular Mechanics}
-\footnotesize{
-\begin{itemize}
-%\item Molecular mechanics uses Newtonian mechanics to model molecular systems. 
-\item The potential energy of all systems in molecular mechanics is calculated using force fields. 
-\item Molecular mechanics can be used to study small molecules as well as large biological systems or material assemblies with many thousands to millions of atoms.
-\item All-atomistic molecular mechanics methods have the following properties:
-\begin{itemize}
-\footnotesize{
-\item[$\vardiamond$] Each atom is simulated as a single particle
-\item[$\vardiamond$] Each particle is assigned a radius (typically the van der Waals radius), polarizability, and a constant net charge (generally derived from quantum calculations and/or experiment)
-\item[$\vardiamond$] Bonded interactions are treated as "springs" with an equilibrium distance equal to the experimental or calculated bond length
-}
-\end{itemize}
-\item The exact functional form of the potential function, or force field, depends on the particular simulation program being used. 
-\item Generally the bond and angle terms are modeled as harmonic potentials centered around equilibrium bond-length values derived from experiment or \emph{ab initio} calculations. 
-\item Morse potential can be used for an accurate reproduction of vibrational spectra but at a higher computational cost.
-\item The dihedral or torsional terms  typically have multiple minima and thus cannot be modeled as harmonic oscillators.
-\item The non-bonded terms are much more computationally costly to calculate in full.%, since a typical atom is bonded to only a few of its neighbors, but interacts with every other atom in the molecule. 
-\item Modelled using a short range van der Waals interactions usually Lennard-Jones potential and a long range or electrostatic interaction which has a functional form of the Coulomb potential.
-%\item Fortunately the van der Waals term falls off rapidly – %it is typically modeled using a "6–12 Lennard-Jones potential", which means that attractive forces fall off with distance as $r^6$ and repulsive forces as $r^{12}$, where r represents the distance between two atoms. 
-\item Generally a cutoff radius is used to speed up the calculation so that atom pairs whose distances are greater than the cutoff have a van der Waals interaction energy of zero.
-\end{itemize}
-}
-\end{frame}
-
-\begin{frame}
-\frametitle{\small Molecular Mechanics}
-\footnotesize{
-\begin{columns}
-\column{5.5cm}
-\vspace{-0.5cm}
-\begin{block}{General form of Molecular Mechanics equations}
-\begin{align*}
-E&=E_{\mathrm{bond}}+E_{\mathrm{angle}} + E_{\mathrm{dihedral}} + E_{\mathrm{vdW}} + E_{\mathrm{elec}}\\
-&=\frac{1}{2}\sum_{\mathrm{bonds}}K_b(b-b_0)^2\\
-&+\frac{1}{2}\sum_{\mathrm{angles}}K_\theta(\theta-\theta_0)^2\\
-&+\frac{1}{2}\sum_{\mathrm{dihedrals}}K_\phi\left[1+\cos(n\phi)\right]^2\\
-&+\sum_{\mathrm{non-bonds}}\left\{ \begin{array}{l}
-\left[\left(\dfrac{\sigma}{r}\right)^{12}-\left(\dfrac{\sigma}{r}\right)^{6}\right] \\
-+ \dfrac{q_1q_2}{Dr}
-       \end{array} \right\}
-\end{align*}
-\end{block}
-\column{5.5cm}
-\vspace{0.5cm}
-\begin{block}{}
-\includegraphics[width=5.5cm,keepaspectratio=true,clip=true]{MM_PEF}
-\end{block}
-\end{columns}
-}
-\end{frame}
-
 \section{Basis Sets}
-\begin{frame}[allowframebreaks,fragile]
+\begin{frame}
 \frametitle{\small Basis Sets}
 \footnotesize{
 \begin{itemize}
@@ -827,6 +770,11 @@ where $L=l+m+n$ is the total angular momentun and $\zeta,\xi$ are orbital expone
 \begin{center}
 \includegraphics[width=5cm,keepaspectratio=true,clip=true]{STO-GTO}
 \end{center}
+}
+\end{frame}
+
+\begin{frame}
+\footnotesize{
 \begin{columns}
 \column{5.5cm}
 \vspace{-0.2cm}
@@ -850,7 +798,11 @@ where $L=l+m+n$ is the total angular momentun and $\zeta,\xi$ are orbital expone
 \end{itemize}
 \end{block}
 \end{columns}
+}
+\end{frame}
 
+\begin{frame}
+\footnotesize{
 %\item Two main families fo basis sets used in modern computational chemistry calculations:
 \begin{block}{Pople family basis set}
 \begin{enumerate}
@@ -874,21 +826,29 @@ where $L=l+m+n$ is the total angular momentun and $\zeta,\xi$ are orbital expone
 \end{enumerate}
 \end{enumerate}
 \end{block}
+}
+\end{frame}
 
+\begin{frame}
+\footnotesize{
 \begin{block}{Correlation consistent basis set}
 \begin{enumerate}
 \item[$\vardiamond$]Family of basis sets of increasing sizes.
-\item[$\vardiamond$]can be used to extrapolate basis set limit.
+\item[$\vardiamond$]Can be used to extrapolate basis set limit.
 \item[$\vardiamond$]cc-pVDZ: Double Zeta(DZ) with d's on heavy atoms, p's on H
 \item[$\vardiamond$]cc-pVTZ: triple split valence with 2 sets of d's and 1 set of f's on heavy atom, 2 sets of p's and 1 set of d's on H
 \item[$\vardiamond$]cc-pVQZ, cc-pV5Z, cc-pV6Z
 \item[$\vardiamond$]can be augmented with diffuse functions: aug-cc-pVXZ (X=D,T,Q,5,6)
 \end{enumerate}
 \end{block}
+}
+\end{frame}
 
+\begin{frame}
+\footnotesize{
 \begin{block}{Pseudopotentials or Effective Core Potentials}
 \begin{enumerate}
-\item[$\vardiamond$]All Electron calculations prohibitively expensive.
+\item[$\vardiamond$]All Electron calculations are prohibitively expensive.
 \item[$\vardiamond$]Only valence electrons take part in bonding interaction leaving core electrons unaffected.\item[$\vardiamond$]Effective Core Potentials (ECP) a.k.a Pseudopotentials describe interactions between the core and valence electrons.
 \item[$\vardiamond$]Only valence electrons explicitly described using basis sets.
 \item[$\vardiamond$] Pseudopotentials commonly used
@@ -911,109 +871,367 @@ where $L=l+m+n$ is the total angular momentun and $\zeta,\xi$ are orbital expone
 }
 \end{frame}
 
-\section{Molecular Dynamics}
-\begin{frame}[allowframebreaks]
-\frametitle{\small Molecular Dynamics}
+
+%\part{Molecular Mechanics}
+\section{Molecular Mechanics}
+\begin{frame}
+\frametitle{\small Molecular Mechanics}
+\footnotesize{
 \begin{itemize}
-{\footnotesize
-\item Obtained from solutions of the time-dependent Schr\"{o}dinger equations.
-\item Classical Molecular Dynamics: Using "predefined potentials" usually force fields from Molecular Mechanics to propagate the nuclei which are treated as classical particles obeying Newton's Laws of motions.
-\item \textit{Ab Initio Molecular Dynamics}: also known as First Principles/Direct/Quantum MD. Here the forces acting on the nuclei are computed from electronic structure calculations "on-the-fly" as the molecular dynamics trajectory is generated. Nuclei are treated classical with Newton's Laws of motion for nuclei are derived from the TDSE.
-\item Quantum Dynamics: Full Quantum treatment of all particles. Here the nuclei are treated as wavepackets whose motion is coupled to that of electrons obtained from electronic structure calculations.
-\item Cost and Accuracy of calculations:\\
-Classical MD > AIMD > Quantum Dynamics
-%}
-\item The full Hamiltonian for a molecular system is
+%\item Molecular mechanics uses Newtonian mechanics to model molecular systems. 
+\item The potential energy of all systems in molecular mechanics is calculated using force fields. 
+\item Molecular mechanics can be used to study small molecules as well as large biological systems or material assemblies with many thousands to millions of atoms.
+\item All-atomistic molecular mechanics methods have the following properties:
+\begin{itemize}
+\footnotesize{
+\item[$\vardiamond$] Each atom is simulated as a single particle
+\item[$\vardiamond$] Each particle is assigned a radius (typically the van der Waals radius), polarizability, and a constant net charge (generally derived from quantum calculations and/or experiment)
+\item[$\vardiamond$] Bonded interactions are treated as "springs" with an equilibrium distance equal to the experimental or calculated bond length
+}
+\end{itemize}
+\item The exact functional form of the potential function, or force field, depends on the particular simulation program being used. 
+\end{itemize}
+}
+\end{frame}
+
+\begin{frame}
+%\frametitle{\small Molecular Mechanics}
+\footnotesize{
+\begin{columns}
+\column{6.5cm}
+\begin{colorblock}{white}{blue!30!black}{black}{blue!8!white}{General form of Molecular Mechanics equations}
+\begin{align*}
+E&={\color{red}E_{\mathrm{bond}}}+{\color{blue}E_{\mathrm{angle}}} + {\color{tigerspurple}E_{\mathrm{torsion}}} + {\color{DarkGreen}E_{\mathrm{vdW}}} + {\color{indigo}E_{\mathrm{elec}}}\\
+&={\color{red}\frac{1}{2}\sum_{\mathrm{bonds}}K_b(b-b_0)^2 \hspace{1.6cm}\mathrm{Bond}}\\
+&+{\color{Blue}\frac{1}{2}\sum_{\mathrm{angles}}K_\theta(\theta-\theta_0)^2 \hspace{1.6cm}\mathrm{Angle}}\\
+&+{\color{tigerspurple}\frac{1}{2}\sum_{\mathrm{dihedrals}}K_\phi\left[1+\cos(n\phi)\right]^2 \hspace{0.55cm}\mathrm{Torsion}}\\
+&+\sum_{\mathrm{non bonds}}\left\{ \begin{array}{l}
+{\color{DarkGreen}\left[\left(\dfrac{\sigma}{r}\right)^{12}-\left(\dfrac{\sigma}{r}\right)^{6}\right] \mathrm{van\,der\,Waals}}\\
++ {\color{indigo}\dfrac{q_1q_2}{Dr} \hspace{1.6cm}\mathrm{Electrostatics}}
+       \end{array} \right.
+\end{align*}
+\end{colorblock}
+\column{5.2cm}
+\vspace{0.6cm}
+\begin{colorblock}{white}{blue!30!black}{black}{white!95!black}{}
+\includegraphics[width=5.2cm,keepaspectratio=true,clip=true]{MM_PEF}
+\let\thefootnote\relax\footnotetext{\tiny Picture taken from }
+\let\thefootnote\relax\footnotetext{\tiny http://en.wikipedia.org/wiki/Molecular\_mechanics}
+\end{colorblock}
+\end{columns}
+}
+\end{frame}
+
+\section{Quantum Mechanics/Molecular Mechanics (QM/MM)}
+\begin{frame}
+\frametitle{\small QM/MM}
+\begin{columns}
+\column{12cm}
+\footnotesize{
+\vspace{-0.5cm}
+\begin{colorblock}{white}{blue!30!black}{black}{white!70!black}{}
+\begin{itemize}
+\item What do we do if we want simulate chemical reaction in large systems?
+\item Quantum Mechanics(QM): Accurate, expensive ($\mathcal{O}(N^4)$), suitable for small systems.
+\item Molecular Mechanics(MM): Approximate, does not treat electrons explicitly, suitable for large systems such as enzymes and proteins, cannot simulate bon breaking/forming
+\end{itemize}
+\end{colorblock}
+{
+\begin{colorblock}{white}{blue!30!black}{black}{white!80!black}{}
+\begin{itemize}
+\item Methods that combine QM and MM are the solution.
+\item Such methods are called Hybrid QM/MM methods.
+\item The basic idea is to partition the system into two (or more) parts
+\begin{enumerate}
+\footnotesize{
+\item The region of chemical interest is treated using accurate QM methods eg. active site of an enzyme.
+\item The rest of the system is treated using MM or less accurate QM methods such as semi-empirical methods or  a combination of the two.
+}
+\end{enumerate}
+\vspace{-0.3cm}
+\begin{align*}
+\hat{H}_{\rm Total} = \hat{H}_{\rm QM} + \hat{H}_{\rm MM} + \hat{H}^{\rm int}_{\rm QM-MM}
+\end{align*}
+\end{itemize}
+\end{colorblock}}
+}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{\small QM/MM}
+\footnotesize{
+\begin{itemize}
+\vspace{0.2cm}
+\begin{colorblock}{white}{blue!30!black}{black}{black!25!white}{}
+\item[] \textbf{ONIOM:} Divide the system into a real (full) system and the model system. Treat the model system at high and low level. The total energy of the system is given by
+\begin{align*}
+E = E(low,real) + E(high,model) - E(low,model)
+\end{align*}
+\end{colorblock}
+\vspace{0.2cm}
+\begin{colorblock}{white}{blue!30!black}{black}{black!20!white}{}
+\item[] \textbf{Empirical Valence Bond:} Treat any point on a reaction surface as a combination of two or more valence bond structures
+\begin{align*}
+H({\bf R},{\bf r}) = \left|
+\begin{array}{cc}
+H_{11}({\bf R},{\bf r}) & H_{12}({\bf R},{\bf r})\\
+H_{21}({\bf R},{\bf r}) & H_{22}({\bf R},{\bf r})
+\end{array}
+\right|
+\end{align*}
+\end{colorblock}
+\vspace{0.2cm}
+\begin{colorblock}{white}{blue!30!black}{black}{black!15!white}{}
+\item[] \textbf{Effective Fragment Potential:} Divide a large system into fragments and perform \textit{ab initio} or DFT calculations of fragments and their dimers and including the Coulomb field from the whole system.
+\end{colorblock}
+\end{itemize}
+}
+\end{frame}
+
+\section{Molecular Dynamics}
+\begin{frame}
+\frametitle{\small Molecular Dynamics}
+\footnotesize{
+\begin{columns}
+\column{12cm}
+\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]{\bf Why Molecular Dynamics?}
+\begin{itemize}
+\item Electronic Structure Methods are applicable to systems in gas phase under low pressure (vaccum).
+\item Majority of chemical reactions take place in solution at some temperature with biological reactions usually at specific pH's.
+\item Calculating molecular properties taking into account such environmental effects which can be dynamical in nature are not adequately described by electronic structure methods.
+\end{itemize}
+\end{beamerboxesrounded}
+%\vspace{0.15cm}
+{
+\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\bf Molecular Dynamics}
+\begin{itemize}
+\item Generate a series of time-correlated points in phase-space (a trajectory).
+\item Propagate the initial conditions, position and velocities in accordance with Newtonian Mechanics. ${\bf F}=m{\bf a}=-{\boldsymbol\nabla}V$
+\item Fundamental Basis is the \textbf{Ergodic Hypothesis}: the average obtained by following a small number of particles over a
+long time is equivalent to averaging over a large number of particles for a short time.
+\end{itemize}
+\end{colorblock}
+}
+\end{columns}
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{\small Molecular Dynamics Theory}
+\footnotesize{
+\begin{itemize}
+\item Solve the time-dependent Schr\"{o}dinger equation
+\begin{align*}
+\imath\hbar\dfrac{\partial}{\partial t}\Psi({\bf R},{\bf r},t) = \hat{H}\Psi({\bf R},{\bf r},t)
+\end{align*}
+with 
+\begin{align*}
+\Psi({\bf R},{\bf r},t) = \chi({\bf R},t)\Phi({\bf r},t)
+\end{align*}
+and 
 \begin{align*}
 \hat{H} = -\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I +\underbrace{\dfrac{-\hbar^2}{2m_e}\nabla^2_i + V_{n-e}(\bf r,R)}_{H_e(\bf r,R)}
 \end{align*}
-\item Separate Electronic and Nuclear degrees of freedom
+\item Obtain coupled equations of motion for electrons and nuclei: Time-Dependent Self-Consistent Field (TD-SCF) approach.
 \begin{align*}
-\Phi({\bf r},{\bf R},t) \approx \Psi({\bf r},t)\chi({\bf R},t)\exp\left[\dfrac{i}{\hbar}\int^{t}_{t_0}dt^\prime\tilde{E}_e(t^\prime)\right]
+\imath\hbar\dfrac{\partial\Phi}{\partial t} &= \left[-\sum_i\dfrac{\hbar^2}{2m_e}\nabla^2_i + \langle\chi|V_{n-e}|\chi\rangle\right]\Phi\\
+\imath\hbar\dfrac{\partial\chi}{\partial t} &= \left[-\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I + \langle\Phi|H_e|\Phi\rangle\right]\chi
 \end{align*}
-where $\Psi$ and $\chi$ are normalized separately and the last term is a phase factor
-\begin{align*}
-\tilde{E}_e = \int d{\bf r}d{\bf R}\Psi^\ast({\bf r},t)\chi^\ast({\bf R},t)H_e\Psi({\bf r},t)\chi({\bf R},t)
-\end{align*}
-\item Obtain coupled equations for electronic and nuclear wavefunction: Time-Dependent Self-Consistent Field (TDSCF) method
-\begin{align*}
-i\hbar\dfrac{\partial\Psi}{\partial t} &= -\sum_i\dfrac{\hbar^2}{2m_e}\nabla^2_i\Psi + \left\{\int d{\bf R}\chi^\ast({\bf R},t)V_{n-e}(\bf r,R)\chi({\bf R},t)\right\}\Psi\\
-i\hbar\dfrac{\partial\chi}{\partial t} &= -\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I\chi + \left\{\int d{\bf r}\Psi^\ast({\bf r},t)H_{e}(\bf r,R)\Psi({\bf r},t)\right\}\chi
-\end{align*}
+\end{itemize}
+}
+\end{frame}
+
+\begin{frame}
+%\frametitle{\small Molecular Dynamics Theory}
+\footnotesize{
+\begin{itemize}
+%\item Alternative approach: Decouple electronic and nuclei motions.
+%\item Solve for the clamped nuclei:
+%\begin{align*}
+%\hat{H}_e\Phi_k({\bf r};{\bf R}) = E_k({\bf R})\Phi_k({\bf r};{\bf R})
+%\end{align*}
+%\item Equation of motion for nuclear wavefunction is
+%\begin{align*}
+%\imath\hbar\dfrac{\partial|\chi\rangle}{\partial t} &= \left[-\sum_I\dfrac{\hbar^2}{2M_I}\nabla^2_I + E({\bf R})\right]|%\chi\rangle
+%\end{align*}
 \item Define nuclear wavefunction as
 \begin{align*}
 \chi({\bf R},t) = A({\bf R},t)\exp\left[iS({\bf R},t)/\hbar\right]
 \end{align*}
 where $A$ and $S$ are real.
-\item Solve the time-dependent equation for nuclear wavefunction and take classical limit ($\hbar\rightarrow0$) to obtain the Hamilton-Jacobi equation.
+\item Solve the time-dependent equation for nuclear wavefunction and take classical limit ($\hbar\rightarrow0$) to obtain 
 \begin{align*}
-\dfrac{\partial S}{\partial t} + \sum_I\dfrac{\hbar^2}{2M_I}(\nabla_IS)^2 + \int d{\bf r}\Psi^\ast H_e\Psi = 0
+\dfrac{\partial S}{\partial t} + \sum_I\dfrac{\hbar^2}{2M_I}(\nabla_IS)^2 + \langle\Phi|H_e|\Phi\rangle = 0
 \end{align*}
-\item $S$ is the mechanical action which is related to the momentum as
+an equation that is isomorphic with the Hamilton-Jacobi equation with the classical Hamilton function given by
 \begin{align*}
-{\bf P}_I \equiv \nabla_IS
+\mathcal{H}(\{{\bf R}_I\},\{{\bf P}_I\}) = \sum_I \dfrac{\hbar^2}{2M_I}{\bf P}^2_I + V(\{{\bf R}_I\})
 \end{align*}
-\item We can obtain the Newtonian equation of motion as
+where
 \begin{align*}
-M_I\ddot{\bf R}_I = \dfrac{d{\bf P}_I}{dt} = -\nabla_I\int d{\bf r}\Psi^\ast H_e\Psi = -\nabla_IV^{E}_{e}({\bf R},t)
+{\bf P}_I \equiv \nabla_IS\hspace{1cm}\mathrm{and}\hspace{1cm}
+V(\{{\bf R}_I\}) = \langle\Phi|H_e|\Phi\rangle
 \end{align*}
-Thus, the nuclei move according to classical mechanics in an effective potential $V^E_e$ due to the electrons.
-\footnote{\tiny John C. Tully, \textit{Faraday Discuss}, \textbf{110},407 (1998)}
-\item For the electronic wavefunction in the TDSCF equations, take classical limit by replacing the nuclear wavefunctions by delta functions $\prod_I\delta({\bf R}_I - {\bf R}_I(t))$ centered on the instantaneous positions ${\bf R}_I(t)$ which results in a time-dependent equation for electrons
+\item Obtain equations of nuclear motion from Hamilton's equation
 \begin{align*}
-i\hbar\dfrac{\partial\Psi}{\partial t} = -\sum_i\dfrac{-\hbar^2}{2m_e}\nabla^2_i\Psi + V_{n-e}({\bf r},{\bf R}(t)) = H_e({\bf r},{\bf R}(t))\Psi({\bf r};{\bf R};t)
+\dfrac{d{\bf P}_I}{dt} = -\dfrac{d\mathcal{H}}{d{\bf R}_I}&\Rightarrow M\ddot{\bf R}_I = -\nabla _IV\\
+\dfrac{d{\bf R}_I}{dt} &= \dfrac{d\mathcal{H}}{d{\bf P}_I}
 \end{align*}
-\item This approach which incorporate feedback between the classical and quantal degrees of freedom in both directions is called the "Ehrenfest Molecular Dynamics".
-\item If the electronic wavefunction is described in terms of electronic states or determinants $\Psi_k$
-\begin{align*}
-\Psi({\bf r},{\bf R};t) = \sum^\infty_{k=0}c_k(t)\Psi_k({\bf r};{\bf R})
-\end{align*}
-then transition between electronic states are included. Useful for describing {\bf Non-Adiabatic Dynamics, Charge Transfer dynamics, Electron Transfer}. {\bf Trajectory Surface Hopping} is a derivative of this method designed to address the drawbacks of Ehrenfest dynamics.
-\item If the choice of basis set $\{\Psi_k\}$ is the adiabatic basis obtained from solving the time-independent electronic Schr\"{o}dinger equation and we consider only the ground state wavefunction $\Psi_0$, then nuclei move on a single potential energy surface 
-\begin{align*}
-H_e\Psi_0 = E_0\Psi_0 \vspace{0.5cm} ; \vspace{0.5cm}
-V^E_e = \int d{\bf r}\Psi^\ast_0 H_e\Psi_0
-\end{align*}
-In this limit the Ehrenfest potential is identical to the ground state Born-Oppenheimer potential and the method is known as {\bf Born-Oppenheimer Molecular Dynamics}.
-\item If the Ehrenfest potential $V^E_e$ is approximated to a global potential surface
-\begin{align*}
-V^E_e \approx V^{approx}_e({\bf R}_I) = &\sum^{N}_{I=1}v_1({\bf R}_I) + \sum^N_{I>J}v_2({\bf R}_I,{\bf R}_J) \\+ &\sum^N_{I>J>K}v_3({\bf R}_I,{\bf R}_J,{\bf R}_K) + \cdots
-\end{align*}
-in terms of a truncated expansion of many-body contributions, then the electronic degrees of freedom are replaced by interaction potentials $\{v_n\}$.\\
-Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are determined usually Molecular Mechanics Force Fields. This is most commonly known as {\bf Classical Molecular Dynamics}.
-}
 \end{itemize}
+}
 \end{frame}
 
 \begin{frame}
+\footnotesize{
+\begin{itemize}
+\item Replace nuclear wavefunction by delta functions centered on nuclear position to obtain
+\begin{align*}
+i\hbar\dfrac{\partial\Phi}{\partial t} = H_e({\bf r},\{{\bf R}_I\})\Phi({\bf r};\{{\bf R}_I\},t)
+\end{align*}
+\item This approach of simultaneously solving the electronic and nuclear degrees of freedom by incorporating feedback in both directions is known as \textbf{Ehrenfest Molecular Dynamics}.
+\item Expand $\Phi$ in terms of many electron wavefunctions or  determinants
+\begin{align*}
+\Phi({\bf r};\{{\bf R}_I\},t) = \sum_i c_i(t)\Phi_i({\bf r};\{{\bf R}_I\})
+\end{align*}
+with matrix elements
+\begin{align*}
+H_{ij} = \langle\Phi_i|H_e|\Phi_j\rangle
+\end{align*} 
+\item Inserting $\Phi$ in the TDSE above, we get
+\begin{align*}
+\imath\hbar\dot{c}_i(t) = c_i(t)H_{ii} -\imath\hbar\sum_{I,i}\dot{\bf R}_I{\bf d}^{ij}_I
+\end{align*}
+with non-adiabtic coupling elements given by
+\begin{align*}
+{\bf d}^{ij}_I({\bf R}_I) = \langle\Phi_i|\nabla_I|\Phi_j\rangle
+\end{align*}
+\end{itemize}
+}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\footnotesize{
+\begin{itemize}
+\item Upto this point, no restriction on the nature of $\Phi_i$ i.e. adiabatic or diabatic basis has been made. 
+\item Ehrenfest method rigorously includes non-adiabtic transitions between electronic states within the framework of classical nuclear motion and mean field (TD-SCF) approximation to the electronic structure.
+\item Now suppose, we define $\{\Phi_i\}$ to be the adiabatic basis obtained from solving the time-independent Schr\"{o}dinger equation,
+\begin{align*}
+H_e({\bf r},\{{\bf R}_I\})\Phi_i({\bf r};\{{\bf R}_I\}) = E_i(\{{\bf R}_I\})\Phi_i({\bf r};\{{\bf R}_I\})
+\end{align*}
+\item The classical nuclei now move along the adiabatic or Born-Oppenheimer potential surface. Such dynamics are commonly known as \textbf{Born-Oppenheimer Molecular Dynamics} or BOMD.
+\item If we restrict the dynamics to only the ground electronic state, then we obtain ground state BOMD.
+\item If the Ehrenfest potential $V(\{{\bf R}_I\})$ is approximated to a global potential surface in terms of many-body contributions $\{v_n\}$.
+\begin{align*}
+V(\{{\bf R}_I\}) \approx V^{approx}_e({\bf R}) = \sum^{N}_{I=1}v_1({\bf R}_I) + \sum^N_{I>J}v_2({\bf R}_I,{\bf R}_J) +\sum^N_{I>J>K}v_3({\bf R}_I,{\bf R}_J,{\bf R}_K) + \cdots
+\end{align*}
+\item[] 
+\item Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are determined usually Molecular Mechanics Force Fields. This class of dynamics is most commonly known as {\bf Classical Molecular Dynamics}.
+\item Another approach to obtain equations of motion for \text{ab-initio} molecular dynamics is to apply the Born-Oppenheimer approximation to the full wavefunction $\Psi({\bf r},{\bf R},t)$
+\begin{align*}
+\Psi({\bf r},{\bf R},t) = \sum_k \chi({\bf R},t)\Phi_k({\bf r};{\bf R}(t))
+\end{align*}
+where
+\begin{align*}
+H_e\Phi_k({\bf r};{\bf R}(t)) = E_k({\bf R}(t))\Phi_k({\bf r};{\bf R}(t))
+\end{align*}
+\item Assuming that the nuclear dynamics doesn not change the electronic state, we arrive at the equation of motion for nuclear wavefunction 
+\begin{align*}
+\imath\hbar\dfrac{\partial}{\partial t}\chi({\bf R},t) = \left[\sum_I-\dfrac{\hbar^2}{2M_I}\nabla^2_I + E_k({\bf R})\right]\chi({\bf R},t)
+\end{align*}
+\item The Lagrangian for this system is given by.
+\begin{align*}
+\mathcal{L} = \hat{T} - \hat{V}
+\end{align*}
+\item Corresponding Newton's equation of motion are then obtained from the associated Euler-Lagrange equations,
+\begin{align*}
+\dfrac{d}{dt}\dfrac{\partial\mathcal{L}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}}{\partial{\bf R}_I}
+\end{align*}
+\item The Lagrangian for ground state BOMD is
+\begin{align*}
+\mathcal{L}_\mathrm{BOMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I - \min_{\Phi_0}\langle\Phi|H_e|\Phi\rangle
+\end{align*}
+and equations of motions
+\begin{align*}
+{\color{blue}M_I\ddot{\bf R}_I} = \dfrac{d}{dt}\dfrac{\partial\mathcal{L}_\mathrm{BOMD}}{\partial\dot{\bf R}_I} = \dfrac{\partial\mathcal{L}_\mathrm{BOMD}}{\partial{\bf R}_I} = {\color{blue}-\nabla_I\min_{\Phi_0}\langle\Phi|H_e|\Phi\rangle}
+\end{align*}
+\end{itemize}
+\begin{colorblock}{white}{blue!30!black}{black}{blue!15!white}{\textbf{Extended Lagrangian Molecular Dynamics} (ELMD)}
+Extend the Lagrangian by adding kinetic energy of fictitious particles and obtain their equation of motions from Euler-Lagrange equations.
+\end{colorblock}
+\vspace{-0.3cm}
+\begin{columns}
+\column{6cm}
+\centering{
+\begin{colorblock}{white}{blue!30!black}{black}{green!25!white}{}
+\centering{
+Molecular Orbitals: $\{\phi_i\}$ \\
+Density Matrix: $\displaystyle{{P}_{\mu\nu}=\sum_{i}c^\ast_{\mu i}c_{\nu i}}$}
+\end{colorblock}
+}
+\end{columns}
+}
+\end{frame}
+
+\begin{frame}
+\footnotesize{
+\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{\textbf{Car-Parrinello Molecular Dynamics} (CPMD)}
+{\color{DarkBlue}CPMD and NWCHEM}\let\thefootnote\relax\footnotetext{\tiny R. Car and M. Parrinello, Phys. Rev. Lett. 55 (22), 2471 (1985)}
+\vspace{-0.1cm}
+\begin{align*}
+\mathcal{L}_\mathrm{CPMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \sum_i\dfrac{1}{2}\mu_i\langle\dot{\phi_i}|\dot{\phi_i}\rangle - \langle\Phi_0|H_e|\Phi_0\rangle + \mathrm{constraints}
+\end{align*}
+\end{colorblock}
+ \begin{colorblock}{white}{green!30!black}{black}{green!15!white}{\textbf{Atom centered Density Matrix Propagation} (ADMP)}
+{\color{DarkBlue}Gaussian 03/09}\let\thefootnote\relax\footnotetext{\tiny H. B. Schlegel, J. M. Millam, S. S. Iyengar, G. A. Voth, A. D. Daniels, G. E. Scuseria, M. J. Frisch, J. Chem. Phys. 114, 9758 (2001)}
+\vspace{-0.1cm}
+\begin{align*}
+\mathcal{L}_\mathrm{ADMP} = \dfrac{1}{2}\mathrm{Tr}({\bf V}^T{\bf M}{\bf V}) + \dfrac{1}{2}\mu\mathrm{Tr}(\dot{\bf P}\dot{\bf P}) - E({\bf R},{\bf P}) - \mathrm{Tr}[{\boldsymbol\Lambda}({\bf PP}-{\bf P})]
+\end{align*}
+\end{colorblock}
+\begin{colorblock}{white}{red!30!black}{black}{red!15!white}{\textbf{curvy-steps ELMD} (csELMD)}
+{\color{purple}Q-Chem}\let\thefootnote\relax\footnotetext{\tiny J.M. Herbert and M. Head-Gordon, J. Chem. Phys. 121, 11542 (2004)}
+\vspace{-0.1cm}
+\begin{align*}
+\mathcal{L}_\mathrm{csELMD} = \sum_I\dfrac{1}{2}M_I\dot{\bf R}^2_I + \dfrac{1}{2}\mu\sum_{i<j}\dot{\Delta}_{ij} - E({\bf R},{\bf P}) ;\hspace{0.2cm} {\bf P}(\lambda) = e^{\lambda\Delta}{\bf P}(0)e^{-\lambda\Delta}
+\end{align*}
+\end{colorblock}
+}
+\end{frame}
+
+\beamertemplateshadingbackground{green!10!white}{green!10!white} % New background
+\begin{frame}
 \frametitle{\small Molecular Dynamics: Methods and Programs}
+\begin{columns}
+\column{12cm}
 \begin{itemize}
 \item Electronic energy obtained from 
 \begin{itemize}
-\item Molecular Mechanics $\Rightarrow$ Classical Molecular Dynamics
-{\footnotesize
+\item {Molecular Mechanics $\Rightarrow$ Classical Molecular Dynamics}
 \begin{enumerate}
+{\footnotesize
 \item LAMMPS
 \item NAMD
 \item Amber
 \item Gromacs
-\end{enumerate}
 }
-\item Ab-Initio Methods $\Rightarrow$ Quantum or Ab-Initio Molecular Dynamics
-{\footnotesize
+\end{enumerate}
+\item {Ab-Initio Methods $\Rightarrow$ Quantum or Ab-Initio Molecular Dynamics}
 \begin{enumerate}
+{\footnotesize
 \item Born-Oppenheimer Molecular Dynamics: Gaussian, GAMESS
 \item Extended Lagrangian Molecular Dynamics: VASP, CPMD, Gaussian (ADMP), NWCHEM(CPMD), {\color{red}QChem (curvy-steps ELMD)}
 \item Time Dependent Hartree-Fock and Time Dependent Density Functional Theory: Gaussian, GAMESS, NWCHEM, {\color{red}QChem}
 \item {\color{red}Multiconfiguration Time Dependent Hartree(-Fock), MCTDH(F)}
 \item {\color{red}Non-Adiabatic and  Ehrenfest Molecular Dynamics, Multiple Spawning, Trajectory Surface Hopping}
-\item {\color{red} Wavepacket Methods: Gaussian (QWAIMD)}
-\end{enumerate}
+\item {\color{red}Quantum Nuclei: QWAIMD(Gaussian), NEO(GAMESS)}
 }
+\end{enumerate}
 \end{itemize}
 \end{itemize}
+\end{columns}
 \end{frame}
-
+\beamertemplateshadingbackground{blue!5}{blue!5} % back to original background
 \begin{frame}
 %\frametitle{\small Classical Molecular Dynamics}
 \begin{block}{Classical Molecular Dynamics}
@@ -1059,42 +1277,80 @@ Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are
 
 
 \section{Computational Chemistry Programs}
+
 \begin{frame}
-\frametitle{\small Computational Chemistry Programs}
-%\begin{columns}
-%\column{4cm}
-%\begin{block}{Ab Initio Methods}
-%\begin{itemize}
-%\item {\color{black}Q-Chem}
-%\item {\color{black}Jaguar}
-%\item {\color{tigerspurple}ACES}
-%\item {\color{tigerspurple}ABINIT}
-%\end{itemize}
-%\end{block}
-%\column{4cm}
-\begin{block}{Software:Systems Installed}
-\begin{itemize}
-{\footnotesize
-\item {\color{Blue}AMBER}: x86 clusters, Ducky, Lacumba, LSU HPC 
-\item{\color{Blue}Desmond}: QueenBee
-\item {\color{Blue}DL\_POLY}: x86 clusters
-\item {\color{Blue}Gromacs}: x86 clusters,P5 clusters, Philip
-\item {\color{Blue}LAMMPS}: x86 clusters,P5 clusters, LSU HPC 
-\item {\color{Blue}NAMD}: x86 clusters, P5 clusters except Lacumba, Tezpur, Pelican
-\item{\color{Blue}OpenEye}: x86 clusters
-\item {\color{Blue}CPMD}: x86 clusters, P5 clusters, Tezpur
-\item {\color{Blue}GAMESS}: x86 clusters
-\item {\color{Blue}Gaussian}: x86 clusters except QueenBee and Poseidon, P5 Clusters except Neptune, LSU HPC 
-\item {\color{Blue}NWCHEM}: x86 clusters, P5 clusters, LSU HPC except Philip
-\item{\color{Blue}Piny\_MD}: x86 clusters, P5 clusters, Pelican
+%\frametitle{\small Software Installed on Linux Systems}
+\scriptsize{
+\begin{columns}
+\column{12cm}
+\vspace{-1cm}
+\begin{center}
+\begin{tikzpicture}
+\node (tbl) {
+\begin{tabularx}{\textwidth}{ccccccccc}
+\arrayrulecolor{tigersgold}
+\textcolor{white}{\textbf{Software} }& \textcolor{white}{\textbf{QB}} &\textcolor{white}{\textbf {Eric}} & \textcolor{white}{\textbf{Louie}} & \textcolor{white}{\textbf{Oliver}} & \textcolor{white}{\textbf{Painter}} & \textcolor{white}{\textbf{Poseidon}} & \textcolor{orange}{\textbf{Philip}} & \textcolor{orange}{\textbf{Tezpur}}\\
+Amber\rule{0pt}{3.5ex} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\ 
+Desmond & \checkmark &  &  &  &  &  &  &  \\
+DL\_Poly & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Gromacs & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+NAMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
+OpenEye & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+CPMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
+GAMESS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Gaussian &  & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark & \checkmark \\
+NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
+Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark  \\
+[1.0ex]
+\end{tabularx}};
+\begin{pgfonlayer}{background}
+\draw[rounded corners,top color=blue!30!black,bottom color=blue!10!white,
+    draw=tigerspurple!30] ($(tbl.north west)+(0.14,0)$)
+    rectangle ($(tbl.north east)-(0.13,0.9)$);
+%\draw[rounded corners,top color=tigersgold,bottom color=tigerspurple!20,
+ %   middle color=tigerspurple!20,draw=tigerspurple!20] ($(tbl.south west)
+ %   +(0.12,0.5)$) rectangle ($(tbl.south east)-(0.12,0)$);
+\draw[rounded corners,top color=green!5,bottom color=green!5,draw=green!5]
+    ($(tbl.north east)-(0.13,0.6)$)
+    rectangle ($(tbl.south west)+(0.13,0.2)$);
+\end{pgfonlayer}
+\end{tikzpicture}
+\end{center}
+\vspace{-1cm}
+\begin{center}
+\begin{tikzpicture}
+\node (tbl) {
+\begin{tabularx}{\textwidth}{cccccccc}
+\arrayrulecolor{tigersgold}
+\textcolor{white}{\textbf{Software}} & \textcolor{white}{\textbf{Bluedawg}} & \textcolor{white}{\textbf {Ducky}} & \textcolor{white}{\textbf{Lacumba}} & \textcolor{white}{\textbf{Neptune}} & \textcolor{white}{\textbf{Zeke}} & \textcolor{orange}{\textbf{Pelican}} & \textcolor{orange}{\textbf{Pandora}}\\
+Amber\rule{0pt}{3.5ex} &  & \checkmark & \checkmark &  &  & \checkmark & \\ 
+Gromacs & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \\
+LAMMPS & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \\
+NAMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  &\\
+CPMD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &  & \\
+Gaussian & \checkmark & \checkmark & \checkmark &  & \checkmark & \checkmark & \\
+NWCHEM & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \\
+Piny\_MD & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark  & \\
+[1.0ex]
+\end{tabularx}};
+\begin{pgfonlayer}{background}
+\draw[rounded corners,top color=green!40!black,bottom color=green!10!white,
+    draw=green!5!white] ($(tbl.north west)+(0.14,0)$)
+    rectangle ($(tbl.north east)-(0.13,0.9)$);
+%\draw[rounded corners,top color=tigersgold,bottom color=tigerspurple!20,
+ %   middle color=tigerspurple!20,draw=tigerspurple!20] ($(tbl.south west)
+ %   +(0.12,0.5)$) rectangle ($(tbl.south east)-(0.12,0)$);
+\draw[rounded corners,top color=purple!5,bottom color=purple!5,draw=purple!5]
+    ($(tbl.north east)-(0.13,0.6)$)
+    rectangle ($(tbl.south west)+(0.13,0.2)$);
+\end{pgfonlayer}
+\end{tikzpicture}
+\end{center}
+\end{columns}
 }
-\end{itemize}
-\end{block}
-%\end{columns}
-%\begin{itemize}
-% \item {\color{Blue}Installed on LONI systems}
-%\end{itemize}
 \end{frame}
+
 \begin{frame}
 \frametitle{\small Computational Chemistry Programs}
 \begin{itemize}
@@ -1104,6 +1360,137 @@ Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are
  \item {\color{tigersblue}{\bf \url{http://www.ccl.net/chemistry/links/software/index.shtml}}}
  \item {\color{tigersblue}{\bf \url{http://www.redbrick.dcu.ie/~noel/linux4chemistry/}}}
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{\small Job Types and Keywords}
+\footnotesize{
+\vspace{-0.5cm}
+\begin{columns}
+\column{12cm}
+\begin{exampleblock}{}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Job Type & Gaussian & GAMESS & NWCHEM\\
+\cline{2-4}
+  & \# keyword & runtyp= & task \\       
+\hline
+Energy & sp & energy & energy \\
+Force & force & gradient & gradient \\
+Geometry optimization & opt & optimize & optimize \\
+Transition State & opt=ts & sadpoint & saddle \\
+Frequency & freq & hessian & frequencies, freq \\
+Potential Energy Scan & scan & surface & \checkmark \\
+Excited State & \checkmark & \checkmark & \checkmark \\
+Reaction path following & irc & irc & \checkmark \\
+Molecular Dynamics & admp, bomd & drc & dynamics, Car-Parrinello \\
+Population Analysis & pop & pop & \checkmark \\
+Electrostatic Properties & prop & \checkmark & \checkmark \\
+Molecular Mechanics & \checkmark & \checkmark & \checkmark \\
+Solvation Models & \checkmark & \checkmark & \checkmark \\
+QM/MM & oniom & \checkmark & qmmm \\
+\hline
+\end{tabular}
+\end{exampleblock}
+\end{columns}
+}
+\end{frame}
+
+\begin{frame}
+%\footnotesize{
+\vspace{0.5cm}
+\begin{colorblock}{white}{green!30!black}{black}{green!15!white}{Molecular Dynamics Calculations}
+\begin{itemize}
+\item Gaussian:
+ \begin{itemize}
+% {\scriptsize
+ \item BOMD: Born-Oppenheimer Molecular Dynamics
+ \item ADMP: Atom centered Density Matrix Propagation (an extended Lagrangian Molecular Dynamics similar to CPMD) and ground state BOMD
+% }
+ \end{itemize}
+\item GAMESS:
+  \begin{itemize}
+  \item DRC: Direct Dynamics, a classical trajectory method based on "on-the-fly" ab-initio or semi-empirical potential energy surfaces
+  \end{itemize}
+\item NWCHEM:
+  \begin{itemize}
+  \item Car-Parrinello: Car Parrinello Molecular Dynamics (CPMD)
+%   \item dynamics: Perform classical molecular dynamics
+  \item DIRDYVTST: Direct Dynamics Calculations using POLYRATE with electronic structure from NWCHEM
+  \end{itemize}
+\end{itemize}
+\end{colorblock}
+%}
+\end{frame}
+
+\begin{frame}
+\frametitle{\small Related HPC Tutorials}
+\footnotesize{
+\begin{itemize}
+\item Fall Semester
+\begin{block}{\small Introduction to Gaussian/Electronic Structure Methods}
+\end{block}
+\item Spring Semester
+%\begin{alertblock}{MD: Programming to Production}
+%April 6$^{\rm th}$
+%\end{alertblock}
+\begin{alertblock}{\small Introduction to Computational Chemistry: Molecular Dynamics}
+April 27$^{\rm th}$
+\end{alertblock}
+\end{itemize}
+}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+%\frametitle{\small Useful Links/Further Reading}
+\begin{block}{Useful Links}
+\begin{itemize}
+{\footnotesize\color{Blue}
+\item{\color{tigerspurple}Amber:}\url{http://ambermd.org}
+\item{\color{tigerspurple}Desmond:}\url{http://www.deshawresearch.com/resources_desmond.html}
+\item{\color{tigerspurple}DL\_POLY:}\url{http://www.cse.scitech.ac.uk/ccg/software/DL_POLY}
+\item{\color{tigerspurple}Gromacs:}\url{http://www.gromacs.org}
+\item{\color{tigerspurple}LAMMPS:}\url{http://lammps.sandia.gov}
+\item{\color{tigerspurple}NAMD:}\url{http://www.ks.uiuc.edu/Research/namd}
+\item {\color{tigerspurple}CPMD:} \url{http://www.cpmd.org}
+\item {\color{tigerspurple}GAMESS:} \url{http://www.msg.chem.iastate.edu/gamess}
+\item {\color{tigerspurple}Gaussian:} \url{http://www.gaussian.com}
+\item {\color{tigerspurple}NWCHEM:} \url{http://www.nwchem-sw.org}
+\item{\color{tigerspurple}PINY\_MD:}\url{http://homepages.nyu.edu/~mt33/PINY_MD/PINY.html}
+\item {\color{tigerspurple}Basis Set:} \url{https://bse.pnl.gov/bse/portal}
+}
+\end{itemize}
+\end{block}
+\begin{block}{\small Further Reading}
+\begin{itemize}
+{\scriptsize
+\item David Sherill's Notes at Ga Tech: {\color{Blue}\url{http://vergil.chemistry.gatech.edu/notes/index.html}}
+\item Mark Tuckerman's Notes at NYU: {\color{Blue}\url{http://www.nyu.edu/classes/tuckerman/quant.mech/index.html}}
+\item Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory, A. Szabo and N. Ostlund
+\item Introduction to Computational Chemistry, F. Jensen
+\item Essentials of Cmputational Chemistry - Theories and Models, C. J. Cramer
+\item Exploring Chemistry with Electronic Structure Methods, J. B. Foresman and A. Frisch
+\item Ab Initio Molecular Dynamics: Theory and Implementation, D. Marx and J. Hutter{\color{Blue}\url{http://www.theochem.ruhr-uni-bochum.de/research/marx/marx.pdf}}
+\item Molecular Modeling - Principles and Applications, A. R. Leach
+\item Computer Simulation of Liquids, M. P. Allen and D. J. Tildesley
+\item[$\vardiamond$]Modern Electronic Structure Theory, T. Helgaker, P. Jorgensen and J. Olsen (Highly advanced text, second quantization approach to electronic structure theory)
+}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Example Jobs}
+\begin{frame}
+%\frametitle{\small Worked out Examples On LONI Linux Systems}
+\begin{columns}
+\column{1.16\textwidth}
+\vspace{-0.95cm}
+\begin{alertblock}{On LONI Linux Systems}
+\begin{center}
+\includegraphics[width=0.74\textwidth,clip=true]{workshop}
+\end{center}
+\end{alertblock}
+\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -1161,7 +1548,7 @@ Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are
 \end{verbatim}
 }
 \end{exampleblock}
-\begin{alertblock}{Linda Acess}
+\begin{alertblock}{Linda Access}
 % If your instition have TCP Linda license, then you can run parallel jobs by adding the following to your job submission script
 \begin{verbatim}
   set NODELIST = ( -vv -nodelist '"' `cat $PBS_NODEFILE` '"' -mp 4)
@@ -1181,7 +1568,7 @@ Thus the problem is reduced to purely classical mechanics once the $\{v_n\}$ are
  # @ account_no = your_allocation
  # @ requirements = (Arch == "Power5")
  # @ environment = LL_JOB=TRUE ;  MP_PULSE=1200
- # @ job_type = serial
+ # @ job_type = parallel
  # @ node_usage = shared
  # @ wall_clock_limit = 12:00:00
  # @ initialdir = /home/apacheco/g03test
@@ -1388,11 +1775,8 @@ mpirun_rsh -machinefile $PBS_NODEFILE -np $NPROCS $EXEC_DIR/$EXEC \
 \begin{block}{Sample Input}
 \begin{verbatim}
 title "H2O"
-
 echo
-
 charge 0
-
 geometry
 zmatrix
 O
@@ -1403,18 +1787,15 @@ r1 1.05
 a1 104.5
 end
 end
-
 basis noprint
  * library 6-31G
 end
-
 dft
  XC b3lyp
  mult 1
 end
 task dft optimize
 task dft energy
-
 task dft freq
 \end{verbatim}
 \end{block}
@@ -1423,11 +1804,8 @@ task dft freq
 \begin{alertblock}{Input Description}
 \begin{verbatim}
 Job title
-blank line
-
-blank line
+echo contents of input file
 charge of molecule
-blank line
 geometry description in
 z-matrix format
 
@@ -1438,174 +1816,21 @@ variables used with values
 
 end z-matrix block
 end geometry block
-blank line
 basis description
  
  
-blank line
 dft calculation options
  
  
 
 job type
 
-blank line
 
 \end{verbatim}
 \end{alertblock}
 }
 \end{columns}
 }
-\end{frame}
-
-\begin{frame}[allowframebreaks]
-\frametitle{\small Job Types and Keywords}
-\footnotesize{
-\begin{columns}
-\column{12cm}
-\begin{exampleblock}{}
-\begin{tabular}{|c|c|c|c|}
-\hline
-% Job Type & \multicolumn{3}{c|}{Keywords} \\
-% \cline{2-4}
-%          & Gaussian & GAMESS & NWCHEM\\ 
-Job Type & Gaussian & GAMESS & NWCHEM\\
-\cline{2-4}
-  & \# keyword & runtyp= & task \\       
-\hline
-% Energy & \checkmark & \checkmark & \checkmark \\
-% Force & \checkmark & \checkmark & \checkmark \\
-% Geometry optimization & \checkmark & \checkmark & \checkmark \\
-% Frequency & \checkmark & \checkmark & \checkmark \\
-% Potential Energy Scan & \checkmark & \checkmark & \checkmark \\
-% Excited State & \checkmark & \checkmark & \checkmark \\
-% Reaction path following & \checkmark & \checkmark & \checkmark \\
-% Dynamics & \checkmark & \checkmark & \checkmark \\
-% Population Analysis & \checkmark & \checkmark & \checkmark \\
-% Electrostatic Properties & \checkmark & \checkmark & \checkmark \\
-Energy & sp & energy & energy \\
-Force & force & gradient & gradient \\
-Geometry optimization & opt & optimize & optimize \\
-Transition State & opt=ts & sadpoint & saddle \\
-Frequency & freq & hessian$^\ast$ & frequencies, freq \\
-Potential Energy Scan & scan & surface & \checkmark \\
-Excited State & \checkmark & \checkmark & \checkmark \\
-Reaction path following & irc & irc & \checkmark \\
-Dynamics & admp, bomd & drc & dynamics, Car-Parrinello \\
-Population Analysis & pop & pop & \checkmark \\
-Electrostatic Properties & prop & \checkmark & \checkmark \\
-Molecular Mechanics & \checkmark & \checkmark & \checkmark \\
-Solvation Models & \checkmark & \checkmark & \checkmark \\
-\hline
-\end{tabular}
-\end{exampleblock}
-\end{columns}
-% \begin{alertblock}{}
-\begin{itemize}
-\scriptsize{
-\item[] \checkmark $\Longrightarrow$ method exists and keyword requires more than one options\\
-% \item Population Analysis in NWCHEM requires a PROPERTY $\cdots$ END block with various options for different properties\\
-\begin{block}{\scriptsize Population Analysis in NWCHEM requires a PROPERTY $\cdots$ END block with various options for different properties}
-property\\
-$\,\,$dipole\\
-$\,\,$mulliken\\
-end
-\end{block}
-% \item Frequency calculations in GAMESS at end of optimization is carried out by adding HSSEND=.T. keyword in the STATPT control line
-\begin{block}{\scriptsize Frequency calculations in GAMESS at end of optimization is carried out by adding HSSEND=.T. keyword in the STATPT control line}
-\,\$STATPT HSSEND=.T. \$END
-\end{block}
-\item Excited State Calculations include TDHF, TDDFT, CIS, CC methods
-\begin{block}{\scriptsize QM/MM Methods}
-\begin{itemize}
-\scriptsize{
-\item Gaussian: ONIOM
-\item GAMESS: Effective Fragment Potential, \$EFRAG block
-\item NWCHEM: task qmmm
-}
-\end{itemize}
-\end{block}
-}
-\end{itemize}
-% \end{alertblock}
-\begin{alertblock}{}
-\begin{itemize}
-\item Dynamics Calculations:
-\begin{itemize}
-\item Gaussian:
- \begin{itemize}
-% {\scriptsize
- \item BOMD: Born-Oppenheimer Molecular Dynamics
- \item ADMP: Atom centered Density Matrix Propagation (an extended Lagrangian Molecular Dynamics similar to CPMD) and ground state BOMD
-% }
- \end{itemize}
-\item GAMESS:
-  \begin{itemize}
-  \item DRC: Direct Dynamics, a classical trajectory method based on "on-the-fly" ab-initio or semi-empirical potential energy surfaces
-  \end{itemize}
-\item NWCHEM:
-  \begin{itemize}
-  \item Car-Parrinello: Car Parrinello Molecular Dynamics (CPMD)
-%   \item dynamics: Perform classical molecular dynamics
-  \item DIRDYVTST: Direct Dynamics Calculations using POLYRATE with electronic structure from NWCHEM
-  \end{itemize}
-\end{itemize}
-\end{itemize}
-\end{alertblock}
-}
-\end{frame}
-
-\begin{frame}
-\frametitle{\small Related HPC Tutorials}
-\begin{itemize}
-\item Fall Semester
-\begin{block}{Introduction to Gaussian/Electronic Structure Methods}
-\end{block}
-\item Spring Semester
-\begin{alertblock}{MD: Programming to Production}
-April 6$^{\rm th}$
-\end{alertblock}
-\begin{alertblock}{Introduction to CPMD/Ab Initio Molecular Dynamics}
-April 27$^{\rm th}$
-\end{alertblock}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[allowframebreaks]
-%\frametitle{\small Useful Links/Further Reading}
-\begin{block}{Useful Links}
-\begin{itemize}
-{\footnotesize\color{Blue}
-\item{\color{tigerspurple}Amber:}\url{http://ambermd.org}
-\item{\color{tigerspurple}Desmond:}\url{http://www.deshawresearch.com/resources_desmond.html}
-\item{\color{tigerspurple}DL\_POLY:}\url{http://www.cse.scitech.ac.uk/ccg/software/DL_POLY}
-\item{\color{tigerspurple}Gromacs:}\url{http://www.gromacs.org}
-\item{\color{tigerspurple}LAMMPS:}\url{http://lammps.sandia.gov}
-\item{\color{tigerspurple}NAMD:}\url{http://www.ks.uiuc.edu/Research/namd}
-\item {\color{tigerspurple}CPMD:} \url{http://www.cpmd.org}
-\item {\color{tigerspurple}GAMESS:} \url{http://www.msg.chem.iastate.edu/gamess}
-\item {\color{tigerspurple}Gaussian:} \url{http://www.gaussian.com}
-\item {\color{tigerspurple}NWCHEM:} \url{http://www.nwchem-sw.org}
-\item{\color{tigerspurple}PINY\_MD:}\url{http://homepages.nyu.edu/~mt33/PINY_MD/PINY.html}
-\item {\color{tigerspurple}Basis Set:} \url{https://bse.pnl.gov/bse/portal}
-}
-\end{itemize}
-\end{block}
-\begin{block}{Further Reading}
-\begin{itemize}
-{\footnotesize
-\item David Sherill's Notes at Ga Tech: {\color{Blue}\url{http://vergil.chemistry.gatech.edu/notes/index.html}}
-\item Mark Tuckerman's Notes at NYU: {\color{Blue}\url{http://www.nyu.edu/classes/tuckerman/quant.mech/index.html}}
-\item Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory, A. Szabo and N. Ostlund
-\item Introduction to Computational Chemistry, F. Jensen
-\item Essentials of Cmputational Chemistry - Theories and Models, C. J. Cramer
-\item Exploring Chemistry with Electronic Structure Methods, J. B. Foresman and A. Frisch
-\item Molecular Modeling - Principles and Applications, A. R. Leach
-\item Computer Simulation of Liquids, M. P. Allen and D. J. Tildesley
-\item[$\vardiamond$]Modern Electronic Structure Theory, T. Helgaker, P. Jorgensen and J. Olsen (Highly advanced text, second quantization approach to electronic structure theory)
-}
-\end{itemize}
-\end{block}
 \end{frame}
 
 \end{document}
