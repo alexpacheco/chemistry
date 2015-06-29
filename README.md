@@ -1,6 +1,6 @@
 ## Chemistry
 This tutorial gives a brief introduction to computational chemistry 
-( [TeX](Chemistry/CompChem.tex) | [PDF](Chemistry/CompChem.pdf) ), 
+( [TeX](CompChem.tex) | [PDF](CompChem.pdf) ), 
 
   * LONI Workshop at 
      + Southern University on Feb. 18, 2011
@@ -11,7 +11,7 @@ This tutorial gives a brief introduction to computational chemistry
     + Nov. 16, 2011    
 
 and molecular dyanamics 
-( [TeX](Chemistry/MolecularDynamics.tex) | [PDF](Chemistry/MolecularDynamics.pdf) ).
+( [TeX](MolecularDynamics.tex) | [PDF](MolecularDynamics.pdf) ).
 
   * HPC Training Series at LSU on 
     + Apr. 27, 2011
