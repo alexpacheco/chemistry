@@ -18,3 +18,8 @@ and molecular dyanamics
     + Jul. 6, 2011
     + Feb. 8, 2012
 
+
+# Contributer
+Alex Pacheco  
+ Manager, Research Computing, Lehigh University (Sep. 2014 - Present)  
+ HPC User Services Consultant, LSU & LONI (Aug. 2010 - Sep. 2014)  
